@@ -62,7 +62,7 @@ html, body{
     overflow-x:hidden;
 }
 body {
-    background: #e8edf2 none repeat scroll 0 0;
+    background: #ffffff none repeat scroll 0 0;
     color: #505050;
     float: left;
     font-family: Open sans;
@@ -862,7 +862,7 @@ header.side-header.light-skin {
 .widget {
     background: #ffffff none repeat scroll 0 0;
     float: left;
-    margin-top: 14px;
+    margin-top: 0px;
     position: relative;
     width: 100%;
     
