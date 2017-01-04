@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+    <meta http-equiv=”cache-control” content=”public” />	<!-- 瀏覽器暫存-->
+	<link rel="stylesheet" type="text/css" href="css/cloud-admin-iframe.css" >
+	<!-- STYLESHEETS --><!--[if lt IE 9]><script src="js/flot/excanvas.min.js"></script><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
+	<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    
+
+
+</head>
+<body>
+	
+	<!-- PAGE -->
+	<section id="page">
+	  <div id="main-content">
+		<div class="container">
+                <div class="row">
+					<div id="content" class="col-lg-12">
+                	<div class="row">
+							<div class="col-sm-12 center">
+								<div class="page-header">
+									<!-- STYLER -->
+                                    <img src="https://kelt8080.github.io/public/image/app/investment.png" width="20" height="20"> 
+                                    <input type="text" id="search_text" placeholder="投資機會" onKeyUp="doSomething(event);">
+                        			<input type="button" value="Send" onClick="redirect();">
+                                    
+								</div>
+							</div>
+						</div>
+                    
+                    
+                
+			</div>
+            </div>
+			</div>
+		</div>
+	</section>
+    
+    
+	<!--/PAGE -->
+	<!-- JAVASCRIPTS -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<!-- JQUERY -->
+	<script src="js/jquery/jquery-2.0.3.min.js"></script>
+	<!-- JQUERY UI-->
+	<script src="js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<!-- CUSTOM SCRIPT -->
+	<script src="js/script.js"></script>
+	<script>
+		jQuery(document).ready(function() {		
+			App.setPage("index");  //Set current page
+			App.init(); //Initialise plugins and elements
+		});
+	</script>
+    
+    <!-- image auto-resize -->
+    <script src="js/jquery-latest.min.js" type="text/javascript"></script>
+
+	 <script type="text/javascript">
+    function doSomething(e) {
+        var keyCode = e.keyCode || e.charCode;
+        if (keyCode === 13) {
+            redirect();
+        }
+    }
+
+    function redirect() {
+		var add=document.getElementById("search_text").value
+		window.open(encodeURI('http://www.101jr.com/search?q='+add));
+		window.open(encodeURI('https://angel.co/search?q='+add));
+		window.open(encodeURI('https://www.gofundme.com/mvc.php?route=search&term='+add));
+		window.open(encodeURI('https://www.indiegogo.com/search#/?q='+add));
+		window.open(encodeURI('https://www.kickstarter.com/discover/advanced?ref=nav_search&amp;term='+add));
+		window.open(encodeURI('https://www.producthunt.com/#!/s/posts/'+add));
+		window.open(encodeURI('https://www.pinterest.com/search/pins/?q='+add));
+		
+		 //將網址先編譯過後再傳遞
+	window.showModalDialog(encodeURI(Url), window, Feature  )  
+		}
+	</script>
+	
+	<!-- /JAVASCRIPTS -->
+</body>
+</html>

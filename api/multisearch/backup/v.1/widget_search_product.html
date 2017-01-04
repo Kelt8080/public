@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+    <meta http-equiv=”cache-control” content=”public” />	<!-- 瀏覽器暫存-->
+	<link rel="stylesheet" type="text/css" href="css/cloud-admin-iframe.css" >
+	<!-- STYLESHEETS --><!--[if lt IE 9]><script src="js/flot/excanvas.min.js"></script><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
+	<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    
+
+
+</head>
+<body>
+	
+	<!-- PAGE -->
+	<section id="page">
+	  <div id="main-content">
+		<div class="container">
+                <div class="row">
+					<div id="content" class="col-lg-12">
+                	<div class="row">
+							<div class="col-sm-12 center">
+								<div class="page-header">
+									<!-- STYLER -->
+                                    <img src="https://kelt8080.github.io/public/image/app/iphone.png" width="20" height="20"> 
+                                    <input type="text" id="search_text" placeholder="找產品與價格" onKeyUp="doSomething(event);">
+                        			<input type="button" value="Send" onClick="redirect();">
+                                    
+								</div>
+							</div>
+						</div>
+                    
+                    
+                
+			</div>
+            </div>
+			</div>
+		</div>
+	</section>
+    
+    
+	<!--/PAGE -->
+	<!-- JAVASCRIPTS -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<!-- JQUERY -->
+	<script src="js/jquery/jquery-2.0.3.min.js"></script>
+	<!-- JQUERY UI-->
+	<script src="js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<!-- CUSTOM SCRIPT -->
+	<script src="js/script.js"></script>
+	<script>
+		jQuery(document).ready(function() {		
+			App.setPage("index");  //Set current page
+			App.init(); //Initialise plugins and elements
+		});
+	</script>
+    
+    <!-- image auto-resize -->
+    <script src="js/jquery-latest.min.js" type="text/javascript"></script>
+
+	 <script type="text/javascript">
+    function doSomething(e) {
+        var keyCode = e.keyCode || e.charCode;
+        if (keyCode === 13) {
+            redirect();
+        }
+    }
+
+    function redirect() {
+		var add=document.getElementById("search_text").value
+		window.open(encodeURI('http://www.amazon.com/s/ref=nb_ss?url=search-alias%3Daps&field-keywords='+add+'&x=0&y=0'));
+		window.open(encodeURI('http://feebee.com.tw/s/?q='+add));
+		window.open(encodeURI('http://www.payeasy.com.tw/search/search3/index.html?q='+add+'&ppcName2=全類別&lv=2'));
+		window.open(encodeURI('https://www.producthunt.com/#!/s/posts/'+add));
+		window.open(encodeURI('http://www.seeedstudio.com/depot/advanced_search.html?amp;inc_subcat=0&disp_order=6&search_in_description=0&keyword='+add));
+		window.open(encodeURI('https://fancy.com/search?q='+add));
+		window.open(encodeURI('http://ecshweb.pchome.com.tw/search/v3.3/?q='+add));
+		window.open(encodeURI('http://www.ebay.com.tw/gsearch/index.html?ssq='+add+'&sst=all'));
+		window.open(encodeURI('https://play.google.com/store/search?q='+add+'&hl=zh-TW'));
+		window.open(encodeURI('https://tw.taobao.com/search/search.htm?_ksTS=1452643942572_101&spm=a213z.1224559.20141209.1&search_type=0&_input_charset=utf-8&navigator=all&q_goods_status=0&json=on&q='+add+'&callback=__jsonp_cb&cna=JnWvDt%2FfaAoCAW%205c1rlQpTm&abtest=_AB-LR492-LR501-LR517-LR895-PR492-PR501-PV517_2374-PV895_2352'));
+		window.open(encodeURI('http://search.ruten.com.tw/search/s002.php?k='+add+'&c=0&t=0'));
+		window.open(encodeURI('https://www.pinterest.com/search/pins/?q='+add+'&term_meta%5B%5D='+add+'%7Ctyped'));
+		window.open(encodeURI('http://www.ebay.com/sch/?_from=R40&_trksid=p3907.m38.l1313&_nkw='+add+'&_sacat=See-All-Categories'));
+
+		 //將網址先編譯過後再傳遞
+		window.showModalDialog(encodeURI(Url), window, Feature  )  
+		}
+	</script>
+	
+	<!-- /JAVASCRIPTS -->
+</body>
+</html>
