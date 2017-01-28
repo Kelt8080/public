@@ -13905,11 +13905,11 @@ li.L9 {
     width: 100%;
 }
 .horizontal-menu > nav > ul > li.menu-item-has-children.mega > ul {
-    width: 420px;
+    width: 840px;
 }
 .horizontal-menu > nav > ul > li.menu-item-has-children.mega > ul > li {
     float: left;
-    width: 50%;
+    width: 25%;
 }
 .open-hide-menu {
     background: #ffffff none repeat scroll 0 0;
