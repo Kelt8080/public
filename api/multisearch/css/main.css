@@ -10,7 +10,7 @@
 9. Total Sales Sec
 10. Color Classes
 11. Activity Sec
-12. Graph Wrapperwidget
+12. Graph Wrapper
 13. Our Clients Sec
 14. Product Sale
 15. task management
@@ -295,8 +295,8 @@ form.search-form {
 
     float: left;
     height: 38px;
-    margin-left: 80px;
-    margin-top: 14px;
+    margin-left: 0px;
+    margin-top: 0px;
     position: relative;
     width: 213px;
 }
@@ -318,42 +318,6 @@ form.search-form > button {
     position: absolute;
     right: 0;
 }
-
-
-form.select-form {
-    border: 0px solid #e0e5e7;
-
-    -webkit-border-radius: 22px;
-    -moz-border-radius: 22px;
-    -ms-border-radius: 22px;
-    -o-border-radius: 22px;
-    border-radius: 22px;
-
-    float: left;
-    height: 38px;
-    margin-left: 30px;
-    margin-top: 14px;
-    position: relative;
-    width: 140px;
-}
-form.select-form > select {
-    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-    border: medium none;
-    color: #7b7b7b;
-    float: left;
-    font-size: 12px;
-    padding: 9px 10px 9px 10px;
-    width: 100%;
-}
-
-.separator {
-  height: 1px;
-  border-bottom: 1px solid #FFFFFF !important;
-  border-top: 1px solid #E7E7E7 !important;
-  color: #555555 !important;
-  margin: 30px 0 0px;
-}
-
 .top-bar > ul {
     float: left;
     list-style: outside none none;
@@ -465,7 +429,7 @@ header.side-header.light-skin {
     background: #dfe6ec none repeat scroll 0 0;
 }
 .admin-details {
-    background-image: url("https://preview.c9users.io/mit001/mit_001/image/scroll_background.png");
+    background-image: url("http://placehold.it/222x237");
     background-size: cover;
     display: table;
     float: left;
@@ -706,7 +670,7 @@ header.side-header.light-skin {
 /* Main Content */
 .main-content {
     float: left;
-    padding: 80px 25px 0px 245px;
+    padding: 106px 45px 110px 265px;
     width: 100%;
 
     -webkit-transition:all 0.4s ease 0s;
@@ -851,8 +815,8 @@ header.side-header.light-skin {
     width: 100%;
 }
 .widget-controls {
-    padding-right: 0px;
-    padding-top: 0px;
+    padding-right: 10px;
+    padding-top: 10px;
     position: absolute;
     right: 0;
     top: 0;
@@ -864,7 +828,7 @@ header.side-header.light-skin {
     float: right;
     font-size: 13px;
     line-height: 14px;
-    margin-left: 0px;
+    margin-left: 8px;
 }
 .widget::before {
     background-color: #ffffff;
@@ -898,7 +862,7 @@ header.side-header.light-skin {
 .widget {
     background: #ffffff none repeat scroll 0 0;
     float: left;
-    margin-top: 0px;
+    margin-top: 14px;
     position: relative;
     width: 100%;
 
@@ -3280,7 +3244,7 @@ footer li{
 
 /* Toggle Content */
 .toggle-content {
-    background-image: url("https://preview.c9users.io/mit001/mit_001/image/toggle_backgroun_cpoffice.jpg");
+    background-image: url("http://placehold.it/1365x177");
     background-size: cover;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
     left: 0;
@@ -9985,7 +9949,7 @@ margin-top: -2%;
     width: 100%;
 }
 .account-user-sec {
-    background-image: url("https://preview.c9users.io/mit001/mit_001/image/welcome_backgroun.png");
+    background-image: url("http://placehold.it/1920x1314");
     background-size: cover;
     float: left;
     height: 100%;
@@ -11702,7 +11666,7 @@ acronym {
 
 /*===== Comming Soon ====*/
 .commingsoon{
-    background: rgba(0, 0, 0, 0) url("https://preview.c9users.io/mit001/mit_001/image/comming_backgroun.png?_c9_id=livepreview3&_c9_host=https://ide.c9.io") no-repeat scroll 0 0 / cover ;
+    background: rgba(0, 0, 0, 0) url("http://placehold.it/1366x690") no-repeat scroll 0 0 / cover ;
     float: left;
     padding: 70px 0 120px;
     position: relative;
@@ -13838,7 +13802,7 @@ li.L9 {
     width: 100%;
 }
 .horizontal-menu {
-    background: #ffffff none repeat scroll 0 0;
+    background: #fbfbfb none repeat scroll 0 0;
     float: left;
     position: relative;
     width: 100%;
