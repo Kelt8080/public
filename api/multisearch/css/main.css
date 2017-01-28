@@ -62,7 +62,7 @@ html, body{
     overflow-x:hidden;
 }
 body {
-    background: #ffffff none repeat scroll 0 0;
+    background: #e8edf2 none repeat scroll 0 0;
     color: #505050;
     float: left;
     font-family: Open sans;
@@ -164,7 +164,7 @@ a{
     left: 0;
     position: absolute;
     top: 50%;
-    
+
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
@@ -175,7 +175,7 @@ a{
 }
 .menu-action::after {
     background: #555555 none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     -ms-border-radius: 2px;
@@ -206,7 +206,7 @@ a{
 }
 .menu-action::before {
     background: #555555 none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     -ms-border-radius: 2px;
@@ -240,7 +240,7 @@ a{
     left: 0;
     position: absolute;
     top: 50%;
-    
+
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
@@ -251,7 +251,7 @@ a{
 }
 .menu-action > i::before {
     background: #555555 none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     -ms-border-radius: 2px;
@@ -286,7 +286,7 @@ a{
 
 form.search-form {
     border: 1px solid #e0e5e7;
-    
+
     -webkit-border-radius: 22px;
     -moz-border-radius: 22px;
     -ms-border-radius: 22px;
@@ -295,8 +295,8 @@ form.search-form {
 
     float: left;
     height: 38px;
-    margin-left: 0px;
-    margin-top: 0px;
+    margin-left: 80px;
+    margin-top: 14px;
     position: relative;
     width: 213px;
 }
@@ -318,6 +318,42 @@ form.search-form > button {
     position: absolute;
     right: 0;
 }
+
+
+form.select-form {
+    border: 0px solid #e0e5e7;
+
+    -webkit-border-radius: 22px;
+    -moz-border-radius: 22px;
+    -ms-border-radius: 22px;
+    -o-border-radius: 22px;
+    border-radius: 22px;
+
+    float: left;
+    height: 38px;
+    margin-left: 30px;
+    margin-top: 14px;
+    position: relative;
+    width: 140px;
+}
+form.select-form > select {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    color: #7b7b7b;
+    float: left;
+    font-size: 12px;
+    padding: 9px 10px 9px 10px;
+    width: 100%;
+}
+
+.separator {
+  height: 1px;
+  border-bottom: 1px solid #FFFFFF !important;
+  border-top: 1px solid #E7E7E7 !important;
+  color: #555555 !important;
+  margin: 30px 0 0px;
+}
+
 .top-bar > ul {
     float: left;
     list-style: outside none none;
@@ -350,7 +386,7 @@ form.search-form > button {
 }
 .quick-links > ul > li > a {
     border: 1px solid #e8edf2;
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -365,7 +401,7 @@ form.search-form > button {
     line-height: 30px;
     text-align: center;
     width: 34px;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -429,7 +465,7 @@ header.side-header.light-skin {
     background: #dfe6ec none repeat scroll 0 0;
 }
 .admin-details {
-    background-image: url("http://placehold.it/222x237");
+    background-image: url("https://preview.c9users.io/cpoffice/cpoffice/image/scroll_background.png");
     background-size: cover;
     display: table;
     float: left;
@@ -480,7 +516,7 @@ header.side-header.light-skin {
     margin-right: 16px;
 }
 .admin-details > span > img {
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -529,7 +565,7 @@ header.side-header.light-skin {
     background: #ff6e6e;
 }
 .admin-status::before {
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -670,7 +706,7 @@ header.side-header.light-skin {
 /* Main Content */
 .main-content {
     float: left;
-    padding: 106px 45px 110px 265px;
+    padding: 80px 25px 0px 245px;
     width: 100%;
 
     -webkit-transition:all 0.4s ease 0s;
@@ -802,7 +838,7 @@ header.side-header.light-skin {
 }
 .mini-stats {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -835,7 +871,7 @@ header.side-header.light-skin {
     background-image: url("../images/loader.gif");
     background-position: center center;
     background-repeat: no-repeat;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -865,7 +901,7 @@ header.side-header.light-skin {
     margin-top: 14px;
     position: relative;
     width: 100%;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -875,7 +911,7 @@ header.side-header.light-skin {
 }
 .widget.no-color {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     -ms-border-radius: 0;
@@ -903,7 +939,7 @@ header.side-header.light-skin {
 
 .mini-stats > span {
     border: 1px solid;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -970,7 +1006,7 @@ header.side-header.light-skin {
     position: absolute;
     text-align: center;
     top: 50%;
-    
+
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
@@ -1123,7 +1159,7 @@ header.side-header.light-skin {
     position: relative;
 }
 .graph-info > a > span {
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -1175,7 +1211,7 @@ header.side-header.light-skin {
     width: 100%;
 }
 .graph-details > ul > li > span {
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -1200,7 +1236,7 @@ header.side-header.light-skin {
 .admin-follow {
     background-image: url("http://placehold.it/329x427");
     background-size: cover;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -1243,7 +1279,7 @@ header.side-header.light-skin {
 }
 .admin-follow > img {
     border: 3px solid rgba(255, 255, 255, 0.8);
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -1269,7 +1305,7 @@ header.side-header.light-skin {
 }
 .admin-follow > a {
     background: #fff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -1297,7 +1333,7 @@ header.side-header.light-skin {
     padding: 0 20px;
 }
 .admin-follow > ul > li > i {
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -1338,7 +1374,7 @@ header.side-header.light-skin {
 }
 form.filterform {
     border: 1px solid #dbe0e2;
-    
+
     -webkit-border-radius: 22px;
     -moz-border-radius: 22px;
     -ms-border-radius: 22px;
@@ -1504,7 +1540,7 @@ form.filterform {
 }
 .add-task-item {
     border: 1px solid #e8edf2;
-    
+
     -webkit-border-radius: 22px;
     -moz-border-radius: 22px;
     -ms-border-radius: 22px;
@@ -1583,7 +1619,7 @@ form.filterform {
 }
 .task-managment > ol > li > span {
     background: #555 none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -1661,7 +1697,7 @@ form.filterform {
 .chat-message-bubble {
     background: #fff none repeat scroll 0 0;
     border: 1px solid #e8ecec;
-    
+
     -webkit-border-radius: 18px;
     -moz-border-radius: 18px;
     -ms-border-radius: 18px;
@@ -1720,7 +1756,7 @@ form.filterform {
     max-width: 350px;
     background: #fff;
     padding: 8px 14px;
-    
+
     -webkit-border-radius: 18px;
     -moz-border-radius: 18px;
     -ms-border-radius: 18px;
@@ -1755,7 +1791,7 @@ form.filterform {
 }
 .chat-input-bar {
     background: #63d6ff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -1772,7 +1808,7 @@ form.filterform {
     z-index: 2;
     /*background: #63d6ff;*/
     padding: 0.5em 0;
-    
+
     -webkit-border-radius: 0 0 2px 2px;
     -moz-border-radius: 0 0 2px 2px;
     -ms-border-radius: 0 0 2px 2px;
@@ -1861,7 +1897,7 @@ form.filterform {
     -ms-transform: rotateY(0);
     -o-transform: rotateY(0);
     transform: rotateY(0);
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -1879,7 +1915,7 @@ form.filterform {
     position: absolute;
     width: 15px;
     height: 15px;
-    
+
     -webkit-border-radius: 100%;
     -moz-border-radius: 100%;
     -ms-border-radius: 100%;
@@ -1953,7 +1989,7 @@ form.filterform {
 }
 .twitter-widget ul > li > a {
     border: 1px solid #e8ecec;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -2034,7 +2070,7 @@ footer li{
 }
 .welcome-bar > i {
     border: 1px solid;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -2088,7 +2124,7 @@ footer li{
     position:absolute;z-index:1000;
 }
 .morris-hover.morris-default-style{
-    
+
     -webkit-border-radius:10px;
     -moz-border-radius:10px;
     -ms-border-radius:10px;
@@ -2103,11 +2139,11 @@ footer li{
     font-size:12px;
     text-align:center;
 }
-.morris-hover.morris-default-style 
+.morris-hover.morris-default-style
 .morris-hover-row-label{
     font-weight:bold;margin:0.25em 0;
 }
-.morris-hover.morris-default-style 
+.morris-hover.morris-default-style
 .morris-hover-point{
     white-space:nowrap;margin:0.1em 0;
 }
@@ -2172,7 +2208,7 @@ footer li{
 }
 .server-details > a {
     border: 1px none;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -2226,7 +2262,7 @@ footer li{
 }
 .pie::before {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -2245,7 +2281,7 @@ footer li{
     -ms-transform: translateY(-50%) translateX(-50%);
     -o-transform: translateY(-50%) translateX(-50%);
     transform: translateY(-50%) translateX(-50%);
-    
+
     width: 70px;
     z-index: 1;
 }
@@ -2266,7 +2302,7 @@ footer li{
   background-color: black;
   width: 150px;
   height: 150px;
-  
+
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   -ms-border-radius: 50%;
@@ -2404,7 +2440,7 @@ footer li{
 }
 .social-widget > ul > li > i {
     border: 1px solid;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -2555,7 +2591,7 @@ footer li{
 }
 .product-stats > span {
     background: #f5f5f5 none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -2569,7 +2605,7 @@ footer li{
     margin: 0;
     padding: 9px 22px;
     position: relative;
-    
+
     -webkit-transform: translateX(-50%);
     -moz-transform: translateX(-50%);
     -ms-transform: translateX(-50%);
@@ -2601,7 +2637,7 @@ footer li{
 }
 .product-stats > a {
     border: 1px solid;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -2623,7 +2659,7 @@ footer li{
 }
 .add-content-form > textarea {
     border: medium none;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -2640,7 +2676,7 @@ footer li{
 }
 .add-content {
     background: #f5f5f5 none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 0 0 5px 5px;
     -moz-border-radius: 0 0 5px 5px;
     -ms-border-radius: 0 0 5px 5px;
@@ -2661,7 +2697,7 @@ footer li{
     float: left;
 }
 .add-content > ul > li a {
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -2682,7 +2718,7 @@ footer li{
 .add-content > button {
     background: #fff none repeat scroll 0 0;
     border: medium none;
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -2768,7 +2804,7 @@ footer li{
 }
 .user-device {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -2789,7 +2825,7 @@ footer li{
 
 .user-device::before {
     background: #fff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -2820,7 +2856,7 @@ footer li{
 }
 .who-post-this > span {
     border: 3px solid #ffffff;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
@@ -3014,7 +3050,7 @@ footer li{
   position: absolute;
   bottom: 0;
   left: 50%;
-  
+
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
@@ -3244,14 +3280,14 @@ footer li{
 
 /* Toggle Content */
 .toggle-content {
-    background-image: url("http://placehold.it/1365x177");
+    background-image: url("https://preview.c9users.io/cpoffice/cpoffice/image/toggle_backgroun.png");
     background-size: cover;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
     left: 0;
     margin-top: -20px;
     position: fixed;
     top: 0;
-    
+
     -webkit-transform: translateY(-100%);
     -moz-transform: translateY(-100%);
     -ms-transform: translateY(-100%);
@@ -3268,7 +3304,7 @@ footer li{
     z-index: 2147483647;
 }
 .toggle-content.active {
-    
+
     -webkit-transform: translateY(0px);
     -moz-transform: translateY(0px);
     -ms-transform: translateY(0px);
@@ -3401,7 +3437,7 @@ footer li{
 }
 .quick-links > ul > li .dialouge > span {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 5px 5px 0 0;
     -moz-border-radius: 5px 5px 0 0;
     -ms-border-radius: 5px 5px 0 0;
@@ -3460,7 +3496,7 @@ footer li{
 .quick-links > ul > li .dialouge > a.view-all {
     background: #6f6f6f none repeat scroll 0 0;
     border: medium none;
-    
+
     -webkit-border-radius: 0 0 5px 5px;
     -moz-border-radius: 0 0 5px 5px;
     -ms-border-radius: 0 0 5px 5px;
@@ -3487,7 +3523,7 @@ footer li{
     left: 10px;
     text-indent: -9999em;
     top: 10px;
-    
+
     -webkit-transform: translateZ(0px);
     -moz-transform: translateZ(0px);
     -ms-transform: translateZ(0px);
@@ -3534,7 +3570,7 @@ footer li{
     width: 10%;
     height: 2px;
     background: #f82020;
-    
+
     -webkit-border-radius: 10%;
     -moz-border-radius: 10%;
     -ms-border-radius: 10%;
@@ -3608,7 +3644,7 @@ footer li{
     width: 20px;
     right: 0;
     clip: rect(-6px,22px,14px,10px);
-}  
+}
 
 #vmap {
     background-color: red;
@@ -3756,7 +3792,7 @@ margin-top: -2%;
     width: 100%;
 }
 .notify.rounded {
-    
+
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
     -ms-border-radius: 50px;
@@ -3815,7 +3851,7 @@ margin-top: -2%;
 }
 .search-sec form {
     border: 1px solid #e8edf2;
-    
+
     -webkit-border-radius: 22px;
     -moz-border-radius: 22px;
     -ms-border-radius: 22px;
@@ -3952,7 +3988,7 @@ margin-top: -2%;
 }
 .gallery-padding:hover .gallery-info {
     opacity: 1;
-    
+
     -webkit-transform: scale(1) translateY(-50%);
     -moz-transform: scale(1) translateY(-50%);
     -ms-transform: scale(1) translateY(-50%);
@@ -4136,19 +4172,19 @@ margin-top: -2%;
     position: absolute;
     z-index: 2147483647;
 
-  
+
   -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -ms-border-radius: 4px;
     -o-border-radius: 4px;
     border-radius: 4px;
-    
+
   -webkit-box-shadow: 0 2px 15px rgba(0,0,0,.4);
   -moz-box-shadow: 0 2px 15px rgba(0,0,0,.4);
   -ms-box-shadow: 0 2px 15px rgba(0,0,0,.4);
   -o-box-shadow: 0 2px 15px rgba(0,0,0,.4);
   box-shadow: 0 2px 15px rgba(0,0,0,.4);
-  
+
   -webkit-transition: all 0.3s ease-out;
      -moz-transition: all 0.3s ease-out;
       -ms-transition: all 0.3s ease-out;
@@ -4159,19 +4195,19 @@ margin-top: -2%;
 .introjs-helperNumberLayer {
     background: none repeat scroll 0 0 #28AB7C;
     border: 3px solid;
-    
+
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
     border-radius: 50%;
-    
+
     -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     -ms-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     -o-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-    
+
     color: #FFFFFF;
     font-family: Arial,verdana,tahoma;
     font-size: 13px;
@@ -4224,13 +4260,13 @@ margin-top: -2%;
 
 .introjs-tooltip {
     background-color:#ffffff;
-    
+
     -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
     -ms-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
     -o-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
-    
+
     font-family: open sans;
     font-size: 12px;
     padding: 10px;
@@ -4240,7 +4276,7 @@ margin-top: -2%;
     -ms-transition: opacity 0.1s ease-out 0s;
     -o-transition: opacity 0.1s ease-out 0s;
     transition: opacity 0.1s ease-out 0s;
-    
+
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     -ms-border-radius: 2px;
@@ -4252,8 +4288,8 @@ margin-top: -2%;
   text-align: right;
 }
 
-/* 
- Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/ 
+/*
+ Buttons style by http://nicolasgallagher.com/lab/css3-github-buttons/
  Changed by Afshin Mehrabani
 */
 .introjs-button {
@@ -4290,8 +4326,8 @@ margin-top: -2%;
 
 .introjs-button:hover {
   border-color: #bcbcbc;
-  text-decoration: none; 
-  
+  text-decoration: none;
+
   -webkit-box-shadow: 0px 1px 1px #e3e3e3;
   -moz-box-shadow: 0px 1px 1px #e3e3e3;
   -ms-box-shadow: 0px 1px 1px #e3e3e3;
@@ -4334,13 +4370,13 @@ margin-top: -2%;
 .introjs-disabled, .introjs-disabled:hover, .introjs-disabled:focus {
   color: #9a9a9a;
   border-color: #d4d4d4;
-  
+
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   -ms-box-shadow: none;
   -o-box-shadow: none;
   box-shadow: none;
-  
+
   cursor: default;
   background-color: #f4f4f4;
   background-image: none;
@@ -9949,7 +9985,7 @@ margin-top: -2%;
     width: 100%;
 }
 .account-user-sec {
-    background-image: url("http://placehold.it/1920x1314");
+    background-image: url("https://preview.c9users.io/cpoffice/cpoffice/image/welcome_backgroun.png");
     background-size: cover;
     float: left;
     height: 100%;
@@ -10072,7 +10108,7 @@ margin-top: -2%;
 }
 .account-form > form  div.feild > input[type="text"], .account-form > form div.feild > input[type="password"] {
     border: 1px solid #e6eaea;
-    
+
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     -ms-border-radius: 30px;
@@ -10089,7 +10125,7 @@ margin-top: -2%;
 .account-form > form .feild > input[type="submit"] {
     background: #ff5f5f none repeat scroll 0 0;
     border: medium none;
-    
+
     -webkit-border-radius: 25px;
     -moz-border-radius: 25px;
     -ms-border-radius: 25px;
@@ -10109,7 +10145,7 @@ margin-top: -2%;
     right: -80px;
     text-align: center;
     top: 50%;
-    
+
     -webkit-transform: rotate(-90deg) translateX(50%);
     -moz-transform: rotate(-90deg) translateX(50%);
     -ms-transform: rotate(-90deg) translateX(50%);
@@ -10157,7 +10193,7 @@ margin-top: -2%;
 }
 .creat-an-account > a {
     background: #ff5f5f none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
     -ms-border-radius: 40px;
@@ -10207,13 +10243,13 @@ margin-top: -2%;
     text-align: center;
     width: 40px;
 }
-.creat-an-account > ul > li > a > i.fa-facebook{ 
+.creat-an-account > ul > li > a > i.fa-facebook{
     background:#4e8deb;
 }
-.creat-an-account > ul > li > a > i.fa-google-plus{ 
+.creat-an-account > ul > li > a > i.fa-google-plus{
     background:#eb4e4e;
 }
-.creat-an-account > ul > li > a > i.fa-twitter{ 
+.creat-an-account > ul > li > a > i.fa-twitter{
     background:#4ec4eb;
 }
 .account-detail > ul > li:last-child {
@@ -10313,7 +10349,7 @@ margin-top: -2%;
     float: left;
     margin: 15px 0;
     width: 100%;
-    
+
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     -ms-border-radius: 2px;
@@ -10422,7 +10458,7 @@ margin-top: -2%;
 /* My Cart */
 .my-cart {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
@@ -10531,7 +10567,7 @@ margin-top: -2%;
     float: right;
     margin-top: 0px;
     width: 35px;
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -10550,7 +10586,7 @@ margin-top: -2%;
     margin: 3px auto 0;
     padding: 6px;
     text-align: center;
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -10566,7 +10602,7 @@ margin-top: -2%;
     margin: 0 auto;
     text-align: center;
     width: 50%;
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -10593,7 +10629,7 @@ margin-top: -2%;
     font-size: 13px;
     line-height: 11px;
     padding: 10px 11px;
-    
+
 -webkit-border-radius: 3px;
 -moz-border-radius: 3px;
 -ms-border-radius: 3px;
@@ -10611,7 +10647,7 @@ border-radius: 3px;
     text-transform: uppercase;
     width: 215px;
 
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -10652,7 +10688,7 @@ border-radius: 3px;
     height: 31px;
     padding: 3px 0 0;
     width: 100%;
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -10669,7 +10705,7 @@ border-radius: 3px;
     font-size: 13px;
     padding: 5px 10px;
     width: 100%;
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -10697,7 +10733,7 @@ border-radius: 3px;
 }
 .payment > ul {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
@@ -10795,7 +10831,7 @@ border-radius: 3px;
 .billing-sec button {
     background: #333333 none repeat scroll 0 0;
     border: medium none;
-    
+
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
     -ms-border-radius: 40px;
@@ -10824,7 +10860,7 @@ border-radius: 3px;
 }
 .billing-sec .field input {
     border: medium none;
-    
+
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
     -ms-border-radius: 40px;
@@ -10840,7 +10876,7 @@ border-radius: 3px;
 }
 .billing-sec .field > select {
     border: medium none;
-    
+
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
     -ms-border-radius: 40px;
@@ -10854,7 +10890,7 @@ border-radius: 3px;
 }
 .billing-sec .field > textarea {
     border: medium none;
-    
+
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
@@ -11156,7 +11192,7 @@ border-radius: 3px;
 }
 .accordion > h3.current {
     background: #fff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 5px 5px 0 0;
     -moz-border-radius: 5px 5px 0 0;
     -ms-border-radius: 5px 5px 0 0;
@@ -11167,7 +11203,7 @@ border-radius: 3px;
 }
 .accordion .pane {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 1px 1px 5px 5px;
     -moz-border-radius: 1px 1px 5px 5px;
     -ms-border-radius: 1px 1px 5px 5px;
@@ -11181,9 +11217,9 @@ border-radius: 3px;
 }
 
 /* C0ntact Form */
-#contact span.required{ 
-    font-size: 13px; 
-    color: #ff0000; 
+#contact span.required{
+    font-size: 13px;
+    color: #ff0000;
 } /* Select the colour of the * if the field is required. */
 #message {
     float: left;
@@ -11193,7 +11229,7 @@ border-radius: 3px;
 .error_message {
     background: #fbe3e4 url("../images/error.gif") no-repeat scroll 26px center;
     border: 1px solid #fbc2c4;
-    
+
     -webkit-border-radius: 50px;
     -moz-border-radius: 50px;
     -ms-border-radius: 50px;
@@ -11212,12 +11248,12 @@ border-radius: 3px;
     margin: 45px 0 0 20px;
     padding: 0 10px;
 }
-#contact #success_page h1 { 
-    background: url('../images/success.gif') left no-repeat; 
-    padding-left:22px; 
+#contact #success_page h1 {
+    background: url('../images/success.gif') left no-repeat;
+    padding-left:22px;
 }
-acronym { 
-    border-bottom:1px dotted #ccc; 
+acronym {
+    border-bottom:1px dotted #ccc;
 }
 #contact {
     float: left;
@@ -11233,7 +11269,7 @@ acronym {
 }
 #contact > #contactform input {
     border: 1px solid #e8ecec;
-    
+
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     -ms-border-radius: 30px;
@@ -11249,7 +11285,7 @@ acronym {
 }
 #contact > #contactform textarea {
     border: 1px solid #e8ecec;
-    
+
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
@@ -11348,7 +11384,7 @@ acronym {
     width: 100%;
 }
 .mockup img {
-    
+
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
@@ -11488,7 +11524,7 @@ acronym {
     text-align: center;
     top: 15px;
     width: 120px;
-    
+
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -11498,7 +11534,7 @@ acronym {
 
 .ribbon-design:before, .ribbon-design:after {
   content: "";
-  border-top:   3px solid #6e8900;   
+  border-top:   3px solid #6e8900;
   border-left:  3px solid transparent;
   border-right: 3px solid transparent;
   position:absolute;
@@ -11519,7 +11555,7 @@ acronym {
     position: relative;
     z-index: 90;
 
-    
+
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     -ms-border-radius: 3px;
@@ -11557,7 +11593,7 @@ acronym {
 }
 .panel-group .panel {
     border-color: #e8ecec;
-    
+
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     -ms-border-radius: 0;
@@ -11568,7 +11604,7 @@ acronym {
 }
 .panel-group .panel .panel-heading {
     border-color: #e8ecec;
-    
+
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     -ms-border-radius: 0;
@@ -11666,7 +11702,7 @@ acronym {
 
 /*===== Comming Soon ====*/
 .commingsoon{
-    background: rgba(0, 0, 0, 0) url("http://placehold.it/1366x690") no-repeat scroll 0 0 / cover ;
+    background: rgba(0, 0, 0, 0) url("https://preview.c9users.io/cpoffice/cpoffice/image/comming_backgroun.png?_c9_id=livepreview3&_c9_host=https://ide.c9.io") no-repeat scroll 0 0 / cover ;
     float: left;
     padding: 70px 0 120px;
     position: relative;
@@ -11853,7 +11889,7 @@ ul.countdown {
 
 ul.countdown > li {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -12191,7 +12227,7 @@ ul.countdown > li > p {
   border-radius: 10px;
 
   padding: 0 15px;
-  position:relative; 
+  position:relative;
   min-height: 200px;
   margin: 15px auto;
   width: 96%;
@@ -12213,18 +12249,18 @@ ul.countdown > li > p {
     margin: 39px 0;
     padding: 0;
 }
-  
+
   .title { display: block; margin-right: 150px; }
   .author { float:right; width: 150px; }
   .lt { display: none; }
-  
+
 }
 
 @media only screen and (max-width:600px) {
-  
+
   .chart { text-align: center; }
-  
-  #DonutTicketsByDepartment { 
+
+  #DonutTicketsByDepartment {
     width: 200px;
     margin: 0 auto;
     float: none;
@@ -12237,20 +12273,20 @@ ul.countdown > li > p {
     display: inline-block;
     text-align: left;
   }
-  
+
   .title,
   .author { display: block; text-align:center; }
   .author { margin-top: 5px; }
   .lt { display: block; }
   .rt { display: none; }
-  
+
 }
 
-#TicketByDepartmentLegends li { 
-  margin-bottom: 10px; 
+#TicketByDepartmentLegends li {
+  margin-bottom: 10px;
   font-family: 'Titillium Web', sans-serif;
   font-weight: 400;
-  color:#000; 
+  color:#000;
 }
 #TicketByDepartmentLegends li span.icon {
 
@@ -12335,7 +12371,7 @@ ul.countdown > li > p {
 }
 .stepsForm .sf-steps-content > div {
     background: #ccc none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     -ms-border-radius: 0;
@@ -12445,7 +12481,7 @@ ul.countdown > li > p {
 }
 .stepsForm input[type="text"], .stepsForm input[type="tel"], .stepsForm input[type="email"], .stepsForm input[type="password"] {
     border: 1px solid #e8ecec;
-    
+
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     -ms-border-radius: 0;
@@ -12460,7 +12496,7 @@ ul.countdown > li > p {
 }
 .stepsForm textarea {
     border: 1px solid #e8ecec;
-    
+
     -webkit-border-radius: 0 !important;
     -moz-border-radius: 0 !important;
     -ms-border-radius: 0 !important;
@@ -12480,7 +12516,7 @@ ul.countdown > li > p {
 }
 .stepsForm label.sf-select > select {
     border: 1px solid #e8ecec;
-    
+
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     -ms-border-radius: 0;
@@ -12854,7 +12890,7 @@ box-shadow: 0px 0px 5px 0px rgba(31,181,174,1);
     position: absolute;
     text-align: center;
     top: 50%;
-    
+
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
@@ -12869,7 +12905,7 @@ box-shadow: 0px 0px 5px 0px rgba(31,181,174,1);
 }
 .profile-banner-sec li > a, .profile-banner-sec li > label {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     -ms-border-radius: 30px;
@@ -12909,7 +12945,7 @@ box-shadow: 0px 0px 5px 0px rgba(31,181,174,1);
 }
 .user-bar {
     background: #fff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 0 0 5px 5px;
     -moz-border-radius: 0 0 5px 5px;
     -ms-border-radius: 0 0 5px 5px;
@@ -12926,7 +12962,7 @@ box-shadow: 0px 0px 5px 0px rgba(31,181,174,1);
     left: 0;
     position: absolute;
     top: 50%;
-    
+
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
@@ -13021,7 +13057,7 @@ box-shadow: 0px 0px 5px 0px rgba(31,181,174,1);
     display: none;
 }
 .my-location > #mapthree {
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -13061,7 +13097,7 @@ box-shadow: 0px 0px 5px 0px rgba(31,181,174,1);
     display: inline-block;
     height: 30px;
     position: relative;
-    
+
     -webkit-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     -moz-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     -ms-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
@@ -13076,13 +13112,13 @@ box-shadow: 0px 0px 5px 0px rgba(31,181,174,1);
     font-size: 9px;
     line-height: 32px;
     position: absolute;
-    
+
     -webkit-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     -moz-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     -ms-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     -o-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
-    
+
     z-index: 2;
 }
 .toggle::before {
@@ -13116,13 +13152,13 @@ box-shadow: 0px 0px 5px 0px rgba(31,181,174,1);
     -ms-transform: translateX(0px);
     -o-transform: translateX(0px);
     transform: translateX(0px);
-    
+
     -webkit-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     -moz-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     -ms-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     -o-transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
     transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
-    
+
     width: 34px;
     z-index: 1;
 }
@@ -13223,7 +13259,7 @@ input:checked + .toggle .toggle__handler {
 }
 .inbox-panel-head > ul > li > a {
     background: #ff5f5f none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 45px;
     -moz-border-radius: 45px;
     -ms-border-radius: 45px;
@@ -13437,7 +13473,7 @@ input:checked + .toggle .toggle__handler {
     content: "\f005";
 }
 .message-list > li > span.make-important.important-done {
-    
+
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
@@ -13600,7 +13636,7 @@ li.L9 {
   height: 200px;
   background: #ffffff;
   border: solid 1px #E9E9E9;
-  
+
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
@@ -13668,7 +13704,7 @@ li.L9 {
     padding: 6px 14px;
 }
 .lrg-radius{
-    
+
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     -ms-border-radius: 30px;
@@ -13677,7 +13713,7 @@ li.L9 {
 
 }
 .mdm-radius{
-    
+
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
@@ -13719,8 +13755,8 @@ li.L9 {
 .nav > li > a:focus, .nav > li > a:hover  {
     background: #929595 none repeat scroll 0 0;
 }
-.nav .open > a, 
-.nav .open > a:focus, 
+.nav .open > a,
+.nav .open > a:focus,
 .nav .open > a:hover{
        background: #929595 none repeat scroll 0 0;
 }
@@ -13933,7 +13969,7 @@ li.L9 {
 }
 .maintainance-mode {
     background: #ffffff none repeat scroll 0 0;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
@@ -14014,7 +14050,7 @@ li.L9 {
 .maintainance-mode > .subscribtion > button {
     background: #858585 none repeat scroll 0 0;
     border: medium none;
-    
+
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
