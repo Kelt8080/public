@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <!-- Our Website CSS Styles -->
+    <link rel="stylesheet" href="css/icons.css">
     <link rel="stylesheet" href="css/main.css">
 
 
@@ -16,47 +17,45 @@
 <div class="account-user-sec">
 
             <div class="container">
-                
+
                 <div class="fancy-social">
     				<img src="https://kelt8080.github.io/public/image/app/cpoffice_logo_01.jpg">
     			</div>
-    			
+
     			<div class="fancy-social">
     			</div>
-                
+
                 <div class="row">
-                <div class="col-md-2"></div>
-		    	<div class="col-md-8"> 
-                	<div class="contact-sec">
-                		<div class="row">
-                			<div class="col-md-4">
+                    <div class="col-md-2 column"></div>
 
-        		 			<form class="select-form">
-        				        <select id="MySelectMenu" name="MySelectMenu" onChange="searchSrc();">
-        				            <option value="">請挑選搜尋主題</option>
-        				            <option value="widget_search_product.html">產品與價格</option>
-        				            <option value="widget_search_wiki.html">wiki知識</option>
-        				            <option value="widget_search_english.html">英語學習與翻譯</option>
-        				            <option value="widget_search_person.html">公眾人物</option>
-        				            <option value="widget_search_files.html">雲端檔案</option>
-        				            <option value="widget_search_present.html">簡報</option>
-        				            <option value="widget_search_app.html">APP進階應用</option>
-        				            <option value="widget_search_3d.html">3D物件</option>
-        				            <option value="widget_search_page_web.html">web template</option>
-        				            <option value="widget_search_test.html">test</option>
-							        <option value="https://preview.c9users.io/kelt8080/dashboard/api/search_center/widget_search_kelt_asset.html?_c9_id=livepreview0&_c9_host=https://ide.c9.io">測試</option>
-        				        </select>
-        				    </form>
-        				    </div>
-        
-        				    <div class="col-md-8">
-        				        <iframe name="MyFrame" id="MyFrame" src="about:blank"   allowtransparency="yes"  width='100%' height='55' frameborder="0" scrolling="no" allowfullscreen webkitallowfullscreen msallowfullscreen>Loading…</iframe>
-        				    </div>
-				    
-				    </div>
+                    <div class="col-md-8 column">
+                    <header class="horizontal-menu">
+                        <nav>
+                            <ul>
+                                <li class="menu-item-has-children mega">
+                                    <a href="#" title=""><i class="fa ti-search"></i> <span>挑選搜尋主題</a>
+                                     <ul>
+                                        <li><a href="javascript:setSrcsearch('https://kelt8080.github.io/public/api/multisearch/widget_search_hardware.html');"><i class="fa ti-search"></i> <span>硬體與設備</a></li>
+                                        <li><a href="javascript:setSrcsearch('https://kelt8080.github.io/public/api/multisearch/widget_search_wiki.html');"><i class="fa ti-search"></i> <span>wiki知識</a></li>
+                                        <li><a href="javascript:setSrcsearch('https://kelt8080.github.io/public/api/multisearch/widget_search_communication.html');"><i class="fa ti-search"></i> <span>討論區</a></li>
+                                        <li><a href="javascript:setSrcsearch('https://kelt8080.github.io/public/api/multisearch/widget_search_english.html');"><i class="fa ti-search"></i> <span>英語學習與翻譯</a></li>
+                                        <li><a href="javascript:setSrcsearch('https://kelt8080.github.io/public/api/multisearch/widget_search_person.html');"><i class="fa ti-search"></i> <span>公眾人物</a></li>
+                                        <li><a href="javascript:setSrcsearch('https://kelt8080.github.io/public/api/multisearch/widget_search_company.html');"><i class="fa ti-search"></i> <span>公司</a></li>
+                                        <li><a href="javascript:setSrcsearch('https://kelt8080.github.io/public/api/multisearch/widget_search_movie.html');"><i class="fa ti-search"></i> <span>影片</a></li>
+                                        <li><a href="javascript:setSrcsearch('https://preview.c9users.io/kelt8080/dashboard/api/search_center/widget_search_kelt_asset.html');"><i class="fa ti-search"></i> <span>個人資產</a></li>
+                                        <li><a href="javascript:setSrcsearch('https://preview.c9users.io/kelt8080/dashboard/api/search_center/widget_search_kelt_nw.html');"><i class="fa ti-search"></i> <span>個人人脈</a></li>
+                                        <li><a href="javascript:setSrcsearch('https://preview.c9users.io/kelt8080/dashboard/api/search_center/widget_search_kelt_kw.html');"><i class="fa ti-search"></i> <span>個人檔案</a></li>
+                                    </ul>
 
-                 </div>
-               </div>
+                                </li>
+
+                                <li>
+                                    <iframe name="MyFrame" id="MyFrame" src="about:blank"   allowtransparency="yes"  width='100%' height='55' frameborder="0" scrolling="no" allowfullscreen webkitallowfullscreen msallowfullscreen>Loading…</iframe>
+                                </li>
+                            </ul>
+                        </nav>
+                    </header>
+                    </div>
 		   	</div>
             </div>
 
@@ -70,13 +69,12 @@
 
 
 </div><!-- Main Content -->
-	<script type="text/javascript">
-		function searchSrc() {
-		      var e = document.getElementById("MySelectMenu");
-		      var searchSrc = e.options[e.selectedIndex].value;
-		      document.getElementById("MyFrame").src=searchSrc;
-		     }
-	</script> 
+
+  <script type="text/javascript">
+	function setSrcsearch(value) {
+    document.getElementById('MyFrame').src = value;
+	}
+  </script>
 
 </body>
 </html>
