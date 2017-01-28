@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta-Information -->
+    <title>Welcome</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Our Website CSS Styles -->
+    <link rel="stylesheet" href="css/main.css">
+
+
+</head>
+<body>
+
+<div class="main-content">
+<div class="account-user-sec">
+
+            <div class="container">
+                
+                <div class="fancy-social">
+    				<img src="https://kelt8080.github.io/public/image/app/cpoffice_logo_01.jpg">
+    			</div>
+    			
+    			<div class="fancy-social">
+    			</div>
+                
+                <div class="row">
+                <div class="col-md-2"></div>
+		    	<div class="col-md-8"> 
+                	<div class="contact-sec">
+                		<div class="row">
+                			<div class="col-md-4">
+
+        		 			<form class="select-form">
+        				        <select id="MySelectMenu" name="MySelectMenu" onChange="searchSrc();">
+        				            <option value="">請挑選搜尋主題</option>
+        				            <option value="widget_search_product.html">產品與價格</option>
+        				            <option value="widget_search_wiki.html">wiki知識</option>
+        				            <option value="widget_search_english.html">英語學習與翻譯</option>
+        				            <option value="widget_search_person.html">公眾人物</option>
+        				            <option value="widget_search_files.html">雲端檔案</option>
+        				            <option value="widget_search_present.html">簡報</option>
+        				            <option value="widget_search_app.html">APP進階應用</option>
+        				            <option value="widget_search_3d.html">3D物件</option>
+        				            <option value="widget_search_page_web.html">web template</option>
+        				        </select>
+        				    </form>
+        				    </div>
+        
+        				    <div class="col-md-8">
+        				        <iframe name="MyFrame" id="MyFrame" src="about:blank"   allowtransparency="yes"  width='100%' height='55' frameborder="0" scrolling="no" allowfullscreen webkitallowfullscreen msallowfullscreen>Loading…</iframe>
+        				    </div>
+				    
+				    </div>
+
+                 </div>
+               </div>
+		   	</div>
+            </div>
+
+<footer>
+    <div class="container">
+        <p>© 2017 Made with Kelt Chen</p>
+    </div>
+</footer>
+
+    </div>
+
+
+</div><!-- Main Content -->
+	<script type="text/javascript">
+		function searchSrc() {
+		      var e = document.getElementById("MySelectMenu");
+		      var searchSrc = e.options[e.selectedIndex].value;
+		      document.getElementById("MyFrame").src=searchSrc;
+		     }
+	</script> 
+
+</body>
+</html>
