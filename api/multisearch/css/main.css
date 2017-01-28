@@ -465,7 +465,7 @@ header.side-header.light-skin {
     background: #dfe6ec none repeat scroll 0 0;
 }
 .admin-details {
-    background-image: url("https://preview.c9users.io/cpoffice/cpoffice/image/scroll_background.png");
+    background-image: url("https://preview.c9users.io/mit001/mit_001/image/scroll_background.png");
     background-size: cover;
     display: table;
     float: left;
@@ -3280,7 +3280,7 @@ footer li{
 
 /* Toggle Content */
 .toggle-content {
-    background-image: url("https://preview.c9users.io/cpoffice/cpoffice/image/toggle_backgroun.png");
+    background-image: url("https://preview.c9users.io/mit001/mit_001/image/toggle_backgroun_cpoffice.jpg");
     background-size: cover;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
     left: 0;
@@ -9985,7 +9985,7 @@ margin-top: -2%;
     width: 100%;
 }
 .account-user-sec {
-    background-image: url("https://preview.c9users.io/cpoffice/cpoffice/image/welcome_backgroun.png");
+    background-image: url("https://preview.c9users.io/mit001/mit_001/image/welcome_backgroun.png");
     background-size: cover;
     float: left;
     height: 100%;
@@ -11702,7 +11702,7 @@ acronym {
 
 /*===== Comming Soon ====*/
 .commingsoon{
-    background: rgba(0, 0, 0, 0) url("https://preview.c9users.io/cpoffice/cpoffice/image/comming_backgroun.png?_c9_id=livepreview3&_c9_host=https://ide.c9.io") no-repeat scroll 0 0 / cover ;
+    background: rgba(0, 0, 0, 0) url("https://preview.c9users.io/mit001/mit_001/image/comming_backgroun.png?_c9_id=livepreview3&_c9_host=https://ide.c9.io") no-repeat scroll 0 0 / cover ;
     float: left;
     padding: 70px 0 120px;
     position: relative;
@@ -13838,7 +13838,7 @@ li.L9 {
     width: 100%;
 }
 .horizontal-menu {
-    background: #fbfbfb none repeat scroll 0 0;
+    background: #ffffff none repeat scroll 0 0;
     float: left;
     position: relative;
     width: 100%;
