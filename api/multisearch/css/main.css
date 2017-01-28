@@ -10,7 +10,7 @@
 9. Total Sales Sec
 10. Color Classes
 11. Activity Sec
-12. Graph Wrapper
+12. Graph Wrapperwidget
 13. Our Clients Sec
 14. Product Sale
 15. task management
@@ -851,8 +851,8 @@ header.side-header.light-skin {
     width: 100%;
 }
 .widget-controls {
-    padding-right: 10px;
-    padding-top: 10px;
+    padding-right: 0px;
+    padding-top: 0px;
     position: absolute;
     right: 0;
     top: 0;
@@ -864,7 +864,7 @@ header.side-header.light-skin {
     float: right;
     font-size: 13px;
     line-height: 14px;
-    margin-left: 8px;
+    margin-left: 0px;
 }
 .widget::before {
     background-color: #ffffff;
@@ -898,7 +898,7 @@ header.side-header.light-skin {
 .widget {
     background: #ffffff none repeat scroll 0 0;
     float: left;
-    margin-top: 14px;
+    margin-top: 0px;
     position: relative;
     width: 100%;
 
