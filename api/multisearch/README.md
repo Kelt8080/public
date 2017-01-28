@@ -9,7 +9,8 @@ multisearch 是採用JavaScript達成一鍵搜尋多個主題頁面的Web API
 
 ## Getting Started
 
-目前v.2版並沒有製作首頁，請直接在網頁路徑加上你要掛接的搜尋主題API即可，例如:
+可以直接使用首頁進行搜尋
+也可以用網頁路徑跨街你要的搜尋主題API，例如:
 [https://kelt8080.github.io/public/api/multisearch/widget_search_3d.html] (https://kelt8080.github.io/public/api/multisearch/widget_search_3d.html)
 即可掛接3D主題的搜尋框
 
@@ -18,6 +19,7 @@ multisearch 是採用JavaScript達成一鍵搜尋多個主題頁面的Web API
 ### vision.2
 * 變更css
 * 製作成可掛接的web API
+* 製作新版首頁
 
 ### vision.1
 * 製作與測試可行code
