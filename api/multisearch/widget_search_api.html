@@ -17,7 +17,7 @@
 	
 	<div class="widget">
 	<form class="search-form">
-		<input type="text" id="search_text" placeholder="input keywords"  onKeyUp="doSomething(event);">
+		<input type="text" id="search_text" placeholder="search api"  onKeyUp="doSomething(event);">
         <button type="submit" value="Send" onClick="redirect();"><i class="fa fa-search"></i></button>
     </form>
 	</div>
@@ -45,6 +45,7 @@
 		window.open(encodeURI('https://www.mulesoft.com/search-results?as_q='+add));
 		window.open(encodeURI('http://wso2.com/search/resources/?key='+add));
 	    	window.open(encodeURI('https://stackshare.io/search/q='+add));
+	    window.open(encodeURI('https://zapier.com/learn/google-sheets/best-google-sheets-addons/'));
 
 		 //將網址先編譯過後再傳遞
 	window.showModalDialog(encodeURI(Url), window, Feature  )  
