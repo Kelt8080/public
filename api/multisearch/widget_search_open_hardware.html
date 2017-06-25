@@ -37,7 +37,7 @@
     function redirect() {
 		var add=document.getElementById("search_text").value
 		window.open(encodeURI('http://www.seeedstudio.com/depot/s/'+add+'.html?search_in_description=0'));
-
+		window.open(encodeURI('https://www.hackster.io/search?q='+add+'&i=projects'));
 		
 		 //將網址先編譯過後再傳遞
 	window.showModalDialog(encodeURI(Url), window, Feature  )  
