@@ -17,7 +17,7 @@
 	
 	<div class="widget">
 	<form class="search-form">
-		<input type="text" id="search_text" placeholder="input keywords"  onKeyUp="doSomething(event);">
+		<input type="text" id="search_text" placeholder="搜尋網頁模組"  onKeyUp="doSomething(event);">
         <button type="submit" value="Send" onClick="redirect();"><i class="fa fa-search"></i></button>
     </form>
 	</div>
@@ -47,6 +47,7 @@
 		window.open(encodeURI('http://divtagtemplates.com/weebly-showcase/'));
         window.open(encodeURI('http://downtheme.com/?s='+add));
 	    window.open(encodeURI('https://public.tableau.com/en-us/s/gallery'));
+	    window.open(encodeURI('https://ecomm.design/?s='+add+'&obj_type=website'));
 		
 		 //將網址先編譯過後再傳遞
 	window.showModalDialog(encodeURI(Url), window, Feature  )  
