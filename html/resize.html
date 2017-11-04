@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta-Information -->
+    <title>Welcome</title>
+    <meta charset="UTF-8">
+</head>
+<body onload="rightWinfunction();">
+
+
+
+
+	<script type="text/javascript">
+  var rightWindow;
+  function rightWinfunction() {
+    
+    //firefox調整用
+    var w = window.screen.availWidth; 
+    var h = window.screen.availHeight;
+    var DPR = window.devicePixelRatio*0.8;
+    w = Math.round(DPR * w);
+    h = Math.round(DPR * h);
+    
+    rightWindow = window.open('', '_blank');
+    rightWindow.resizeTo(w-380, h);  
+    rightWindow.moveTo(380, 0);  
+    rightWindow.location.href='imacros://run/?m=server_h2/products/kelt8080_index_h2.iim';
+    rightWindow.focus(); 
+    setTimeout(function(){
+      window.open('', '_self', '');
+      window.close();
+	    }, 1000);
+  }
+	</script> 
+
+
+
+</body>
+</html>
