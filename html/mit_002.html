@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta-Information -->
+    <title>Welcome</title>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="../theme/electric/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="../theme/electric/css/main.css" />
+</head>
+<body onload="leftWinfunction();">
+
+	<div class="maintainance">
+		<div class="container">
+			<div class="maintainance-mode">
+				<div class="logo">
+			        <a href="#">Welcome</a>
+			    </div>
+			    <span>如果無法順利跳轉到系統</span>
+			    <span>請依照下圖操作: 顯示彈出式視窗</span>
+				<div class="fancy-social">
+					<span>本系統採用Chrome開發，請用Chrome開啟</span>
+				</div>
+			</div>
+
+			<form class="subscribtion">
+				<a href="#" title=""><img src="https://kelt8080.github.io/public/image/background/readme_01.png" style="text-align: center;"></a>
+			</form>
+		</div>
+	</div>
+
+
+
+	<script type="text/javascript">
+  var leftWindow;
+  function leftWinfunction() {
+    leftWindow = window.open('', '', 'location=no,menubar=no,status=no,top=0,left=0,width=100,height=100');
+    leftWindow.resizeTo(380, window.screen.height);  
+    leftWindow.moveTo(0, 0);  
+    leftWindow.location.href='https://preview.c9users.io/mit002/dashboard/mit_002/mobile_ui.html';
+    leftWindow.focus(); 
+    setTimeout(function(){
+      window.open('', '_self', '');
+      window.close();
+	    }, 1000);
+  }
+	</script> 
+
+
+
+</body>
+</html>
