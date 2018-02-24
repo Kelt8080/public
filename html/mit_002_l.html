@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Welcome</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+
+	<!-- Styles -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/responsive.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" href="css/icons.css">
+
+</head>
+<body onload="parent.location='http://localhost/home/mit_002/index.html' ">
+	<div class="commingsoon">
+		<div class="container">
+			<div class="logo">
+				<div class="fancy-social">
+					<span>
+						Welcome to mit_002
+						<p>只要一個google帳號，立即建構個人混合雲端辦公室</p>
+					</span>
+				</div>
+				<a href="#" target="_self" id="to_dashboard" name="to_dashboard" title=""> <img src="https://kelt8080.github.io/public/image/app/mit_002_logo_01.png"></a>
+
+			</div>
+			
+
+			
+			<div class="countdown-sec">
+				<ul class="countdown">
+					<li><span class="days"><img src="https://kelt8080.github.io/public/image/app/chrome.png" width="40" height="40"></span><p class="days_ref">Chrome</p><p></p></li>
+					<li><span class="hours"><img src="https://kelt8080.github.io/public/image/app/windows.png" width="40" height="40"></span><p class="hours_ref">Windows</p><p></p</li>
+					<li><span class="minutes"><img src="https://kelt8080.github.io/public/image/app/google_driver.png" width="40" height="40"></span><p class="minutes_ref">Driver</p></li>
+				</ul>
+			</div>
+			
+			<iframe  src="https://ide.c9.io/mit002/dashboard"  width='0' high='0' frameborder="0" scrolling="yes" sandbox="allow-same-origin allow-popups allow-forms allow-scripts">Loading…</iframe>
+			
+            
+		</div>
+		
+
+		
+	</div>
+
+<footer>
+    <div class="container">
+        <p>© 2017 Made with Kelt Chen</p>
+    </div>
+</footer>
+
+	<!--傳送雲端運算參數-->
+  <input  type="hidden"  id="local_page"  value="mit_002_index">
+  <script type="text/javascript" async="true">
+		//啟動雲端運算
+setTimeout(send_page, 1000);
+		function send_page(){
+		      var page=$('#local_page').val();
+		      $.ajax({
+		      url:"https://docs.google.com/forms/d/e/1FAIpQLSeOP9LVeYaUShPAhI0CwLq_PjfLMazcNFiRL3X4MKNXk4XhZg/formResponse",data:{"entry_1060049478":page},type:"POST",dataType:"xml"
+		      });
+        }
+	</script>
+
+	
+
+
+
+	<script src="js/jquery-2.1.3.js" type="text/javascript"></script>
+	<script type="text/javascript" src="js/app.js"></script> 
+
+
+
+</body>
+</html>
