@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta-Information -->
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Vendor: Bootstrap Stylesheets http://getbootstrap.com -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Our Website CSS Styles -->
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+</head>
+<body>
+	
+	<div class="widget">
+	<form class="search-form">
+		<input type="text" id="search_text" placeholder="input keywords"  onKeyUp="doSomething(event);">
+        <button type="submit" value="Send" onClick="redirect();"><i class="fa fa-search"></i></button>
+    </form>
+	</div>
+	
+
+	<!-- JAVASCRIPTS -->
+
+
+	 <script type="text/javascript">
+    function doSomething(e) {
+        var keyCode = e.keyCode || e.charCode;
+        if (keyCode === 13) {
+            redirect();
+        }
+    }
+
+    function redirect() {
+		var add=document.getElementById("search_text").value
+		window.open(encodeURI('http://www.vertex42.com/search.html?cx=partner-pub-3683987017468561%3A6068012675&cof=FORID%3A10&q='+add));
+		window.open(encodeURI('https://exceldashboardschool.com/?s='+add));
+		window.open(encodeURI('http://www.myonlinetraininghub.com/?s='+add));
+	    window.open(encodeURI('http://marcus-small.squarespace.com/search?q='+add));
+		window.open(encodeURI('https://www.google.com.tw/search?newwindow=1&espv=2&q='+add+'+site:https://sites.google.com/site/272586/'));
+		window.open(encodeURI('https://drive.google.com/templates?q='+add+'&type=spreadsheets&sort=hottest&view=public'));
+		window.open(encodeURI('http://gdoc.pub/?ref=producthunt'));
+		window.open(encodeURI('https://www.google.com.tw/search?q=spreadsheet+add-on'));
+		
+		 //將網址先編譯過後再傳遞
+	window.showModalDialog(encodeURI(Url), window, Feature  )  
+		}
+	</script>
+	
+	<!-- /JAVASCRIPTS -->
+</body>
+</html>
