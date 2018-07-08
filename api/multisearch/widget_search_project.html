@@ -38,6 +38,7 @@
     function redirect() {
 		var add=document.getElementById("search_text").value
 		window.open(encodeURI('https://airtable.com/templates/search?q='+add));
+	    	window.open(encodeURI('https://keep.google.com/#search/text%253D'+add));
 		
 		 //將網址先編譯過後再傳遞
 	window.showModalDialog(encodeURI(Url), window, Feature  )  
