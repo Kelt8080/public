@@ -37,12 +37,7 @@
 
     function redirect() {
 		var add=document.getElementById("search_text").value
-		window.open(encodeURI('http://www.inoreader.com/search/'+add));
-		window.open(encodeURI('https://www.quora.com/search?q='+add));
-		window.open(encodeURI('https://www.google.com.tw/search?q='+add+'+ptt&cad=h'));
-		window.open(encodeURI('https://plus.google.com/u/0/s/'+add+'/top'));
-		window.open(encodeURI('http://www.mobile01.com/googlesearch.php?q='+add));
-	    window.open(encodeURI('https://app.bloomberry.com/questions;q='+add));
+		window.open(encodeURI('https://airtable.com/templates/search?q='+add));
 		
 		 //將網址先編譯過後再傳遞
 	window.showModalDialog(encodeURI(Url), window, Feature  )  
