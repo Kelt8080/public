@@ -34,6 +34,7 @@
     function redirect() {
 		var add=document.getElementById("search_text").value
 		window.open(encodeURI('https://www.freesound.org/search/?q='+add));
+	    window.open(encodeURI('https://soundcloud.com/search?q='+add));
 
 		 //將網址先編譯過後再傳遞
 	window.showModalDialog(encodeURI(Url), window, Feature  )  
