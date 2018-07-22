@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta-Information -->
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Vendor: Bootstrap Stylesheets http://getbootstrap.com -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Our Website CSS Styles -->
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+</head>
+<body>
+	
+	<div class="widget">
+	<form class="search-form">
+		<input type="text" id="search_text" placeholder="search api"  onKeyUp="doSomething(event);">
+        <button type="submit" value="Send" onClick="redirect();"><i class="fa fa-search"></i></button>
+    </form>
+	</div>
+
+
+
+
+
+	 <script type="text/javascript">
+    function doSomething(e) {
+        var keyCode = e.keyCode || e.charCode;
+        if (keyCode === 13) {
+            redirect();
+        }
+    }
+
+    function redirect() {
+		var add=document.getElementById("search_text").value
+		window.open(encodeURI('https://market.mashape.com/explore?query='+add));
+		window.open(encodeURI('https://temboo.com/library/?q='+add));
+		window.open(encodeURI('https://zapier.com/zapbook/'+add+'/'));
+		window.open(encodeURI('https://ifttt.com/search/'+add));
+	    	window.open(encodeURI('https://llamalab.com/automate/community/?q='+add));
+		window.open(encodeURI('http://www.primefaces.org/showcase/ui/ajax/basic.xhtml'));
+		window.open(encodeURI('https://open.blockspring.com/templates?utm_campaign=04062016-emailer&utm_medium=email&utm_source=test'));
+		window.open(encodeURI('https://www.mulesoft.com/search-results?as_q='+add));
+		window.open(encodeURI('http://wso2.com/search/resources/?key='+add));
+	    	window.open(encodeURI('https://stackshare.io/search/q='+add));
+	    window.open(encodeURI('https://zapier.com/learn/google-sheets/best-google-sheets-addons/'));
+	    window.open(encodeURI('https://rapidapi.com/?q='+add));
+	    window.open(encodeURI('https://flow.microsoft.com/zh-tw/search/?q='+add));
+	    window.open(encodeURI('https://www.workato.com/integrations'));
+	    window.open(encodeURI('https://github.com/abhishekbanthia/Public-APIs'));
+
+		 //將網址先編譯過後再傳遞
+	window.showModalDialog(encodeURI(Url), window, Feature  )  
+		}
+	</script>
+	
+	<!-- /JAVASCRIPTS -->
+</body>
+</html>
