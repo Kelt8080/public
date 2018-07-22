@@ -17,7 +17,7 @@
 	
 	<div class="widget">
 	<form class="search-form">
-		<input type="text" id="search_text" placeholder="input keywords" onKeyUp="doSomething(event);">
+		<input type="text" id="search_text" placeholder="輸入配色關鍵詞" onKeyUp="doSomething(event);">
         <button type="submit" value="Send" onClick="redirect();"><i class="fa fa-search"></i></button>
     </form>
 	</div>
@@ -34,11 +34,8 @@
 
     function redirect() {
 		var add=document.getElementById("search_text").value
-		window.open(encodeURI('http://3docean.net/search?utf8=%E2%9C%93&term='+add+'&view=list&sort=&date=&price_min=&price_max=&sales=&rating_min=&poly_count='));
-		window.open(encodeURI('http://www.thingiverse.com/search?q='+add+'&sa='));
-		window.open(encodeURI('https://www.tinkercad.com/search/?q='+add));
-		window.open(encodeURI('https://www.onshape.com/#iaf-nav:https%3A%2F%2Fonshape.inbenta.com%2F%3Faction%3Dsearch%26q%3D'+add+'%26maxresults%3D1000%26regxpag%3D10'));
-		window.open(encodeURI('https://www.pixelsquid.com/png/'+add));
+		window.open(encodeURI('http://nipponcolors.com/'));
+	    window.open(encodeURI('http://zhongguose.com/'));
 		
 		 //將網址先編譯過後再傳遞
 	window.showModalDialog(encodeURI(Url), window, Feature  )  
