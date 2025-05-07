@@ -10,17 +10,17 @@ Sub auto_open()
     Dim title_range, para_range, source_range, target_rang, fix_range As Range
     Dim i, j, k As Integer
     
-    '«İ§ó·s¤º®e
-    '³øªíDB§ó·s§ï¥Ñ«á¥x¹q¤l¯¦®Ñ¶i¦æ¡A«e¥x§ï¦¨¥i¤â°Ê§ó·s
+    'å¾…æ›´æ–°å…§å®¹
+    'å ±è¡¨DBæ›´æ–°æ”¹ç”±å¾Œå°é›»å­ç¥•æ›¸é€²è¡Œï¼Œå‰å°æ”¹æˆå¯æ‰‹å‹•æ›´æ–°
     
 
-    If WorksheetExists("³øªí°Ñ¼Æ", ThisWorkbook) Then
-    Set para_range = Workbooks(ThisWorkbook.name).Sheets("³øªí°Ñ¼Æ").Range("A1:E500")
+    If WorksheetExists("å ±è¡¨åƒæ•¸", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("å ±è¡¨åƒæ•¸").Range("A1:E500")
         For i = 1 To 500
-            If para_range.Cells(i, 5).value = "³]©w¦Û°Ê§ó·s¡A¶}±Ò®É·|¦Û°Ê¶×¤J³Ì·s¸ê®Æ" Then
-                If para_range.Cells(i, 4).value = "¦Û°Ê§ó·s" Then
+            If para_range.Cells(i, 5).value = "è¨­å®šè‡ªå‹•æ›´æ–°ï¼Œé–‹å•Ÿæ™‚æœƒè‡ªå‹•åŒ¯å…¥æœ€æ–°è³‡æ–™" Then
+                If para_range.Cells(i, 4).value = "è‡ªå‹•æ›´æ–°" Then
                     For j = 1 To 500
-                        If para_range.Cells(j, 5).value = "¨Ì·Ó¤£¦P¸ê®Æ¨Ó·½®æ¦¡¡A±Ò°Ê¹ïÀ³µ{¦¡" Then
+                        If para_range.Cells(j, 5).value = "ä¾ç…§ä¸åŒè³‡æ–™ä¾†æºæ ¼å¼ï¼Œå•Ÿå‹•å°æ‡‰ç¨‹å¼" Then
                             Select Case para_range.Cells(j, 4).value
                                 Case "db"
                                     Call report_menu_import_data
@@ -38,7 +38,7 @@ Sub auto_open()
             End If
         Next
         For i = 1 To 500
-            If para_range.Cells(i, 5).value = "¬ö¿ı¨t²Îlog" Then
+            If para_range.Cells(i, 5).value = "ç´€éŒ„ç³»çµ±log" Then
                 If para_range.Cells(i, 4).value = "Y" Then
                     'Call frm_rec_log_txt
                     Call frm_rec_log_googleforms
@@ -55,7 +55,7 @@ End Sub
 
 
 Sub report_menu_import_api()
-'¦UÀÉ®×main¼Ò²Õ¿W¥ß©I¥sªº¨ç¼Æ¡A¦b¦¹³Æ¥ÎÁ×§Kµ{¦¡¿ù»~
+'å„æª”æ¡ˆmainæ¨¡çµ„ç¨ç«‹å‘¼å«çš„å‡½æ•¸ï¼Œåœ¨æ­¤å‚™ç”¨é¿å…ç¨‹å¼éŒ¯èª¤
 
 End Sub
 
@@ -78,11 +78,11 @@ Sub auto_close()
     On Error Resume Next
 
 
-    '¨C©P¤@10:30~14:30±Ò°Ê³Æ¥÷
+    'æ¯å‘¨ä¸€10:30~14:30å•Ÿå‹•å‚™ä»½
     If Weekday(Date) = 2 Then
        If TimeValue(Time) >= TimeValue("10:30:00") And TimeValue(Time) <= TimeValue("14:30:00") Then
-            '¶i¦æ³Æ¥÷§@·~
-            BackupPath = "\\SolarDoc\Á`¸g²z«Ç\¦wÀô¼t°È³B\¼t°È³¡\¼t°È³¡±M¥Î\14.¼t°ÈºŞ²z¨t²Î\WEA\¼t°È³¡³øªí_¹Bºâ¥Î\¦Û°ÊBackup\" & ThisWorkbook.name
+            'é€²è¡Œå‚™ä»½ä½œæ¥­
+            BackupPath = "\\SolarDoc\ç¸½ç¶“ç†å®¤\å®‰ç’°å» å‹™è™•\å» å‹™éƒ¨\å» å‹™éƒ¨å°ˆç”¨\14.å» å‹™ç®¡ç†ç³»çµ±\WEA\å» å‹™éƒ¨å ±è¡¨_é‹ç®—ç”¨\è‡ªå‹•Backup\" & ThisWorkbook.name
             If Dir(BackupPath) <> "" Then
                 Kill BackupPath
             End If
@@ -93,14 +93,14 @@ Sub auto_close()
 
     If Not ActiveWorkbook.ReadOnly Then
         'Call initial
-        If WorksheetExists("³øªí°Ñ¼Æ", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("³øªí°Ñ¼Æ").Range("A1:E500")
+        If WorksheetExists("å ±è¡¨åƒæ•¸", ThisWorkbook) Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("å ±è¡¨åƒæ•¸").Range("A1:E500")
             For j = 1 To 500
-                If para_range.Cells(j, 5).value = "³]©w¦Û°Ê§ó·s¡A¶}±Ò®É·|¦Û°Ê¶×¤J³Ì·s¸ê®Æ" Then
-                    If para_range.Cells(j, 4).value = "¦Û°Ê§ó·s" Then
+                If para_range.Cells(j, 5).value = "è¨­å®šè‡ªå‹•æ›´æ–°ï¼Œé–‹å•Ÿæ™‚æœƒè‡ªå‹•åŒ¯å…¥æœ€æ–°è³‡æ–™" Then
+                    If para_range.Cells(j, 4).value = "è‡ªå‹•æ›´æ–°" Then
                         NowSheet = ActiveSheet.name
                         Call del_unuse_row("db")
-                        '§ó·s¼Ï¯Ã¤ÀªRªí
+                        'æ›´æ–°æ¨ç´åˆ†æè¡¨
                         For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
                             Set GetPivotTables = Workbooks(ThisWorkbook.name).Sheets(i).PivotTables(1)
                             If Not GetPivotTables Is Nothing Then
@@ -109,9 +109,9 @@ Sub auto_close()
                             End If
                         Next
 exit_sub:
-                        '§R°£©Ò¦³message
+                        'åˆªé™¤æ‰€æœ‰message
                         For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
-                            If Workbooks(ThisWorkbook.name).Sheets(i).name Like "*°Ñ¼Æ*" Or Workbooks(ThisWorkbook.name).Sheets(i).name Like "*»¡©ú*" Then
+                            If Workbooks(ThisWorkbook.name).Sheets(i).name Like "*åƒæ•¸*" Or Workbooks(ThisWorkbook.name).Sheets(i).name Like "*èªªæ˜*" Then
                             
                             Else
                                 Workbooks(ThisWorkbook.name).Sheets(i).Cells.Validation.Delete
@@ -143,7 +143,7 @@ End Sub
 Sub timer_reset()
 
     Dim t As Long
-    t = Timer   'Àò¨ú·í«e®É¶¡
+    t = Timer   'ç²å–ç•¶å‰æ™‚é–“
     Application.EnableEvents = False
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
@@ -153,7 +153,7 @@ Sub timer_reset()
     Application.EnableEvents = True
     Application.ScreenUpdating = True
     Application.DisplayAlerts = True
-    'MsgBox Format(Timer - t, "0.00") & "¬í"
+    'MsgBox Format(Timer - t, "0.00") & "ç§’"
 
          
 End Sub
@@ -210,26 +210,26 @@ Function Offset_string(title_address, target_string As String) As String
     Dim LocalPath, FilePath, FileOnly, PathOnly, source_string As String
     Dim i, j, k As Integer
 
-    'ªì©l¤Æ
+    'åˆå§‹åŒ–
     Windows(ThisWorkbook.name).Activate
     Set source_range = Range(title_address)
     Set target_rang = ActiveCell
     LocalPath = Left(target_rang.Address, InStrRev(target_rang.Address, "$") - 1) & source_range.Cells(1).Row
     source_string = Range(LocalPath).value
-    If WorksheetExists("³øªí°Ñ¼Æ", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("³øªí°Ñ¼Æ").Range("A1:E500")
+    If WorksheetExists("å ±è¡¨åƒæ•¸", ThisWorkbook) Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("å ±è¡¨åƒæ•¸").Range("A1:E500")
     End If
     
     
     If target_rang.Row > source_range.Cells(1).Row Then
-        '¥ı¨ú±o²{¦³Äæ¦ì¬Û¹ï¦ì¸m
+        'å…ˆå–å¾—ç¾æœ‰æ¬„ä½ç›¸å°ä½ç½®
         i = 1
         For Each source_cel In source_range.Cells
             If source_cel.value = "" Then Exit For
             If source_cel.value = source_string Then Exit For
             i = i + 1
         Next source_cel
-        '¨ú±o"emailµ¹¨Ï¥Î³æ¦ì"Äæ¦ì¸ê®Æ-->email_email
+        'å–å¾—"emailçµ¦ä½¿ç”¨å–®ä½"æ¬„ä½è³‡æ–™-->email_email
         j = 1
         For Each source_cel In source_range.Cells
             If j = source_range.Cells.Count And source_cel.value <> target_string Then
@@ -257,26 +257,26 @@ Function Offset_string_auto(target_sheet, title_address, source_address, target_
     Dim i, j, k As Integer
 
 
-    'ªì©l¤Æ
+    'åˆå§‹åŒ–
     Windows(ThisWorkbook.name).Activate
     Set source_range = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(title_address)
     Set target_rang = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(source_address)
     LocalPath = Left(target_rang.Address, InStrRev(target_rang.Address, "$") - 1) & source_range.Cells(1).Row
     source_string = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(LocalPath).value
-    If WorksheetExists("³øªí°Ñ¼Æ", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("³øªí°Ñ¼Æ").Range("A1:E500")
+    If WorksheetExists("å ±è¡¨åƒæ•¸", ThisWorkbook) Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("å ±è¡¨åƒæ•¸").Range("A1:E500")
     End If
 
 
     If target_rang.Row > source_range.Cells(1).Row Then
-        '¥ı¨ú±o²{¦³Äæ¦ì¬Û¹ï¦ì¸m
+        'å…ˆå–å¾—ç¾æœ‰æ¬„ä½ç›¸å°ä½ç½®
         i = 1
         For Each source_cel In source_range.Cells
             If source_cel.value = "" Then Exit For
             If source_cel.value = source_string Then Exit For
             i = i + 1
         Next source_cel
-        '¨ú±o"emailµ¹¨Ï¥Î³æ¦ì"Äæ¦ì¸ê®Æ-->email_email
+        'å–å¾—"emailçµ¦ä½¿ç”¨å–®ä½"æ¬„ä½è³‡æ–™-->email_email
         j = 1
         For Each source_cel In source_range.Cells
             If j = source_range.Cells.Count And source_cel.value <> target_string Then
@@ -316,7 +316,7 @@ Sub frm_rec_log_googleforms()
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
     On Error Resume Next
-    Application.Calculation = xlManual  'Ãö³¬¦Û°Ê¹Bºâ
+    Application.Calculation = xlManual  'é—œé–‰è‡ªå‹•é‹ç®—
     
 
     Set fso = CreateObject("Scripting.FileSystemObject")
@@ -328,7 +328,7 @@ Sub frm_rec_log_googleforms()
     UpperPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1) & "\"
 
 
-    '»İ­n¦³2­Ólink
+    'éœ€è¦æœ‰2å€‹link
     link(1) = "https://docs.google.com/forms/d/e/1FAIpQLSeC9OyOC9Aqcxkgrwnr9d5ff9X_pEYZaAhG49QjJtPyZLCb6Q/formResponse?usp=pp_url&"
     link(2) = "https://docs.google.com/forms/d/e/1FAIpQLSeC9OyOC9Aqcxkgrwnr9d5ff9X_pEYZaAhG49QjJtPyZLCb6Q/viewform"
     Set myhttp = CreateObject("MSXML2.ServerXMLHTTP")
@@ -355,7 +355,7 @@ Sub frm_rec_log_googleforms()
     End If
 
     
-    Application.Calculation = xlSemiautomatic   '°£¹Bºâ¦Cªí¥~¡A¦Û°Ê¹Bºâ
+    Application.Calculation = xlSemiautomatic   'é™¤é‹ç®—åˆ—è¡¨å¤–ï¼Œè‡ªå‹•é‹ç®—
     On Error GoTo 0
     Application.EnableEvents = True
     Application.ScreenUpdating = True
@@ -436,7 +436,7 @@ Sub frm_rec_log_txt()
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
     On Error Resume Next
-    Application.Calculation = xlManual  'Ãö³¬¦Û°Ê¹Bºâ
+    Application.Calculation = xlManual  'é—œé–‰è‡ªå‹•é‹ç®—
 
 
     Set fso = CreateObject("Scripting.FileSystemObject")
@@ -446,10 +446,10 @@ Sub frm_rec_log_txt()
     LocalPath = Left(PathOnly, InStrRev(PathOnly, "\") - 1)
     CheckPath = Right(LocalPath, Len(LocalPath) - InStrRev(LocalPath, "\"))
     UpperPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1) & "\"
-    s_path = UpperPath & "¼t°È³¡³øªí_¬ö¿ı¥Î\db\log_db.xlsb"
-    t_path = "\\SolarDoc\Public\¼t°È³¡¤½§i\log\WEA\log_db.xlsb"
+    s_path = UpperPath & "å» å‹™éƒ¨å ±è¡¨_ç´€éŒ„ç”¨\db\log_db.xlsb"
+    t_path = "\\SolarDoc\Public\å» å‹™éƒ¨å…¬å‘Š\log\WEA\log_db.xlsb"
     
-    '¶}±Ò­n¼g¤JªºDB¡A¦pªG§ä¤£¨ìÀÉ®×´N½Æ»s¤@¥÷
+    'é–‹å•Ÿè¦å¯«å…¥çš„DBï¼Œå¦‚æœæ‰¾ä¸åˆ°æª”æ¡ˆå°±è¤‡è£½ä¸€ä»½
     TestStr = ""
     TestStr = Dir(t_path)
     If TestStr = "" Then
@@ -479,7 +479,7 @@ EarlyExit:
     Workbooks("log_DB.xlsb").Close SaveChanges:=True
     
 
-    Application.Calculation = xlSemiautomatic   '°£¹Bºâ¦Cªí¥~¡A¦Û°Ê¹Bºâ
+    Application.Calculation = xlSemiautomatic   'é™¤é‹ç®—åˆ—è¡¨å¤–ï¼Œè‡ªå‹•é‹ç®—
     On Error GoTo 0
     Application.EnableEvents = True
     Application.ScreenUpdating = True
@@ -497,7 +497,7 @@ Function Paste_Columns(source_sheet, target_sheet As String)
     Dim source_cel, target_cel As Range
     Dim LocalPath, FilePath, FileOnly, PathOnly As String
     
-    'ªì©l¤Æ
+    'åˆå§‹åŒ–
     Windows(ThisWorkbook.name).Activate
     Sheets(source_sheet).Select
     Set source_range = Range(Range("A1").End(xlToRight), Range("A1"))
@@ -533,7 +533,7 @@ Function Format_Columns()
     Dim source_cel, target_cel As Range
     Dim LocalPath, FilePath, FileOnly, PathOnly As String
     
-    ''ªì©l¤Æ
+    ''åˆå§‹åŒ–
     'Sheets(target_sheet).Select
     Set target_rang = Range(Range("A1").End(xlToRight), Range("A1"))
 
@@ -541,16 +541,16 @@ Function Format_Columns()
         PathOnly = target_cel.Address
         FilePath = Left(PathOnly, InStrRev(PathOnly, "$") - 1)
         LocalPath = FilePath & ":" & FilePath
-        '¶i¦æ¸ê®Æ®æ¦¡¤Æ
-        If target_cel.value Like "*¤é*" Or target_cel.value Like "*¥æ´Á*" Or target_cel.value Like "*Date*" Then
+        'é€²è¡Œè³‡æ–™æ ¼å¼åŒ–
+        If target_cel.value Like "*æ—¥*" Or target_cel.value Like "*äº¤æœŸ*" Or target_cel.value Like "*Date*" Then
             Call Format_TextToColumns(target_cel.value)
             Range(LocalPath).NumberFormatLocal = "yyyy/m/d"
-        ElseIf target_cel.value Like "*³æ»ù*" Then
+        ElseIf target_cel.value Like "*å–®åƒ¹*" Then
             Call Format_TextToColumns(target_cel.value)
-            Range(LocalPath).NumberFormatLocal = "#,##0.000000_ ;[¬õ¦â]-#,##0.000000 "
-        ElseIf target_cel.value Like "*¼Æ¶q*" Or target_cel.value Like "*NTD*" Or target_cel.value Like "*¤p­p*" Or target_cel.value Like "*¶ZÂ÷*" Or target_cel.value Like "*KNT*" Or target_cel.value Like "*¤Ñ¼Æ*" Then
+            Range(LocalPath).NumberFormatLocal = "#,##0.000000_ ;[ç´…è‰²]-#,##0.000000 "
+        ElseIf target_cel.value Like "*æ•¸é‡*" Or target_cel.value Like "*NTD*" Or target_cel.value Like "*å°è¨ˆ*" Or target_cel.value Like "*è·é›¢*" Or target_cel.value Like "*KNT*" Or target_cel.value Like "*å¤©æ•¸*" Then
             Call Format_TextToColumns(target_cel.value)
-            Range(LocalPath).NumberFormatLocal = "#,##0.0_ ;[¬õ¦â]-#,##0.0 "
+            Range(LocalPath).NumberFormatLocal = "#,##0.0_ ;[ç´…è‰²]-#,##0.0 "
         ElseIf target_cel.value Like "*Time*" Then
             Call Format_TextToColumns(target_cel.value)
             Range(LocalPath).NumberFormatLocal = "yyyy/m/d h:mm;@"
@@ -574,7 +574,7 @@ Function Format_TextToColumns(target_text As String)
     Dim source_cel, target_cel As Range
     Dim LocalPath, FilePath, FileOnly, PathOnly As String
     
-    ''ªì©l¤Æ
+    ''åˆå§‹åŒ–
     Set target_rang = Range(Range("A1").End(xlToRight), Range("A1"))
 
     For Each target_cel In target_rang.Cells
@@ -582,7 +582,7 @@ Function Format_TextToColumns(target_text As String)
             PathOnly = target_cel.Address
             FilePath = Left(PathOnly, InStrRev(PathOnly, "$") - 1)
             LocalPath = FilePath & ":" & FilePath
-            '¶i¦æ¸ê®Æ­åªR
+            'é€²è¡Œè³‡æ–™å‰–æ
             Columns(LocalPath).Select
             Selection.TextToColumns Destination:=Range(PathOnly), DataType:=xlDelimited, _
             TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
@@ -671,13 +671,13 @@ Sub report_menu_import_data()
     
 
     On Error Resume Next
-    Application.Calculation = xlManual  'Ãö³¬¦Û°Ê¹Bºâ
+    Application.Calculation = xlManual  'é—œé–‰è‡ªå‹•é‹ç®—
     
 
         NowSheet = ActiveSheet.name
         Call import_data
         
-        '§ó·s¼Ï¯Ã¤ÀªRªí
+        'æ›´æ–°æ¨ç´åˆ†æè¡¨
         For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
             j = Workbooks(ThisWorkbook.name).Sheets.Count - i + 1
             Set GetPivotTables = Workbooks(ThisWorkbook.name).Sheets(j).PivotTables(1)
@@ -692,7 +692,7 @@ exit_sub:
         Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
         
     On Error GoTo 0
-    Application.Calculation = xlSemiautomatic   '°£¹Bºâ¦Cªí¥~¡A¦Û°Ê¹Bºâ
+    Application.Calculation = xlSemiautomatic   'é™¤é‹ç®—åˆ—è¡¨å¤–ï¼Œè‡ªå‹•é‹ç®—
 
     
     
@@ -715,9 +715,9 @@ Sub import_data()
     Dim fm, fso, aFile As Object
     Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
 
-    'ªì©l¤Æ
-    If WorksheetExists("³øªí°Ñ¼Æ", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("³øªí°Ñ¼Æ").Range("A1:E500")
+    'åˆå§‹åŒ–
+    If WorksheetExists("å ±è¡¨åƒæ•¸", ThisWorkbook) Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("å ±è¡¨åƒæ•¸").Range("A1:E500")
     End If
     Set fso = CreateObject("Scripting.FileSystemObject")
     FilePath = ThisWorkbook.FullName
@@ -727,11 +727,11 @@ Sub import_data()
     LocalPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1)
     LocalPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1)
 
-    '°Ñ¼Æ³]©w½T»{
+    'åƒæ•¸è¨­å®šç¢ºèª
     For k = 1 To 500
-        If para_range.Cells(k, 5).value = "¬D¿ï¸ê®Æ¼Ò«¬«á¡A¦A³]©w§A»İ­nªºÄæ¦ì»PÄæ¦ì¶¶§Ç" Then
+        If para_range.Cells(k, 5).value = "æŒ‘é¸è³‡æ–™æ¨¡å‹å¾Œï¼Œå†è¨­å®šä½ éœ€è¦çš„æ¬„ä½èˆ‡æ¬„ä½é †åº" Then
             If para_range.Cells(k, 4).value = "" Then
-                MsgBox "§A¨S¦³³]©w¸ê®Æ¼Ò«¬³á¡C"
+                MsgBox "ä½ æ²’æœ‰è¨­å®šè³‡æ–™æ¨¡å‹å–”ã€‚"
                 Exit Sub
             Else
                 Exit For
@@ -739,9 +739,9 @@ Sub import_data()
         End If
     Next
     For k = 1 To 500
-        If para_range.Cells(k, 5).value = "³]©w¦Û°Ê§ó·s¡A¶}±Ò®É·|¦Û°Ê¶×¤J³Ì·s¸ê®Æ" Then
+        If para_range.Cells(k, 5).value = "è¨­å®šè‡ªå‹•æ›´æ–°ï¼Œé–‹å•Ÿæ™‚æœƒè‡ªå‹•åŒ¯å…¥æœ€æ–°è³‡æ–™" Then
             If para_range.Cells(k, 4).value = "" Then
-                MsgBox "§A¨S¦³³]©w¬O§_¦Û°Ê§ó·s³á¡C"
+                MsgBox "ä½ æ²’æœ‰è¨­å®šæ˜¯å¦è‡ªå‹•æ›´æ–°å–”ã€‚"
                 Exit Sub
             Else
                 Exit For
@@ -750,7 +750,7 @@ Sub import_data()
     Next
     
     For k = 1 To 500
-        If para_range.Cells(k, 5).value = "¬D¿ï¸ê®Æ¼Ò«¬«á¡A¦A³]©w§A»İ­nªºÄæ¦ì»PÄæ¦ì¶¶§Ç" Then
+        If para_range.Cells(k, 5).value = "æŒ‘é¸è³‡æ–™æ¨¡å‹å¾Œï¼Œå†è¨­å®šä½ éœ€è¦çš„æ¬„ä½èˆ‡æ¬„ä½é †åº" Then
             file_file(1) = para_range.Cells(k, 4).value & ".xlsb"
             Exit For
         End If
@@ -759,21 +759,21 @@ Sub import_data()
 
 
     
-    '¶}±Ò©Ò¦³ÀÉ®×
+    'é–‹å•Ÿæ‰€æœ‰æª”æ¡ˆ
     If FileFolderExists(spath_file(1)) Then
         Workbooks.Open Filename:=spath_file(1), Notify:=True, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, UpdateLinks:=False
     Else
-        MsgBox "¡i" & spath_file(1) & "¡j ÀÉ®×¤£¦s¦b!"
+        MsgBox "ã€" & spath_file(1) & "ã€‘ æª”æ¡ˆä¸å­˜åœ¨!"
     End If
     
     
-    'Âà¶K¸ê®Æ¼Ò«¬
+    'è½‰è²¼è³‡æ–™æ¨¡å‹
     Workbooks(ThisWorkbook.name).Activate
-    Workbooks(ThisWorkbook.name).Sheets("§R°£ªÅ¥Õ¦æ¦C").Cells.ClearContents
+    Workbooks(ThisWorkbook.name).Sheets("åˆªé™¤ç©ºç™½è¡Œåˆ—").Cells.ClearContents
     Windows(file_file(1)).Activate
     Sheets("db").UsedRange.Copy
     Workbooks(ThisWorkbook.name).Activate
-    Workbooks(ThisWorkbook.name).Sheets("§R°£ªÅ¥Õ¦æ¦C").Select
+    Workbooks(ThisWorkbook.name).Sheets("åˆªé™¤ç©ºç™½è¡Œåˆ—").Select
     Range("A1").Select
     Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks:=False, Transpose:=False
     Range("A1").Copy
@@ -786,9 +786,9 @@ Sub import_data()
     Else
         Rows("1:1").AutoFilter
     End If
-    Call Paste_Columns("§R°£ªÅ¥Õ¦æ¦C", "db")
+    Call Paste_Columns("åˆªé™¤ç©ºç™½è¡Œåˆ—", "db")
     'Call Format_Columns
-    Workbooks(ThisWorkbook.name).Sheets("§R°£ªÅ¥Õ¦æ¦C").Cells.ClearContents
+    Workbooks(ThisWorkbook.name).Sheets("åˆªé™¤ç©ºç™½è¡Œåˆ—").Cells.ClearContents
     Sheets("db").Select
     Range("A1").Select
     
@@ -828,26 +828,26 @@ End Function
 
 
 
-Sub ºŞ²z¥Î_menu_update_message()
+Sub ç®¡ç†ç”¨_menu_update_message()
     Dim title_range, para_range, source_range, target_rang, fix_range As Range
     Dim focus_sheet, Response As String
     Dim i, j, k As Integer
     
-    If WorksheetExists("¶i«×»¡©ú", ThisWorkbook) Then
-        Response = MsgBox("§A­n§ó·s¶i«×»¡©ú¶Ü?", vbYesNo)
+    If WorksheetExists("é€²åº¦èªªæ˜", ThisWorkbook) Then
+        Response = MsgBox("ä½ è¦æ›´æ–°é€²åº¦èªªæ˜å—?", vbYesNo)
         If Response = vbYes Then    ' User chose Yes.
             For j = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
-                If Workbooks(ThisWorkbook.name).Sheets(j).name Like "*°Ñ¼Æ*" Or Workbooks(ThisWorkbook.name).Sheets(j).name Like "*»¡©ú*" Then
+                If Workbooks(ThisWorkbook.name).Sheets(j).name Like "*åƒæ•¸*" Or Workbooks(ThisWorkbook.name).Sheets(j).name Like "*èªªæ˜*" Then
                 
                 Else
                     Workbooks(ThisWorkbook.name).Sheets(j).Cells.Validation.Delete
                 End If
             Next
             Call ini_message
-            MsgBox "¶i«×»¡©ú¤w¸g§¹¦¨¼Ğµù¡C"
+            MsgBox "é€²åº¦èªªæ˜å·²ç¶“å®Œæˆæ¨™è¨»ã€‚"
         End If
     Else
-        MsgBox "¨S¦³[¶i«×»¡©ú]¬¡­¶¡C"
+        MsgBox "æ²’æœ‰[é€²åº¦èªªæ˜]æ´»é ã€‚"
     End If
 
 
@@ -855,12 +855,12 @@ End Sub
 
 
 Sub report_menu_making()
-        MsgBox "³o¤@­Ó¥\¯à©Î³øªíÁÙ¦b¶}µo¤¤¡C"
+        MsgBox "é€™ä¸€å€‹åŠŸèƒ½æˆ–å ±è¡¨é‚„åœ¨é–‹ç™¼ä¸­ã€‚"
 End Sub
 
 
 Sub no_meaasge()
-        MsgBox "³o¤@­ÓÄæ¦ì¨S¦³³qª¾ªº¹ï¶H¡C"
+        MsgBox "é€™ä¸€å€‹æ¬„ä½æ²’æœ‰é€šçŸ¥çš„å°è±¡ã€‚"
 End Sub
 
 
@@ -872,7 +872,7 @@ Function link_Folder_And_File(Source_Path As String)
     strFolderExists = Dir(strFolderName, vbDirectory)
     
     If strFolderExists = "" Then
-        MsgBox "¥Ø¿ı¤£¦s¦b¡A½ĞÀË¬d¥Ø¿ı¸ô®|¬O§_¥¿½T¡C"
+        MsgBox "ç›®éŒ„ä¸å­˜åœ¨ï¼Œè«‹æª¢æŸ¥ç›®éŒ„è·¯å¾‘æ˜¯å¦æ­£ç¢ºã€‚"
         GoTo exit_sub
     Else
         Call Shell("explorer.exe " & strFolderName, vbNormalFocus)
@@ -892,7 +892,7 @@ Function link_Excel_Report(Source_Path As String)
     strFileExists = Dir(FilePath)
     
     If strFileExists = "" Then
-        MsgBox "ÀÉ®×¤£¦s¦b¡A½ĞÀË¬dÀÉ®×¸ô®|¬O§_¥¿½T¡C"
+        MsgBox "æª”æ¡ˆä¸å­˜åœ¨ï¼Œè«‹æª¢æŸ¥æª”æ¡ˆè·¯å¾‘æ˜¯å¦æ­£ç¢ºã€‚"
         GoTo exit_sub
     Else
         If AlreadyOpen(CStr(FileOnly)) Then
