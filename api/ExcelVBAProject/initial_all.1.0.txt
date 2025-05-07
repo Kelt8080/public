@@ -99,6 +99,7 @@ exit_sub:
             For j = 1 To 500
                 If para_range.Cells(j, 3).Value = "gmail_to" Then
                     Call frm_email_googleforms
+                    Exit For
                 End If
             Next
 
@@ -106,6 +107,7 @@ exit_sub:
             For j = 1 To 500
                 If para_range.Cells(j, 3).Value = "email_to" Then
                     Call email_report
+                    Exit For
                 End If
             Next
 
