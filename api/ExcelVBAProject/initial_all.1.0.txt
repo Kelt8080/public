@@ -52,12 +52,13 @@ Sub auto_close()     '關閉檔案時自動執行
         Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = 1
     End If
     
-    'Call frm_email_googleforms
+    
 
 
     If Not ActiveWorkbook.ReadOnly Then
         If WorksheetExists("報表參數", ThisWorkbook) Then
         Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+            '更新api
             For j = 1 To 500
                 If para_range.Cells(j, 3).Value = "更新方式" Then
                     If para_range.Cells(j, 4).Value = "自動更新" Then
@@ -89,18 +90,37 @@ exit_sub:
                         '        Workbooks(ThisWorkbook.name).Sheets(i).Cells.Validation.Delete
                         '    End If
                         'Next
-                        
-                        Workbooks(ThisWorkbook.name).Activate
-                        Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
                         Exit For
                     End If
                 End If
             Next
+            
+            '發出gmail
+            For j = 1 To 500
+                If para_range.Cells(j, 3).Value = "gmail_to" Then
+                    Call frm_email_googleforms
+                End If
+            Next
+
+            '發出email
+            For j = 1 To 500
+                If para_range.Cells(j, 3).Value = "email_to" Then
+                    Call email_report
+                End If
+            Next
+
         End If
+        
+        Workbooks(ThisWorkbook.name).Activate
+        Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
         ThisWorkbook.Close SaveChanges:=True
     Else
         ThisWorkbook.Close SaveChanges:=False
     End If
+    
+    
+    
+    
     
     On Error GoTo 0
     'Application.EnableEvents = True
@@ -1982,7 +2002,7 @@ End Function
 
 Function URLEncode$(s$, Optional bForceOldSchool As Boolean)        '網址編碼
   Select Case True
-    Case bForceOldSchool Or Val(Application.Version) < 15
+    Case bForceOldSchool Or Val(Application.version) < 15
                URLEncode = CreateObject("htmlfile").parentWindow.encodeURIComponent(s)
     Case Else: URLEncode = WorksheetFunction.EncodeURL(s)
   End Select
@@ -2455,3 +2475,5 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     Set fso = Nothing
     Set TempWB = Nothing
 End Function
+
+
