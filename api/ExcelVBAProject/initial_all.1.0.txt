@@ -1,67 +1,21 @@
-Attribute VB_Name = "initial_all"
 Option Explicit
+Public Const Mname As String = "MyPopUpMenu"
+Public Const AppVersion As String = "1.0"
+
+
+'*****************************************************************************************
+'
+'01_主程式
+'
+'*****************************************************************************************
 
 
 
 
 
-Sub auto_open()
-
-    Dim title_range, para_range, source_range, target_rang, fix_range As Range
-    Dim i, j, k As Integer
-    
-    '待更新內容
-    '報表DB更新改由後台電子祕書進行，前台改成可手動更新
-    
-
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
-        For i = 1 To 500
-            If para_range.Cells(i, 5).value = "設定自動更新，開啟時會自動匯入最新資料" Then
-                If para_range.Cells(i, 4).value = "自動更新" Then
-                    For j = 1 To 500
-                        If para_range.Cells(j, 5).value = "依照不同資料來源格式，啟動對應程式" Then
-                            Select Case para_range.Cells(j, 4).value
-                                Case "db"
-                                    Call report_menu_import_data
-                                    Exit For
-                                Case "api"
-                                    Call report_menu_import_api
-                                    Exit For
-                                Case Else
-                                    Call report_menu_import_data
-                                    Exit For
-                            End Select
-                        End If
-                    Next
-                End If
-            End If
-        Next
-        For i = 1 To 500
-            If para_range.Cells(i, 5).value = "紀錄系統log" Then
-                If para_range.Cells(i, 4).value = "Y" Then
-                    'Call frm_rec_log_txt
-                    Call frm_rec_log_googleforms
-                    Exit For
-                End If
-            End If
-        Next
-    End If
-    
-
-    
-End Sub
 
 
-
-Sub report_menu_import_api()
-'各檔案main模組獨立呼叫的函數，在此備用避免程式錯誤
-
-End Sub
-
-
-
-Sub auto_close()
+Sub auto_close()     '關閉檔案時自動執行
 
     Dim BackupPath As String
     Dim NowSheet As String
@@ -69,37 +23,55 @@ Sub auto_close()
     Dim i, j, k As Integer
     Dim title_range, para_range, source_range, target_rang, fix_range As Range
     Dim focus_sheet As String
+    Dim ws, ws2 As Worksheet
     
     
-    
-    Application.EnableEvents = False
+    'Application.EnableEvents = False
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
     On Error Resume Next
 
 
     '每周一10:30~14:30啟動備份
-    If Weekday(Date) = 2 Then
-       If TimeValue(Time) >= TimeValue("10:30:00") And TimeValue(Time) <= TimeValue("14:30:00") Then
-            '進行備份作業
-            BackupPath = "\\SolarDoc\總經理室\安環廠務處\廠務部\廠務部專用\14.廠務管理系統\WEA\廠務部報表_運算用\自動Backup\" & ThisWorkbook.name
-            If Dir(BackupPath) <> "" Then
-                Kill BackupPath
-            End If
-            Workbooks(ThisWorkbook.name).SaveCopyAs (BackupPath)
-        End If
+    'If Weekday(Date) = 2 Then
+    '   If TimeValue(Time) >= TimeValue("10:30:00") And TimeValue(Time) <= TimeValue("14:30:00") Then
+    '        '進行備份作業
+    '        BackupPath = "\\SolarDoc\總經理室\安環廠務處\廠務部\廠務部專用\14.廠務管理系統\WEA\廠務部報表_運算用\自動Backup\" & ThisWorkbook.name
+    '        If Dir(BackupPath) <> "" Then
+    '            Kill BackupPath
+    '        End If
+    '        Workbooks(ThisWorkbook.name).SaveCopyAs (BackupPath)
+    '    End If
+    'End If
+    
+    
+    '啟動檔案的獨立函數
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = "auto_ui_initialization"
+        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1").Value = Now()
+        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = 1
     End If
+    
+    'Call frm_email_googleforms
 
 
     If Not ActiveWorkbook.ReadOnly Then
-        'Call initial
         If WorksheetExists("報表參數", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
             For j = 1 To 500
-                If para_range.Cells(j, 5).value = "設定自動更新，開啟時會自動匯入最新資料" Then
-                    If para_range.Cells(j, 4).value = "自動更新" Then
+                If para_range.Cells(j, 3).Value = "更新方式" Then
+                    If para_range.Cells(j, 4).Value = "自動更新" Then
                         NowSheet = ActiveSheet.name
-                        Call del_unuse_row("db")
+                        'Call del_unuse_row("db")
+                        
+                        '更新api
+                        For Each ws In ActiveWorkbook.Worksheets
+                            If ws.name Like "*api_*" Or ws.name Like "*_api*" Then
+                                ws.Select
+                                Workbooks(ThisWorkbook.name).Sheets(ws.name).Range("A1").ListObject.QueryTable.Refresh BackgroundQuery:=False
+                            End If
+                        Next
+                        
                         '更新樞紐分析表
                         For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
                             Set GetPivotTables = Workbooks(ThisWorkbook.name).Sheets(i).PivotTables(1)
@@ -110,13 +82,13 @@ Sub auto_close()
                         Next
 exit_sub:
                         '刪除所有message
-                        For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
-                            If Workbooks(ThisWorkbook.name).Sheets(i).name Like "*參數*" Or Workbooks(ThisWorkbook.name).Sheets(i).name Like "*說明*" Then
-                            
-                            Else
-                                Workbooks(ThisWorkbook.name).Sheets(i).Cells.Validation.Delete
-                            End If
-                        Next
+                        'For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
+                        '    If Workbooks(ThisWorkbook.name).Sheets(i).name Like "*參數*" Or Workbooks(ThisWorkbook.name).Sheets(i).name Like "*說明*" Then
+                        '
+                        '    Else
+                        '        Workbooks(ThisWorkbook.name).Sheets(i).Cells.Validation.Delete
+                        '    End If
+                        'Next
                         
                         Workbooks(ThisWorkbook.name).Activate
                         Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
@@ -131,7 +103,7 @@ exit_sub:
     End If
     
     On Error GoTo 0
-    Application.EnableEvents = True
+    'Application.EnableEvents = True
     Application.ScreenUpdating = True
     Application.DisplayAlerts = True
     
@@ -140,7 +112,1579 @@ End Sub
 
 
 
-Sub timer_reset()
+
+
+
+'*****************************************************************************************
+'
+'02_報表程式
+'
+'*****************************************************************************************
+
+
+
+
+
+Function 管理用_menu_cell_search() As String    '取得active.cell在[報表參數]的快搜範圍，如果沒有設定，就傳回NA
+
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+
+
+    '初始化
+    '取參數值
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "欄位快搜" Then
+                If para_range.Cells(j, 2).Value = ActiveSheet.name Then
+                    If para_range.Cells(j, 4).Value = "" Then
+                        管理用_menu_cell_search = "NA"
+                    Else
+                        管理用_menu_cell_search = para_range.Cells(j, 4).Value
+                    End If
+                    GoTo end_sub
+                End If
+            End If
+        Next
+        管理用_menu_cell_search = "NA"
+    End If
+    
+end_sub:
+    
+    
+    
+End Function
+
+
+Sub all_menu_Delete_PopUpMenu()      '如果浮動選單存在就刪除它
+    On Error Resume Next
+    Application.CommandBars(Mname).Delete
+    On Error GoTo 0
+End Sub
+
+
+Sub 管理用_menu_Create_PopUp管理用_menu_main_report()      '建置報表icon專用的浮動選單
+
+    With Application.CommandBars(Mname)
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "報表專用的浮動選單"
+            .FaceId = 220
+            .OnAction = "auto_open"
+            .BeginGroup = True
+        End With
+
+    End With
+    
+End Sub
+
+
+
+
+
+Sub 管理用_menu_Create_PopUp管理用_menu_main()      '建置報表icon浮動選單
+    Dim MenuItem As CommandBars
+    
+    Call all_menu_Delete_PopUpMenu
+    'Set MenuItem = Application.CommandBars.Add(Name:=Mname, Position:=msoBarPopup, MenuBar:=False, Temporary:=True)
+    With Application.CommandBars.Add(name:=Mname, Position:=msoBarPopup, MenuBar:=False, Temporary:=True)
+
+
+
+        
+
+        '四層-Planner專案管理
+        With .Controls.Add(Type:=msoControlPopup)
+            .Caption = "Planner"
+            With .Controls.Add(Type:=msoControlPopup)
+                .Caption = "執行中專案"
+                With .Controls.Add(Type:=msoControlButton)
+                    .Caption = "廠務部專案與工作"
+                    .FaceId = 268
+                    .OnAction = "管理用_menu_廠務部專案與工作"
+                End With
+            End With
+            With .Controls.Add(Type:=msoControlPopup)
+                .Caption = "已結案專案"
+
+            End With
+            .BeginGroup = True
+        End With
+        
+
+        '三層-廠務部即時報表
+        With .Controls.Add(Type:=msoControlPopup)
+            .Caption = "廠務部Dashboard"
+            With .Controls.Add(Type:=msoControlButton)
+                .Caption = "光洋中央供應系統"
+                .FaceId = 17
+                .OnAction = "管理用_menu_光洋中央供應系統"
+            End With
+            With .Controls.Add(Type:=msoControlButton)
+                .Caption = "光洋中央供應系統_週報"
+                .FaceId = 17
+                .OnAction = "管理用_menu_光洋中央供應系統_週報"
+            End With
+            With .Controls.Add(Type:=msoControlButton)
+                .Caption = "廠務部月報(開發中)"
+                .FaceId = 17
+                .Enabled = False
+                .OnAction = "管理用_menu_廠務部月報"
+                .BeginGroup = True
+            End With
+        End With
+
+
+
+        '二層-供應商關係管理
+        With .Controls.Add(Type:=msoControlPopup)
+            .Caption = "供應商管理"
+            With .Controls.Add(Type:=msoControlButton)
+                .Caption = "新供應商填寫用空白文件"
+                .FaceId = 32
+                .OnAction = "管理用_menu_新供應商填寫用空白文件"
+                .Enabled = False
+            End With
+            With .Controls.Add(Type:=msoControlButton)
+                .Caption = "台塑酸鹼化學品型錄"
+                .FaceId = 32
+                .OnAction = "管理用_menu_台塑酸鹼化學品型錄"
+            End With
+            With .Controls.Add(Type:=msoControlButton)
+                .Caption = "環境部再利用檢核廠商清單"
+                .FaceId = 32
+                .OnAction = "管理用_menu_環境部再利用檢核廠商清單"
+            End With
+            With .Controls.Add(Type:=msoControlButton)
+                .Caption = "供應商稽核"
+                .FaceId = 32
+                .OnAction = "report_menu_making"
+                .Enabled = False
+            End With
+            With .Controls.Add(Type:=msoControlButton)
+                    .Caption = "承攬商違規管理"
+                    .FaceId = 32
+                    .OnAction = "管理用_menu_承攬商違規管理"
+                    .Enabled = False
+            End With
+            .BeginGroup = True
+        End With
+        
+        
+        
+
+        '二層-材質管理
+        With .Controls.Add(Type:=msoControlPopup)
+            .Caption = "備品管理"
+            With .Controls.Add(Type:=msoControlButton)
+                .Caption = "原物料品號管理"
+                .FaceId = 32
+                .OnAction = "report_menu_making"
+                .Enabled = False
+            End With
+        End With
+
+
+        '三層-各部門公用路徑
+        With .Controls.Add(Type:=msoControlPopup)
+            .Caption = "各部門公用路徑"
+            With .Controls.Add(Type:=msoControlPopup)
+                .Caption = "環保部"
+                With .Controls.Add(Type:=msoControlButton)
+                    .Caption = "下腳料合約廠商"
+                    .FaceId = 32
+                    .OnAction = "管理用_menu_下腳料合約廠商"
+                End With
+            End With
+            With .Controls.Add(Type:=msoControlPopup)
+                .Caption = "安全衛生室"
+                With .Controls.Add(Type:=msoControlButton)
+                    .Caption = "承攬商違規管理"
+                    .FaceId = 32
+                    .OnAction = "管理用_menu_承攬商違規管理"
+                End With
+                With .Controls.Add(Type:=msoControlButton)
+                    .Caption = "SDS"
+                    .FaceId = 32
+                    .OnAction = "管理用_menu_SDS"
+                End With
+            End With
+            With .Controls.Add(Type:=msoControlPopup)
+                .Caption = "會計財務"
+                With .Controls.Add(Type:=msoControlButton)
+                    .Caption = "延宕6個月追蹤"
+                    .FaceId = 32
+                    .OnAction = "管理用_menu_延宕6個月追蹤"
+                End With
+            End With
+        End With
+        
+
+        '三層-外部資源
+        With .Controls.Add(Type:=msoControlPopup)
+            .Caption = "外部連結"
+            With .Controls.Add(Type:=msoControlButton)
+                .Caption = "郵遞區號查詢"
+                .FaceId = 610
+                .OnAction = "管理用_menu_郵遞區號"
+            End With
+            With .Controls.Add(Type:=msoControlPopup)
+                .Caption = "職能與證照"
+                With .Controls.Add(Type:=msoControlButton)
+                    .Caption = "smit中華採購協會"
+                    .FaceId = 610
+                    .OnAction = "管理用_menu_smit中華採購協會"
+                End With
+            End With
+            
+        End With
+        
+        
+        '載入自訂選單
+        On Error Resume Next
+        Call 管理用_menu_Create_PopUp管理用_menu_main_report
+        On Error GoTo 0
+
+        
+        
+        
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "大視窗"
+            .FaceId = 444
+            .OnAction = "report_menu_Fullscreen"
+            .BeginGroup = True
+        End With
+
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "小視窗"
+            .FaceId = 445
+            .OnAction = "report_menu_Deactivatescreen"
+        End With
+        
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "標註進度說明"
+            .FaceId = 274
+            .OnAction = "管理用_menu_update_message"
+            .Enabled = False
+            .BeginGroup = True
+        End With
+
+        
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "匯入資料模型"
+            .FaceId = 1215
+            .OnAction = "auto_open"
+        End With
+        
+
+
+
+    End With
+    
+    
+
+    
+
+
+    '顯示浮動選單
+    On Error Resume Next
+    Application.CommandBars(Mname).ShowPopup
+    On Error GoTo 0
+End Sub
+
+
+Sub Create_PopUpMenu_search()        '建置欄位search專用的浮動選單
+
+    Dim MenuItem As CommandBarPopup
+    Dim i, j, k, l As Integer
+    Dim para_range As Range
+    Dim search_app(100, 3) As String
+    
+    '初始化
+    search_app(1, 1) = "search_everything"
+    search_app(2, 1) = "search_anytxt"
+    search_app(3, 1) = "search_trello"
+    search_app(4, 1) = "search_google_keep"
+    search_app(5, 1) = "search_google_tasks"
+    search_app(6, 1) = "search_chatgpt"
+    search_app(7, 1) = "search_gemini"
+    search_app(8, 1) = "search_copilot"
+    search_app(9, 1) = "search_deepseek"
+    search_app(10, 1) = "search_ithy"
+    
+
+
+    '取參數值
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For k = 1 To 100
+            If search_app(k, 1) = "" Then GoTo end_k
+            For j = 1 To 500
+                If para_range.Cells(j, 3).Value = "" Then Exit For
+                If para_range.Cells(j, 3).Value = search_app(k, 1) Then
+                    search_app(k, 2) = "True"
+                    GoTo end_k
+                End If
+            Next
+            search_app(k, 2) = "False"
+end_k:
+        Next
+    End If
+
+
+    Call all_menu_Delete_PopUpMenu
+    '新增欄位search浮動選單_search內容
+    With Application.CommandBars.Add(name:=Mname, Position:=msoBarPopup, MenuBar:=False, Temporary:=True)
+    
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "evrything搜尋本地檔案"
+            .FaceId = 22
+            .OnAction = "管理用_menu_欄位search_everything"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_everything" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+        
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "anyTXT搜尋本地內文"
+            .FaceId = 18
+            .OnAction = "管理用_menu_欄位search_anytxt"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_anytxt" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+        
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "trello搜尋雲端工作卡"
+            .FaceId = 25
+            .OnAction = "管理用_menu_欄位search_trello"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_trello" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+            .BeginGroup = True
+        End With
+        
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "google_keep搜尋雲端記事"
+            .FaceId = 25
+            .OnAction = "管理用_menu_欄位search_google_keep"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_google_keep" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "google_tasks搜尋待辦事項"
+            .FaceId = 25
+            .OnAction = "管理用_menu_欄位search_google_tasks"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_google_tasks" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+
+
+        '單層
+        'chatgpt快捷鍵:  https://blog.csdn.net/Dontla/article/details/143599702
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "問問chatgpt AI"
+            .FaceId = 327
+            .OnAction = "管理用_menu_欄位search_chatgpt"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_chatgpt" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+            .BeginGroup = True
+        End With
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "問問gemini AI"
+            .FaceId = 327
+            .OnAction = "管理用_menu_欄位search_gemini"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_gemini" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "問問copilot AI"
+            .FaceId = 327
+            .OnAction = "管理用_menu_欄位search_copilot"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_copilot" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "問問deepseek AI"
+            .FaceId = 327
+            .OnAction = "管理用_menu_欄位search_deepseek"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_deepseek" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "問問ithy AI"
+            .FaceId = 327
+            .OnAction = "管理用_menu_欄位search_ithy"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_ithy" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "問問perplexity AI"
+            .FaceId = 327
+            .OnAction = "管理用_menu_欄位search_perplexity"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_perplexity" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "問問felo AI"
+            .FaceId = 327
+            .OnAction = "管理用_menu_欄位search_felo"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_felo" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+
+
+        '單層
+        With .Controls.Add(Type:=msoControlButton)
+            .Caption = "問問claude AI"
+            .FaceId = 327
+            .OnAction = "管理用_menu_欄位search_claude"
+            For k = 1 To 100
+                If search_app(k, 1) = "" Then Exit For
+                If search_app(k, 1) = "search_claude" Then
+                    .Enabled = search_app(k, 2)
+                    Exit For
+                End If
+            Next
+        End With
+
+
+    End With
+    
+    
+    
+    '顯示欄位search浮動選單_search
+    On Error Resume Next
+    Application.CommandBars(Mname).ShowPopup
+    On Error GoTo 0
+    
+End Sub
+
+
+
+
+'浮動選單超連結
+
+
+Sub 管理用_menu_update_message()            '更新進度說明
+    Dim title_range, para_range, source_range, target_rang, fix_range As Range
+    Dim focus_sheet, Response As String
+    Dim i, j, k As Integer
+    
+    If WorksheetExists("進度說明", ThisWorkbook) Then
+        Response = MsgBox("你要更新進度說明嗎?", vbYesNo)
+        If Response = vbYes Then    ' User chose Yes.
+            For j = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
+                If Workbooks(ThisWorkbook.name).Sheets(j).name Like "*參數*" Or Workbooks(ThisWorkbook.name).Sheets(j).name Like "*說明*" Then
+                
+                Else
+                    Workbooks(ThisWorkbook.name).Sheets(j).Cells.Validation.Delete
+                End If
+            Next
+            Call ini_message
+            MsgBox "進度說明已經完成標註。"
+        End If
+    Else
+        MsgBox "沒有[進度說明]活頁。"
+    End If
+
+
+End Sub
+
+
+
+
+Sub report_menu_making()
+        MsgBox "這一個功能或報表還在開發中。"
+End Sub
+
+
+Sub no_meaasge()
+        MsgBox "這一個欄位沒有通知的對象。"
+End Sub
+
+
+Function link_Folder_And_File(Source_Path As String)
+
+    Dim strFolderName, strFolderExists As String
+    
+    strFolderName = Source_Path
+    strFolderExists = Dir(strFolderName, vbDirectory)
+    
+    If strFolderExists = "" Then
+        MsgBox "目錄不存在，請檢查目錄路徑是否正確。"
+        GoTo exit_sub
+    Else
+        Call Shell("explorer.exe " & strFolderName, vbNormalFocus)
+    End If
+exit_sub:
+    
+End Function
+
+
+
+
+
+
+Function link_Excel_Report(Source_Path As String)
+
+    Dim LocalPath, FilePath, FileOnly, PathOnly As String
+    Dim strFileName, strFileName2, strFileExists As String
+
+    FilePath = Source_Path
+    LocalPath = Left(FilePath, InStrRev(FilePath, "\") + 1)
+    FileOnly = Mid(FilePath, Len(LocalPath), Len(FilePath))
+    strFileExists = Dir(FilePath)
+    
+    If strFileExists = "" Then
+        MsgBox "檔案不存在，請檢查檔案路徑是否正確。"
+        GoTo exit_sub
+    Else
+        If AlreadyOpen(CStr(FileOnly)) Then
+            Windows(FileOnly).Activate
+        Else
+            Workbooks.Open Filename:=FilePath
+            On Error Resume Next
+            Application.Run "'" & FileOnly & "'!auto_open"
+            On Error GoTo 0
+        End If
+    End If
+exit_sub:
+
+
+End Function
+
+
+Function link_Web(ByVal link As String)     '超連結格式化
+    'ActiveWorkbook.FollowHyperlink Address:=Source_Path, NewWindow:=True
+
+   'Escape chars that cmd.exe uses
+    link = Replace(link, "^", "^^")
+    link = Replace(link, "|", "^|")
+    link = Replace(link, "&", "^&")
+    'Open default web browser
+    Shell "CMD.EXE /C START " & link, vbHide
+End Function
+
+Sub 管理用_menu_廠務部專案與工作()
+    Call link_Web("https://tasks.office.com/solartech.com.tw/zh-TW/Home/Planner/#/plantaskboard?groupId=db7995ca-aa46-40c0-9a66-d266524f65a0&planId=Ba9uBBMK9EKj7rt_z0EHkskABclV")
+End Sub
+Sub 管理用_menu_光洋中央供應系統()
+    Call link_Folder_And_File("\\SolarDoc\總經理室\安環廠務處\廠務部\廠務部共用區\14.廠務管理系統\WEA\光洋中央供應系統.pptx")
+End Sub
+Sub 管理用_menu_光洋中央供應系統_週報()
+    Call link_Folder_And_File("\\SolarDoc\總經理室\安環廠務處\廠務部\廠務部共用區\14.廠務管理系統\WEA\光洋中央供應系統_週報.pptx")
+End Sub
+Sub 管理用_menu_環境部再利用檢核廠商清單()
+        Call link_Web("https://rms.moenv.gov.tw/")
+End Sub
+Sub 管理用_menu_台塑酸鹼化學品型錄()
+        Call link_Web("http://www.fpc.com.tw/fpcw/index.php?op=proD&con=2&d=1")
+End Sub
+Sub 管理用_menu_郵遞區號()
+        Call link_Web("https://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208")
+End Sub
+
+
+Sub 管理用_menu_欄位search_everything()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_everything" Then
+                If FileFolderExists(para_range.Cells(j, 5).Value) Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value & " -search " & ActiveCell.Value
+                    WshShell.Run exePath, 1, False  '1 = 正常視窗, False = 不等待完成
+                Else
+                    MsgBox "你有在[報表參數]設定everything搜尋，但everything的執行路徑是無效的，請確認。"
+                End If
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+Sub 管理用_menu_欄位search_anytxt()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_anytxt" Then
+                If FileFolderExists(para_range.Cells(j, 5).Value) Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = """" & para_range.Cells(j, 5).Value & """" & " /s " & """" & ActiveCell.Value & """"
+                    WshShell.Run exePath, 1, False  '1 = 正常視窗, False = 不等待完成
+                Else
+                    MsgBox "你有在[報表參數]設定anyTXT搜尋，但anyTXT的執行路徑是無效的，請確認。"
+                End If
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+Sub 管理用_menu_欄位search_trello()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_trello" Then
+                Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value & ActiveCell.Value
+                    Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("J18") = exePath
+                    Call link_Web(exePath)
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+Sub 管理用_menu_欄位search_google_keep()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_google_keep" Then
+                Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                exePath = para_range.Cells(j, 5).Value & ActiveCell.Value
+                Call link_Web(exePath)
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+Sub 管理用_menu_欄位search_google_tasks()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_google_tasks" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value
+                    Call link_Web(exePath)
+                    Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
+                    'Application.CutCopyMode = False
+                    'Application.ActiveCell.Copy
+                    Application.Wait (Now + TimeValue("00:00:08"))
+                    WshShell.SendKeys "^v" ' "^" 代表 Ctrl 鍵
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+Sub 管理用_menu_欄位search_chatgpt()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_chatgpt" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value
+                    Call link_Web(exePath)
+                    Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
+                    Application.Wait (Now + TimeValue("00:00:08"))
+                    WshShell.SendKeys "^v" ' "^" 代表 Ctrl 鍵
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+Sub 管理用_menu_欄位search_gemini()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_gemini" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value
+                    Call link_Web(exePath)
+                    Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
+                    Application.Wait (Now + TimeValue("00:00:08"))
+                    WshShell.SendKeys "^v" ' "^" 代表 Ctrl 鍵
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+
+Sub 管理用_menu_欄位search_copilot()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_copilot" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value
+                    Call link_Web(exePath)
+                    Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
+                    Application.Wait (Now + TimeValue("00:00:08"))
+                    WshShell.SendKeys "^v" ' "^" 代表 Ctrl 鍵
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+Sub 管理用_menu_欄位search_deepseek()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_deepseek" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value
+                    Call link_Web(exePath)
+                    Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
+                    Application.Wait (Now + TimeValue("00:00:08"))
+                    WshShell.SendKeys "^v" ' "^" 代表 Ctrl 鍵
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+Sub 管理用_menu_欄位search_ithy()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_ithy" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value
+                    Call link_Web(exePath)
+                    Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
+                    Application.Wait (Now + TimeValue("00:00:08"))
+                    WshShell.SendKeys "^v" ' "^" 代表 Ctrl 鍵
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+
+Sub 管理用_menu_欄位search_perplexity()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_perplexity" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value
+                    Call link_Web(exePath)
+                    Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
+                    Application.Wait (Now + TimeValue("00:00:08"))
+                    WshShell.SendKeys "^v" ' "^" 代表 Ctrl 鍵
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+Sub 管理用_menu_欄位search_felo()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_felo" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value
+                    Call link_Web(exePath)
+                    Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
+                    Application.Wait (Now + TimeValue("00:00:08"))
+                    WshShell.SendKeys "^v" ' "^" 代表 Ctrl 鍵
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+Sub 管理用_menu_欄位search_claude()
+
+    Dim WshShell As Object
+    Dim exePath As String
+    Dim i, j, k, l As Integer
+    Dim click_rang, para_range As Range
+    
+
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    '取參數值
+    If ActiveCell.Value = "" Then
+        MsgBox "這一個欄位沒有資料。"
+        Exit Sub
+    End If
+    
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "search_claude" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    exePath = para_range.Cells(j, 5).Value
+                    Call link_Web(exePath)
+                    Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
+                    Application.Wait (Now + TimeValue("00:00:08"))
+                    WshShell.SendKeys "^v" ' "^" 代表 Ctrl 鍵
+                Exit For
+            End If
+        Next
+    End If
+    
+    Set WshShell = Nothing
+    
+End Sub
+
+
+
+
+Function email_report_old(email, cc, subject, name, body, body_rang As String)      '發出email
+
+    Dim OutApp, OutMail As Object, signature As String
+    
+    
+    Set OutApp = CreateObject("Outlook.Application")
+    Set OutMail = OutApp.CreateItem(0)
+    '建立email
+    With OutMail
+         .To = email
+         .cc = cc
+         .subject = subject
+         .Display
+    End With
+    '取得簽名檔+執行tinytask
+    signature = OutMail.HTMLBody
+    'send email
+    With OutMail
+         '.body = body
+         .HTMLBody = "Hello " & name & " : " & "<br><br>" & _
+            body & "<br><br>" & _
+           "Thank you for your cooperation." & "<br><br>" & signature
+         .Active
+         .Focus
+         '.Attachments.Add ("") 'You can add files here
+         '.Display
+         '.Send
+    End With
+
+    Set OutMail = Nothing
+    Set OutApp = Nothing
+    
+    
+End Function
+
+
+
+
+
+
+
+Sub ini_message()       '將email內容整理成Outlook的表格
+
+    Dim title_range, para_range, source_range, target_rang, fix_range As Range
+    Dim source_cel, target_cel As Range
+    Dim db_range, price_range, list_rang, category_rang As Range
+    Dim LocalPath, FilePath, FileOnly, PathOnly, source_string As String
+    Dim i, j, k As Integer
+    Dim ws As Worksheet
+    Dim fm, fso, aFile As Object
+    Dim TestStr As String
+    Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
+    Dim email_email, email_cc, email_subject, email_name, email_body, email_body_rang As String
+    
+    Application.EnableEvents = False
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    Application.Calculation = xlManual  '關閉自動運算
+    On Error Resume Next
+    
+
+    
+    '只有管理用與運算用能夠啟動自動化功能
+    '初始化
+    Windows(ThisWorkbook.name).Activate
+    FilePath = ThisWorkbook.FullName
+    FileOnly = ThisWorkbook.name
+    PathOnly = Left(FilePath, Len(FilePath) - Len(FileOnly))
+    LocalPath = Left(PathOnly, InStrRev(PathOnly, "\") - 1)
+    FilePath = Left(LocalPath, InStrRev(LocalPath, "\") + 1)
+    FileOnly = Mid(LocalPath, Len(FilePath), Len(LocalPath))
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
+    End If
+
+
+    '對應不同的欄位tile執行不同的功能
+    If (FileOnly = "廠務部報表_運算用" Or FileOnly = "廠務部報表_管理用") Then
+        For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
+            If Application.WorksheetFunction.Sum(Workbooks(ThisWorkbook.name).Sheets(i).Range("G11:G" & Workbooks(ThisWorkbook.name).Sheets(i).UsedRange.Rows.Count)) > 0 Then
+                Set title_range = Workbooks(ThisWorkbook.name).Sheets(i).Range(Workbooks(ThisWorkbook.name).Sheets(i).Range("G10").End(xlToRight), Workbooks(ThisWorkbook.name).Sheets(i).Range("G10"))
+                LocalPath = Left(Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & title_range.Cells(1).Row).Address, InStrRev(Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & title_range.Cells(1).Row).Address, "$") - 1) & title_range.Cells(1).Row
+                source_string = Workbooks(ThisWorkbook.name).Sheets(i).Range(LocalPath).Value
+                Select Case source_string
+                    Case "進度說明"
+                        For j = 11 To Workbooks(ThisWorkbook.name).Sheets(i).UsedRange.Rows.Count
+                            If Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Value = 1 Or Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Value = 2 Or Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Value = 3 Then
+                                For k = 1 To 500
+                                    If para_range.Cells(k, 5).Value = "購案進度說明" Then
+                                        If Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "請購單號") <> "" Then
+                                            para_range.Cells(k, 3).Value = Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "請購單號")
+                                            para_range.Cells(k, 4).Calculate
+                                            With Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Validation
+                                                .Delete
+                                                .Add Type:=xlValidateInputOnly, AlertStyle:=xlValidAlertStop, Operator:=xlBetween
+                                                .IgnoreBlank = True
+                                                .InCellDropdown = True
+                                                .InputTitle = "【" & Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "產品品稱") & "】"
+                                                .InputMessage = para_range.Cells(k, 4).Value
+                                            End With
+                                            Exit For
+                                        End If
+                                        If Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "採購單號") <> "" Then
+                                            para_range.Cells(k, 3).Value = Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "採購單號")
+                                            para_range.Cells(k, 4).Calculate
+                                            With Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Validation
+                                                .Delete
+                                                .Add Type:=xlValidateInputOnly, AlertStyle:=xlValidAlertStop, Operator:=xlBetween
+                                                .IgnoreBlank = True
+                                                .InCellDropdown = True
+                                                .InputTitle = "【" & Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "產品品稱") & "】"
+                                                .InputMessage = para_range.Cells(k, 4).Value
+                                            End With
+                                            Exit For
+                                        End If
+                                    End If
+                                Next
+                            End If
+                        Next
+                    'Case Else
+                End Select
+            End If
+        Next
+    End If
+    
+    On Error GoTo 0
+    Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
+    Application.EnableEvents = True
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+
+
+
+End Sub
+
+
+
+
+Function Offset_string(title_address, target_string As String) As String        'email表格用
+
+    Dim para_range, source_range, target_rang As Range
+    Dim source_cel, target_cel As Range
+    Dim LocalPath, FilePath, FileOnly, PathOnly, source_string As String
+    Dim i, j, k As Integer
+
+    '初始化
+    Windows(ThisWorkbook.name).Activate
+    Set source_range = Range(title_address)
+    Set target_rang = ActiveCell
+    LocalPath = Left(target_rang.Address, InStrRev(target_rang.Address, "$") - 1) & source_range.Cells(1).Row
+    source_string = Range(LocalPath).Value
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
+    End If
+    
+    
+    If target_rang.Row > source_range.Cells(1).Row Then
+        '先取得現有欄位相對位置
+        i = 1
+        For Each source_cel In source_range.Cells
+            If source_cel.Value = "" Then Exit For
+            If source_cel.Value = source_string Then Exit For
+            i = i + 1
+        Next source_cel
+        '取得"email給使用單位"欄位資料-->email_email
+        j = 1
+        For Each source_cel In source_range.Cells
+            If j = source_range.Cells.Count And source_cel.Value <> target_string Then
+                Offset_string = ""
+                Exit For
+            End If
+            If source_cel.Value = target_string Then
+                k = j - i
+                Offset_string = target_rang.Offset(0, k).Value
+                Exit For
+            End If
+            j = j + 1
+        Next source_cel
+    End If
+
+
+
+End Function
+
+Function Offset_string_auto(target_sheet, title_address, source_address, target_string As String) As String        'email表格用
+
+    Dim para_range, source_range, target_rang As Range
+    Dim source_cel, target_cel As Range
+    Dim LocalPath, FilePath, FileOnly, PathOnly, source_string As String
+    Dim i, j, k As Integer
+
+
+    '初始化
+    Windows(ThisWorkbook.name).Activate
+    Set source_range = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(title_address)
+    Set target_rang = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(source_address)
+    LocalPath = Left(target_rang.Address, InStrRev(target_rang.Address, "$") - 1) & source_range.Cells(1).Row
+    source_string = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(LocalPath).Value
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
+    End If
+
+
+    If target_rang.Row > source_range.Cells(1).Row Then
+        '先取得現有欄位相對位置
+        i = 1
+        For Each source_cel In source_range.Cells
+            If source_cel.Value = "" Then Exit For
+            If source_cel.Value = source_string Then Exit For
+            i = i + 1
+        Next source_cel
+        '取得"email給使用單位"欄位資料-->email_email
+        j = 1
+        For Each source_cel In source_range.Cells
+            If j = source_range.Cells.Count And source_cel.Value <> target_string Then
+                Offset_string_auto = ""
+                Exit For
+            End If
+            If source_cel.Value = target_string Then
+                k = j - i
+                Offset_string_auto = target_rang.Offset(0, k).Value
+                Exit For
+            End If
+            j = j + 1
+        Next source_cel
+    End If
+    
+
+
+End Function
+
+
+
+
+
+Sub report_menu_Fullscreen()             '全螢幕視窗
+
+    Dim wsSheet As Worksheet
+    Dim NowSheet As String
+
+    NowSheet = ActiveSheet.name
+    
+    Application.ScreenUpdating = False
+    Application.ExecuteExcel4Macro "SHOW.TOOLBAR(""Ribbon"",False)"
+    Application.DisplayFormulaBar = False
+    Application.DisplayStatusBar = Not Application.DisplayStatusBar
+    ActiveWindow.DisplayWorkbookTabs = True
+    
+    
+    Application.ScreenUpdating = False
+    For Each wsSheet In ThisWorkbook.Worksheets
+        If Not wsSheet.name = "Blank" Then
+            wsSheet.Activate
+            With ActiveWindow
+                .DisplayHeadings = False
+                '.DisplayWorkbookTabs = True
+                '.DisplayHorizontalScrollBar = False
+            End With
+        End If
+    Next wsSheet
+
+    Workbooks(ThisWorkbook.name).Activate
+    Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
+    Application.ScreenUpdating = True
+
+
+End Sub
+
+
+Sub report_menu_Deactivatescreen()      '一般螢幕視窗
+
+    Dim wsSheet As Worksheet
+    Dim NowSheet As String
+
+    NowSheet = ActiveSheet.name
+
+    Application.ScreenUpdating = False
+    Application.ExecuteExcel4Macro "SHOW.TOOLBAR(""Ribbon"",True)"
+    Application.DisplayFormulaBar = True
+    Application.DisplayStatusBar = True
+    ActiveWindow.DisplayWorkbookTabs = True
+    
+    Application.ScreenUpdating = False
+    For Each wsSheet In ThisWorkbook.Worksheets
+        If Not wsSheet.name = "Blank" Then
+            wsSheet.Activate
+            With ActiveWindow
+                .DisplayHeadings = True
+                '.DisplayWorkbookTabs = True
+                '.DisplayHorizontalScrollBar = True
+            End With
+        End If
+    Next wsSheet
+
+    Workbooks(ThisWorkbook.name).Activate
+    Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
+    Application.ScreenUpdating = True
+    
+End Sub
+
+
+
+
+Sub toggle_comments()       '顯示/隱藏備註
+
+    Dim source_range As Range, target_rang As Range, fix_range As Range
+    Dim db_range, price_range, list_rang, category_rang As Range
+    Dim spath, spath_daily, spath_daily2, spath_db, spath_materil, spath_template, spath_item, spath_spec_history, spath_catgeory, spath_bu, spath_email, spath_file(100) As String
+    Dim file_db, file_daily, file_daily2, file_template, file_item, file_catgeory, file_spec_history, file_bu, file_email, file_file(100), task_owner(100) As String
+    Dim LocalPath, FilePath, FileOnly, PathOnly As String
+    Dim row_s, row_e, row_range, target_sheet As String
+    Dim i, j, k, l As Integer
+    Dim ws As Worksheet
+    Dim fm, fso, aFile As Object
+    Dim TestStr As String
+    Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
+    Dim source_cel, target_cel As Range
+    Dim para_range As Range
+    Dim GetPivotTables As PivotTable
+
+
+
+    Application.EnableEvents = False
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    Application.Calculation = xlManual  '關閉自動運算
+    On Error Resume Next
+
+
+                        
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    'Sheets("報表參數").Select
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "顯示隱藏備註" Then
+                'Sheets("廢水流向圖").Select
+                Select Case para_range.Cells(j, 4).Value
+                    Case "N"
+                        '顯示交叉分析篩選器
+                        ActiveSheet.Shapes("shadow_0").Visible = True
+                        ActiveSheet.Shapes("選單背景").Visible = True
+                        ActiveSheet.Shapes("立案年度").Visible = True
+                        ActiveSheet.Shapes("立案月份").Visible = True
+                        ActiveSheet.Shapes("進度").Visible = True
+                        ActiveSheet.Shapes("負責人").Visible = True
+                        ActiveSheet.Shapes("重選").Visible = True
+                        ActiveSheet.Shapes("更新").Visible = True
+                        ActiveSheet.Shapes("flow_zoom_in").Visible = True
+                        ActiveSheet.Shapes("flow_zoom_out").Visible = True
+                        Set source_range = Selection.SpecialCells(xlCellTypeComments)
+                        If Not source_range Is Nothing Then
+                            '顯示備註
+                            For Each target_rang In source_range
+                                target_rang.Comment.Visible = True
+                            Next
+                        End If
+                        para_range.Cells(j, 4).Value = "Y"
+                    Case "Y"
+                        '顯示交叉分析篩選器
+                        ActiveSheet.Shapes("shadow_0").Visible = False
+                        ActiveSheet.Shapes("選單背景").Visible = False
+                        ActiveSheet.Shapes("立案年度").Visible = False
+                        ActiveSheet.Shapes("立案月份").Visible = False
+                        ActiveSheet.Shapes("進度").Visible = False
+                        ActiveSheet.Shapes("負責人").Visible = False
+                        ActiveSheet.Shapes("重選").Visible = False
+                        ActiveSheet.Shapes("更新").Visible = False
+                        ActiveSheet.Shapes("flow_zoom_in").Visible = False
+                        ActiveSheet.Shapes("flow_zoom_out").Visible = False
+                        Set source_range = Selection.SpecialCells(xlCellTypeComments)
+                        If Not source_range Is Nothing Then
+                            '顯示備註
+                            For Each target_rang In source_range
+                                target_rang.Comment.Visible = False
+                            Next
+                        End If
+                        para_range.Cells(j, 4).Value = "N"
+                    Case Else
+                        para_range.Cells(j, 4).Value = "Y"
+                End Select
+                GoTo end_sub
+            End If
+        Next
+    End If
+    
+    
+end_sub:
+    Sheets("廢水流向圖").Select
+    
+    On Error GoTo 0
+    Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
+    Application.EnableEvents = True
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+
+
+
+End Sub
+
+
+
+
+
+
+
+
+
+'*****************************************************************************************
+'
+'0z_共用程式
+'
+'*****************************************************************************************
+
+
+
+Sub show_names()    '顯示所有隱藏的公式名稱
+
+    Dim 名稱 As Object
+    
+    For Each 名稱 In Names: 名稱.Visible = True: Next
+
+End Sub
+
+
+
+Sub timer_reset()    '測試Code運行時間
 
     Dim t As Long
     t = Timer   '獲取當前時間
@@ -159,7 +1703,9 @@ Sub timer_reset()
 End Sub
 
 
-Function WorksheetExists(shtName As String, Optional wb As Workbook) As Boolean
+
+
+Function WorksheetExists(shtName As String, Optional wb As Workbook) As Boolean     '檢測Worksheet是否存在
     Dim sht As Worksheet
 
     If wb Is Nothing Then Set wb = ThisWorkbook
@@ -170,7 +1716,7 @@ Function WorksheetExists(shtName As String, Optional wb As Workbook) As Boolean
 End Function
 
 
-Function AlreadyOpen(strWorkBookName As String) As Boolean
+Function AlreadyOpen(strWorkBookName As String) As Boolean      '檢測檔案是否已經開啟
     'Returns TRUE if the workbook is open
     Dim oXL As Excel.Application
     Dim oBk As Workbook
@@ -195,7 +1741,7 @@ Function AlreadyOpen(strWorkBookName As String) As Boolean
 End Function
 
 
-Function FileFolderExists(strFullPath As String) As Boolean
+Function FileFolderExists(strFullPath As String) As Boolean     '檢測目錄是否存在
     On Error GoTo EarlyExit
     If Not Dir(strFullPath, vbDirectory) = vbNullString Then FileFolderExists = True
 EarlyExit:
@@ -203,103 +1749,65 @@ EarlyExit:
 End Function
 
 
-Function Offset_string(title_address, target_string As String) As String
 
-    Dim para_range, source_range, target_rang As Range
-    Dim source_cel, target_cel As Range
-    Dim LocalPath, FilePath, FileOnly, PathOnly, source_string As String
-    Dim i, j, k As Integer
 
-    '初始化
-    Windows(ThisWorkbook.name).Activate
-    Set source_range = Range(title_address)
-    Set target_rang = ActiveCell
-    LocalPath = Left(target_rang.Address, InStrRev(target_rang.Address, "$") - 1) & source_range.Cells(1).Row
-    source_string = Range(LocalPath).value
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
-    End If
+
+Function frm_search_log_googleforms(keyword, search_app As String)      '紀錄serch_keyword_googleforms
+    Dim last_row_1, last_row_2 As String
+    Dim s_path, t_path As String
+    Dim last_range, input_range As Range
+    Dim FilePath, FileOnly, PathOnly, LocalPath, frm_basPath, CheckPath, UpperPath As String
+    Dim fm, fso, aFile As Object
+    Dim TestStr As String
+    Dim strFolderName As String
+    Dim strFolderExists As String
+    Dim link(100), field(100), myURL, txt, str As String
+    Dim myhttp As Object
     
+
+
+    On Error Resume Next
+    Application.Calculation = xlManual  '關閉自動運算
     
-    If target_rang.Row > source_range.Cells(1).Row Then
-        '先取得現有欄位相對位置
-        i = 1
-        For Each source_cel In source_range.Cells
-            If source_cel.value = "" Then Exit For
-            If source_cel.value = source_string Then Exit For
-            i = i + 1
-        Next source_cel
-        '取得"email給使用單位"欄位資料-->email_email
-        j = 1
-        For Each source_cel In source_range.Cells
-            If j = source_range.Cells.Count And source_cel.value <> target_string Then
-                Offset_string = ""
-                Exit For
-            End If
-            If source_cel.value = target_string Then
-                k = j - i
-                Offset_string = target_rang.Offset(0, k).value
-                Exit For
-            End If
-            j = j + 1
-        Next source_cel
+
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    FilePath = ThisWorkbook.FullName
+    FileOnly = ThisWorkbook.name
+    PathOnly = Left(FilePath, Len(FilePath) - Len(FileOnly))
+    LocalPath = Left(PathOnly, InStrRev(PathOnly, "\") - 1)
+    CheckPath = Right(LocalPath, Len(LocalPath) - InStrRev(LocalPath, "\"))
+    UpperPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1) & "\"
+
+
+    '需要有2個link
+    link(1) = "https://docs.google.com/forms/d/e/1FAIpQLSdxPxdZ_Fi0JbB-ZrHw6cGQsJl4RNWisQGfAJ-gObdTdxNlZQ/formResponse?usp=pp_url&"
+    link(2) = "https://docs.google.com/forms/d/e/1FAIpQLSdxPxdZ_Fi0JbB-ZrHw6cGQsJl4RNWisQGfAJ-gObdTdxNlZQ/viewform"
+    Set myhttp = CreateObject("MSXML2.ServerXMLHTTP")
+    'Set myhttp = CreateObject("WinHttp.WinHttpRequest.5.1")
+    field(1) = "&entry.1286345521=" & Format(Now(), "yyyy/m/d h:mm;@")
+    field(2) = "&entry.1224084617=" & Date
+    field(3) = "&entry.807191636=" & URLEncode$(Application.UserName)
+    field(4) = "&entry.750613553=" & keyword
+    field(5) = "&entry.1127642459=" & URLEncode$(search_app)
+    myURL = link(1) & field(1) & field(2) & field(3) & field(4) & field(5)
+    myURL = myURL & "&submit=Submit"
+
+    If Isurlvalid(link(2)) Then
+        myhttp.Open "GET", myURL, False
+        myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
+        myhttp.send
     End If
+
+    
+    Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
+    On Error GoTo 0
 
 
 
 End Function
 
-Function Offset_string_auto(target_sheet, title_address, source_address, target_string As String) As String
 
-    Dim para_range, source_range, target_rang As Range
-    Dim source_cel, target_cel As Range
-    Dim LocalPath, FilePath, FileOnly, PathOnly, source_string As String
-    Dim i, j, k As Integer
-
-
-    '初始化
-    Windows(ThisWorkbook.name).Activate
-    Set source_range = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(title_address)
-    Set target_rang = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(source_address)
-    LocalPath = Left(target_rang.Address, InStrRev(target_rang.Address, "$") - 1) & source_range.Cells(1).Row
-    source_string = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(LocalPath).value
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
-    End If
-
-
-    If target_rang.Row > source_range.Cells(1).Row Then
-        '先取得現有欄位相對位置
-        i = 1
-        For Each source_cel In source_range.Cells
-            If source_cel.value = "" Then Exit For
-            If source_cel.value = source_string Then Exit For
-            i = i + 1
-        Next source_cel
-        '取得"email給使用單位"欄位資料-->email_email
-        j = 1
-        For Each source_cel In source_range.Cells
-            If j = source_range.Cells.Count And source_cel.value <> target_string Then
-                Offset_string_auto = ""
-                Exit For
-            End If
-            If source_cel.value = target_string Then
-                k = j - i
-                Offset_string_auto = target_rang.Offset(0, k).value
-                Exit For
-            End If
-            j = j + 1
-        Next source_cel
-    End If
-    
-
-
-End Function
-
-
-
-
-Sub frm_rec_log_googleforms()
+Sub frm_rec_log_googleforms()       '紀錄log_googleforms
     Dim last_row_1, last_row_2 As String
     Dim s_path, t_path As String
     Dim last_range, input_range As Range
@@ -351,7 +1859,6 @@ Sub frm_rec_log_googleforms()
         'myhttp.setRequestHeader "Content-Type", "multipart/form-data; charset=UTF-8"
         'myhttp.setRequestHeader "enctype", "text/html; charset=UTF-8"
         myhttp.send
-        'MsgBox convertraw(myhttp.responsebody)
     End If
 
     
@@ -366,8 +1873,91 @@ End Sub
 
 
 
+Sub frm_email_googleforms()       'email_googleforms
+    Dim last_row_1, last_row_2 As String
+    Dim s_path, t_path As String
+    Dim last_range, input_range As Range
+    Dim FilePath, FileOnly, PathOnly, LocalPath, frm_basPath, CheckPath, UpperPath As String
+    Dim fm, fso, aFile As Object
+    Dim TestStr As String
+    Dim strFolderName As String
+    Dim strFolderExists As String
+    Dim link(100), field(100), myURL, txt, str As String
+    Dim gmail_to_String, gmail_subject_String, gmail_body_String As String
+    Dim myhttp As Object
+    Dim title_range, para_range, source_range, target_rang, fix_range As Range
+    Dim i, j, k As Integer
 
-Function Isurlvalid(ByVal url As String) As Boolean
+
+    On Error Resume Next
+    Application.Calculation = xlManual  '關閉自動運算
+    
+
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "gmail_to" Then
+                gmail_to_String = para_range.Cells(i, 4).Value
+                Exit For
+            End If
+        Next
+        If gmail_to_String = "" Then GoTo exit_sub
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "gmail_subject" Then
+                gmail_subject_String = para_range.Cells(i, 4).Value
+                Exit For
+            End If
+        Next
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "gmail_body" Then
+                gmail_body_String = para_range.Cells(i, 4).Value
+                Exit For
+            End If
+        Next
+        If gmail_body_String = "" Then GoTo exit_sub
+    End If
+    
+
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    FilePath = ThisWorkbook.FullName
+    FileOnly = ThisWorkbook.name
+    PathOnly = Left(FilePath, Len(FilePath) - Len(FileOnly))
+    LocalPath = Left(PathOnly, InStrRev(PathOnly, "\") - 1)
+    CheckPath = Right(LocalPath, Len(LocalPath) - InStrRev(LocalPath, "\"))
+    UpperPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1) & "\"
+
+
+    '需要有2個link
+    link(1) = "https://docs.google.com/forms/d/e/1FAIpQLSerFesuFjfwBAMiCf_5Lpy3L2OlYqRllz_Q4zMC6sxC88LE2g/formResponse?usp=pp_url&"
+    link(2) = "https://docs.google.com/forms/d/e/1FAIpQLSerFesuFjfwBAMiCf_5Lpy3L2OlYqRllz_Q4zMC6sxC88LE2g/viewform"
+    Set myhttp = CreateObject("MSXML2.ServerXMLHTTP")
+    'Set myhttp = CreateObject("WinHttp.WinHttpRequest.5.1")
+    field(1) = "&entry.1286345521=" & Format(Now(), "yyyy/m/d h:mm;@")
+    field(2) = "&entry.1224084617=" & Date
+    field(3) = "&entry.807191636=" & gmail_to_String
+    field(4) = "&entry.750613553=" & gmail_subject_String
+    field(5) = "&entry.1127642459=" & URLEncode$(gmail_body_String)
+    myURL = link(1) & field(1) & field(2) & field(3) & field(4) & field(5)
+    myURL = myURL & "&submit=Submit"
+
+    If Isurlvalid(link(2)) Then
+        myhttp.Open "GET", myURL, False
+        myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
+        myhttp.send
+    End If
+    
+exit_sub:
+    
+    Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
+    On Error GoTo 0
+
+
+End Sub
+
+
+
+
+Function Isurlvalid(ByVal url As String) As Boolean     '取得網頁api
     Dim myreq As Object
 
     Isurlvalid = False
@@ -389,7 +1979,8 @@ Notvalid:
 End Function
 
 
-Function URLEncode$(s$, Optional bForceOldSchool As Boolean)
+
+Function URLEncode$(s$, Optional bForceOldSchool As Boolean)        '網址編碼
   Select Case True
     Case bForceOldSchool Or Val(Application.Version) < 15
                URLEncode = CreateObject("htmlfile").parentWindow.encodeURIComponent(s)
@@ -400,98 +1991,26 @@ End Function
 
 
 
-Function convertraw(rawdata)
+Function Paste_Cells(source_sheet, target_sheet As String)       '活頁全轉貼
 
-    Dim rawstr As Object
-    Set rawstr = CreateObject("adodb.stream")
-    With rawstr
-        .Type = 1
-        .Mode = 3
-        .Open
-        .Write rawdata
-        .Position = 0
-        .Type = 2
-        .Charset = "big5"
-        '.Charset = "UTF-8"
-        convertraw = .ReadText
-        .Close
-    End With
-    Set rawstr = Nothing
+    Dim source_range, target_rang As Range
+    Dim source_cel, target_cel As Range
+    Dim LocalPath, FilePath, FileOnly, PathOnly As String
+    
+    '初始化
+    Windows(ThisWorkbook.name).Activate
+    Sheets(target_sheet).Cells.ClearContents
+    Sheets(source_sheet).UsedRange.Copy
+    Sheets(target_sheet).Range("A1").Select
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks:=False, Transpose:=False
+    
+
 
 End Function
 
 
 
-
-Sub frm_rec_log_txt()
-    Dim last_row_1, last_row_2 As String
-    Dim s_path, t_path As String
-    Dim last_range, input_range As Range
-    Dim FilePath, FileOnly, PathOnly, LocalPath, frm_basPath, CheckPath, UpperPath As String
-    Dim fm, fso, aFile As Object
-    Dim TestStr As String
-    
-    
-    Application.EnableEvents = False
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
-    On Error Resume Next
-    Application.Calculation = xlManual  '關閉自動運算
-
-
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    FilePath = ThisWorkbook.FullName
-    FileOnly = ThisWorkbook.name
-    PathOnly = Left(FilePath, Len(FilePath) - Len(FileOnly))
-    LocalPath = Left(PathOnly, InStrRev(PathOnly, "\") - 1)
-    CheckPath = Right(LocalPath, Len(LocalPath) - InStrRev(LocalPath, "\"))
-    UpperPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1) & "\"
-    s_path = UpperPath & "廠務部報表_紀錄用\db\log_db.xlsb"
-    t_path = "\\SolarDoc\Public\廠務部公告\log\WEA\log_db.xlsb"
-    
-    '開啟要寫入的DB，如果找不到檔案就複製一份
-    TestStr = ""
-    TestStr = Dir(t_path)
-    If TestStr = "" Then
-        'MsgBox "File doesn't exist"
-        On Error GoTo EarlyExit
-        fso.CopyFile s_path, t_path
-EarlyExit:
-    End If
-    
-    Workbooks.Open Filename:=t_path, ReadOnly:=False, IgnoreReadOnlyRecommended:=True, UpdateLinks:=False
-
-    With Workbooks("log_DB.xlsb").Sheets("db")
-        last_row_1 = .Cells(.Rows.Count, 1).End(xlUp).Row
-        last_row_2 = last_row_1 + 1
-        last_row_1 = last_row_1 & ":" & last_row_1
-        last_row_2 = last_row_2 & ":" & last_row_2
-        Set last_range = Range(last_row_1)
-        Set input_range = Range(last_row_2)
-        input_range.Cells(1).value = 1
-        input_range.Cells(2).value = last_range.Cells(2).value + 1
-        input_range.Cells(3).value = Now()
-        input_range.Cells(4).value = Date
-        input_range.Cells(5).value = Application.UserName
-        'input_range.Cells(6).Value = Environ("UserName")
-        input_range.Cells(6).value = FileOnly
-    End With
-    Workbooks("log_DB.xlsb").Close SaveChanges:=True
-    
-
-    Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
-    On Error GoTo 0
-    Application.EnableEvents = True
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-
-
-End Sub
-
-
-
-
-Function Paste_Columns(source_sheet, target_sheet As String)
+Function Paste_Columns(source_sheet, target_sheet As String)      '活頁同名欄位轉貼
 
     Dim source_range, target_rang As Range
     Dim source_cel, target_cel As Range
@@ -505,10 +2024,10 @@ Function Paste_Columns(source_sheet, target_sheet As String)
     Set target_rang = Range(Range("A1").End(xlToRight), Range("A1"))
 
     For Each target_cel In target_rang.Cells
-        If target_cel.value = "" Then Exit For
+        If target_cel.Value = "" Then Exit For
         For Each source_cel In source_range.Cells
-            If source_cel.value = "" Then Exit For
-            If target_cel.value = source_cel.value Then
+            If source_cel.Value = "" Then Exit For
+            If target_cel.Value = source_cel.Value Then
                 PathOnly = source_cel.Address
                 LocalPath = Left(PathOnly, InStrRev(PathOnly, "$") - 1)
                 LocalPath = LocalPath & ":" & LocalPath
@@ -526,8 +2045,7 @@ Function Paste_Columns(source_sheet, target_sheet As String)
 End Function
 
 
-
-Function Format_Columns()
+Function Format_Columns()     '欄位格式化
 
     Dim source_range, target_rang As Range
     Dim source_cel, target_cel As Range
@@ -542,23 +2060,23 @@ Function Format_Columns()
         FilePath = Left(PathOnly, InStrRev(PathOnly, "$") - 1)
         LocalPath = FilePath & ":" & FilePath
         '進行資料格式化
-        If target_cel.value Like "*日*" Or target_cel.value Like "*交期*" Or target_cel.value Like "*Date*" Then
-            Call Format_TextToColumns(target_cel.value)
+        If target_cel.Value Like "*日*" Or target_cel.Value Like "*交期*" Or target_cel.Value Like "*Date*" Then
+            Call Format_TextToColumns(target_cel.Value)
             Range(LocalPath).NumberFormatLocal = "yyyy/m/d"
-        ElseIf target_cel.value Like "*單價*" Then
-            Call Format_TextToColumns(target_cel.value)
+        ElseIf target_cel.Value Like "*單價*" Then
+            Call Format_TextToColumns(target_cel.Value)
             Range(LocalPath).NumberFormatLocal = "#,##0.000000_ ;[紅色]-#,##0.000000 "
-        ElseIf target_cel.value Like "*數量*" Or target_cel.value Like "*NTD*" Or target_cel.value Like "*小計*" Or target_cel.value Like "*距離*" Or target_cel.value Like "*KNT*" Or target_cel.value Like "*天數*" Then
-            Call Format_TextToColumns(target_cel.value)
+        ElseIf target_cel.Value Like "*數量*" Or target_cel.Value Like "*NTD*" Or target_cel.Value Like "*小計*" Or target_cel.Value Like "*距離*" Or target_cel.Value Like "*KNT*" Or target_cel.Value Like "*天數*" Then
+            Call Format_TextToColumns(target_cel.Value)
             Range(LocalPath).NumberFormatLocal = "#,##0.0_ ;[紅色]-#,##0.0 "
-        ElseIf target_cel.value Like "*Time*" Then
-            Call Format_TextToColumns(target_cel.value)
+        ElseIf target_cel.Value Like "*Time*" Then
+            Call Format_TextToColumns(target_cel.Value)
             Range(LocalPath).NumberFormatLocal = "yyyy/m/d h:mm;@"
-        ElseIf target_cel.value Like "*%*" Then
-            Call Format_TextToColumns(target_cel.value)
+        ElseIf target_cel.Value Like "*%*" Then
+            Call Format_TextToColumns(target_cel.Value)
             Range(LocalPath).NumberFormatLocal = "0%"
-        ElseIf target_cel.value Like "*index*" Then
-            Call Format_TextToColumns(target_cel.value)
+        ElseIf target_cel.Value Like "*index*" Then
+            Call Format_TextToColumns(target_cel.Value)
         Else
             Range(LocalPath).NumberFormatLocal = "@"
         End If
@@ -567,7 +2085,8 @@ Function Format_Columns()
 End Function
 
 
-Function Format_TextToColumns(target_text As String)
+
+Function Format_TextToColumns(target_text As String)     '欄位格式化成文字
 
 
     Dim source_range, target_rang As Range
@@ -578,7 +2097,7 @@ Function Format_TextToColumns(target_text As String)
     Set target_rang = Range(Range("A1").End(xlToRight), Range("A1"))
 
     For Each target_cel In target_rang.Cells
-        If target_cel.value = target_text Then
+        If target_cel.Value = target_text Then
             PathOnly = target_cel.Address
             FilePath = Left(PathOnly, InStrRev(PathOnly, "$") - 1)
             LocalPath = FilePath & ":" & FilePath
@@ -595,328 +2114,344 @@ Function Format_TextToColumns(target_text As String)
 End Function
 
 
-Sub report_menu_Fullscreen()
-
-    Dim wsSheet As Worksheet
-    Dim NowSheet As String
-
-    NowSheet = ActiveSheet.name
-    
-    Application.ScreenUpdating = False
-    Application.ExecuteExcel4Macro "SHOW.TOOLBAR(""Ribbon"",False)"
-    Application.DisplayFormulaBar = False
-    Application.DisplayStatusBar = Not Application.DisplayStatusBar
-    ActiveWindow.DisplayWorkbookTabs = True
-    
-    
-    Application.ScreenUpdating = False
-    For Each wsSheet In ThisWorkbook.Worksheets
-        If Not wsSheet.name = "Blank" Then
-            wsSheet.Activate
-            With ActiveWindow
-                .DisplayHeadings = False
-                '.DisplayWorkbookTabs = True
-                '.DisplayHorizontalScrollBar = False
-            End With
-        End If
-    Next wsSheet
-
-    Workbooks(ThisWorkbook.name).Activate
-    Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
-    Application.ScreenUpdating = True
 
 
-End Sub
+Function del_all_row(target_sheet As String)        '刪除3行以下資料，在清除所有資料
 
-Sub report_menu_Deactivatescreen()
-
-    Dim wsSheet As Worksheet
-    Dim NowSheet As String
-
-    NowSheet = ActiveSheet.name
-
-    Application.ScreenUpdating = False
-    Application.ExecuteExcel4Macro "SHOW.TOOLBAR(""Ribbon"",True)"
-    Application.DisplayFormulaBar = True
-    Application.DisplayStatusBar = True
-    ActiveWindow.DisplayWorkbookTabs = True
-    
-    Application.ScreenUpdating = False
-    For Each wsSheet In ThisWorkbook.Worksheets
-        If Not wsSheet.name = "Blank" Then
-            wsSheet.Activate
-            With ActiveWindow
-                .DisplayHeadings = True
-                '.DisplayWorkbookTabs = True
-                '.DisplayHorizontalScrollBar = True
-            End With
-        End If
-    Next wsSheet
-
-    Workbooks(ThisWorkbook.name).Activate
-    Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
-    Application.ScreenUpdating = True
-    
-End Sub
-
-
-
-Sub report_menu_import_data()
-
-    Dim NowSheet As String
-    Dim GetPivotTables As PivotTable
-    Dim i, j, k As Integer
-
-    Workbooks(ThisWorkbook.name).Sheets("db").UsedRange.Offset(1).ClearContents
-    
-
-    On Error Resume Next
-    Application.Calculation = xlManual  '關閉自動運算
-    
-
-        NowSheet = ActiveSheet.name
-        Call import_data
-        
-        '更新樞紐分析表
-        For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
-            j = Workbooks(ThisWorkbook.name).Sheets.Count - i + 1
-            Set GetPivotTables = Workbooks(ThisWorkbook.name).Sheets(j).PivotTables(1)
-            If Not GetPivotTables Is Nothing Then
-                Workbooks(ThisWorkbook.name).Sheets(j).PivotTables(1).PivotCache.Refresh
-                GoTo exit_sub
-            End If
-        Next
-    
-exit_sub:
-        Workbooks(ThisWorkbook.name).Activate
-        Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
-        
-    On Error GoTo 0
-    Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
-
-    
-    
-End Sub
-
-
-
-
-
-
-Sub import_data()
-
-
-    Dim title_range, para_range, source_range, target_rang, fix_range As Range
-    Dim db_range, price_range, list_rang, category_rang As Range
-    Dim LocalPath, FilePath, FileOnly, PathOnly As String
-    Dim file_file(100), spath_file(100) As String
-    Dim i, j, k As Integer
-    Dim ws As Worksheet
-    Dim fm, fso, aFile As Object
-    Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
-
-    '初始化
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
+    Sheets(target_sheet).Select
+    ActiveSheet.UsedRange.Select
+    If ActiveSheet.UsedRange.Rows.Count > 2 Then
+        Rows("3:" & ActiveSheet.UsedRange.Rows.Count).Select
+        Selection.Delete Shift:=xlUp
+        ActiveSheet.UsedRange.Select
+        Selection.ClearContents
+    Else
+        ActiveSheet.UsedRange.Select
+        Selection.ClearContents
     End If
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    FilePath = ThisWorkbook.FullName
-    FileOnly = ThisWorkbook.name
-    PathOnly = Left(FilePath, Len(FilePath) - Len(FileOnly))
-    LocalPath = Left(PathOnly, InStrRev(PathOnly, "\") - 1)
-    LocalPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1)
-    LocalPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1)
-
-    '參數設定確認
-    For k = 1 To 500
-        If para_range.Cells(k, 5).value = "挑選資料模型後，再設定你需要的欄位與欄位順序" Then
-            If para_range.Cells(k, 4).value = "" Then
-                MsgBox "你沒有設定資料模型喔。"
-                Exit Sub
-            Else
-                Exit For
-            End If
-        End If
-    Next
-    For k = 1 To 500
-        If para_range.Cells(k, 5).value = "設定自動更新，開啟時會自動匯入最新資料" Then
-            If para_range.Cells(k, 4).value = "" Then
-                MsgBox "你沒有設定是否自動更新喔。"
-                Exit Sub
-            Else
-                Exit For
-            End If
-        End If
-    Next
     
-    For k = 1 To 500
-        If para_range.Cells(k, 5).value = "挑選資料模型後，再設定你需要的欄位與欄位順序" Then
-            file_file(1) = para_range.Cells(k, 4).value & ".xlsb"
+
+End Function
+
+
+Function del_unuse_row(target_sheet As String)       '刪除3行以下資料
+
+
+    Sheets(target_sheet).Select
+    ActiveSheet.UsedRange.Select
+    If ActiveSheet.UsedRange.Rows.Count > 2 Then
+        Rows("3:" & ActiveSheet.UsedRange.Rows.Count).Select
+        Selection.Delete Shift:=xlUp
+    End If
+
+
+End Function
+
+
+
+Sub 刪除空白行列()
+
+    Dim i, j, k As Integer
+    Dim row_data(10), result As Integer
+    Dim rng_check, rng_data As Range
+    Dim del_row As String
+    On Error Resume Next
+
+    '判斷是否貼上資料
+    Set rng_check = Range("A1:A20")
+    j = 1
+    For i = 1 To 20
+        If rng_check.Cells(i) = "" Then
+            j = j + 1
+            If j = 20 Then
+                MsgBox "請將資料貼到A1欄位"
+                Exit Sub
+            End If
+        Else
             Exit For
         End If
     Next
-    spath_file(1) = ThisWorkbook.Path & "\db\" & file_file(1)
-
-
-    
-    '開啟所有檔案
-    If FileFolderExists(spath_file(1)) Then
-        Workbooks.Open Filename:=spath_file(1), Notify:=True, ReadOnly:=True, IgnoreReadOnlyRecommended:=True, UpdateLinks:=False
-    Else
-        MsgBox "【" & spath_file(1) & "】 檔案不存在!"
-    End If
-    
-    
-    '轉貼資料模型
-    Workbooks(ThisWorkbook.name).Activate
-    Workbooks(ThisWorkbook.name).Sheets("刪除空白行列").Cells.ClearContents
-    Windows(file_file(1)).Activate
-    Sheets("db").UsedRange.Copy
-    Workbooks(ThisWorkbook.name).Activate
-    Workbooks(ThisWorkbook.name).Sheets("刪除空白行列").Select
+    '選擇資料範圍
     Range("A1").Select
-    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks:=False, Transpose:=False
-    Range("A1").Copy
-    Workbooks(file_file(1)).Close SaveChanges:=False
-    Workbooks(ThisWorkbook.name).Activate
-    Sheets("db").Select
-    If ActiveSheet.AutoFilterMode Then
-      Rows("1:1").AutoFilter
-      Rows("1:1").AutoFilter
-    Else
-        Rows("1:1").AutoFilter
-    End If
-    Call Paste_Columns("刪除空白行列", "db")
-    'Call Format_Columns
-    Workbooks(ThisWorkbook.name).Sheets("刪除空白行列").Cells.ClearContents
-    Sheets("db").Select
-    Range("A1").Select
-    
-End Sub
-
-
-Function del_all_row(target_sheet As String)
-
-    Sheets(target_sheet).Select
     ActiveSheet.UsedRange.Select
-    If ActiveSheet.UsedRange.Rows.Count > 2 Then
-        Rows("3:" & ActiveSheet.UsedRange.Rows.Count).Select
-        Selection.Delete Shift:=xlUp
-        ActiveSheet.UsedRange.Select
-        Selection.ClearContents
-    Else
-        ActiveSheet.UsedRange.Select
-        Selection.ClearContents
-    End If
-    
-
-End Function
-
-
-Function del_unuse_row(target_sheet As String)
-
-
-    Sheets(target_sheet).Select
-    ActiveSheet.UsedRange.Select
-    If ActiveSheet.UsedRange.Rows.Count > 2 Then
-        Rows("3:" & ActiveSheet.UsedRange.Rows.Count).Select
-        Selection.Delete Shift:=xlUp
-    End If
-
-
-End Function
-
-
-
-Sub 管理用_menu_update_message()
-    Dim title_range, para_range, source_range, target_rang, fix_range As Range
-    Dim focus_sheet, Response As String
-    Dim i, j, k As Integer
-    
-    If WorksheetExists("進度說明", ThisWorkbook) Then
-        Response = MsgBox("你要更新進度說明嗎?", vbYesNo)
-        If Response = vbYes Then    ' User chose Yes.
-            For j = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
-                If Workbooks(ThisWorkbook.name).Sheets(j).name Like "*參數*" Or Workbooks(ThisWorkbook.name).Sheets(j).name Like "*說明*" Then
-                
-                Else
-                    Workbooks(ThisWorkbook.name).Sheets(j).Cells.Validation.Delete
-                End If
-            Next
-            Call ini_message
-            MsgBox "進度說明已經完成標註。"
-        End If
-    Else
-        MsgBox "沒有[進度說明]活頁。"
-    End If
-
-
-End Sub
-
-
-Sub report_menu_making()
-        MsgBox "這一個功能或報表還在開發中。"
-End Sub
-
-
-Sub no_meaasge()
-        MsgBox "這一個欄位沒有通知的對象。"
-End Sub
-
-
-Function link_Folder_And_File(Source_Path As String)
-
-    Dim strFolderName, strFolderExists As String
-    
-    strFolderName = Source_Path
-    strFolderExists = Dir(strFolderName, vbDirectory)
-    
-    If strFolderExists = "" Then
-        MsgBox "目錄不存在，請檢查目錄路徑是否正確。"
-        GoTo exit_sub
-    Else
-        Call Shell("explorer.exe " & strFolderName, vbNormalFocus)
-    End If
-exit_sub:
-    
-End Function
-
-Function link_Excel_Report(Source_Path As String)
-
-    Dim LocalPath, FilePath, FileOnly, PathOnly As String
-    Dim strFileName, strFileName2, strFileExists As String
-
-    FilePath = Source_Path
-    LocalPath = Left(FilePath, InStrRev(FilePath, "\") + 1)
-    FileOnly = Mid(FilePath, Len(LocalPath), Len(FilePath))
-    strFileExists = Dir(FilePath)
-    
-    If strFileExists = "" Then
-        MsgBox "檔案不存在，請檢查檔案路徑是否正確。"
-        GoTo exit_sub
-    Else
-        If AlreadyOpen(CStr(FileOnly)) Then
-            Windows(FileOnly).Activate
+    '移除跨欄
+    With Selection
+        .HorizontalAlignment = xlGeneral
+        .VerticalAlignment = xlTop
+        .WrapText = True
+        .Orientation = 0
+        .AddIndent = False
+        .IndentLevel = 0
+        .ShrinkToFit = False
+        .ReadingOrder = xlContext
+        .MergeCells = False
+    End With
+    '移除title
+    Set rng_data = Range("A1:J1")
+    result = 1
+    For i = 1 To 10
+        If rng_data.Cells(i) <> "" Or rng_data.Cells(i).End(xlDown).Row > 10000 Then
+            row_data(i) = 0
         Else
-            Workbooks.Open Filename:=FilePath
-            On Error Resume Next
-            Application.Run "'" & FileOnly & "'!auto_open"
-            On Error GoTo 0
+            row_data(i) = rng_data.Cells(i).End(xlDown).Row
         End If
+        
+        If row_data(i) > result Then
+            result = row_data(i)
+        End If
+    Next
+    If result > 1 Then
+        del_row = "1:" & result - 1
+        Rows(del_row).Select
+        Selection.Delete Shift:=xlUp
     End If
+    '移除空白欄
+    Rows("1:1").Select
+    If Selection.SpecialCells(xlCellTypeBlanks) Is Nothing Then
+        GoTo end_c
+    Else
+        Selection.SpecialCells(xlCellTypeBlanks).Select
+        Selection.EntireColumn.Delete
+    End If
+end_c:
+    
+   '移除空白行
+    Columns("A:A").Select
+    If Selection.SpecialCells(xlCellTypeBlanks) Is Nothing Then
+        GoTo end_w
+    Else
+        Selection.SpecialCells(xlCellTypeBlanks).Select
+        Selection.EntireRow.Delete
+    End If
+end_w:
+
+    
+    '選擇資料範圍
+    Range("A1").Select
+    ActiveSheet.UsedRange.Select
+    Selection.ColumnWidth = 6
+    
+End Sub
+
+
+Sub upload_images()
+
+    Dim source_cel, target_cel, oRng As Range
+    Dim para_range As Range
+    Dim GetPivotTables As PivotTable
+    Dim oChrtO As ChartObject
+    Dim i, j, k, l As Integer
+    Dim picture_type As String
+
+
+    '上傳最新截圖
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For j = 1 To 500
+            'If para_range.Cells(j, 3).Value = "截圖" And para_range.Cells(j, 9).Value = "Y" Then
+            If para_range.Cells(j, 3).Value = "截圖" Then
+                If FileFolderExists(Left(para_range.Cells(j, 5).Value, InStrRev(para_range.Cells(j, 5).Value, "\") - 1)) Then
+                    If WorksheetExists(para_range.Cells(j, 2).Value, ThisWorkbook) Then
+                        Sheets(para_range.Cells(j, 2).Value).Select
+                        Set oRng = Range(para_range.Cells(j, 4).Value)
+                        oRng.CopyPicture xlScreen, xlPicture
+                        Set oChrtO = ActiveSheet.ChartObjects.Add(Left:=0, Top:=0, Width:=oRng.Width, Height:=oRng.Height)
+                        'Set oChrtO = ActiveSheet.ChartObjects.Add(Left:=0, Top:=0, Width:=1600, Height:=800)
+                         oChrtO.Activate
+                         oChrtO.ShapeRange.Fill.Visible = msoFalse
+                         oChrtO.ShapeRange.Line.Visible = msoFalse
+                    
+                         With oChrtO.Chart
+                          .Paste
+                          .Export Filename:=para_range.Cells(j, 5).Value, Filtername:=Right(para_range.Cells(j, 5).Value, 3)
+                         End With
+                         oChrtO.Delete
+                         '更新校對值
+                          para_range.Cells(j, 7).Value = para_range.Cells(j, 8).Value
+                    Else
+                        MsgBox "找不到 [" & para_range.Cells(j, 2).Value & "] 這一個活頁簿。"
+                    End If
+                End If
+            End If
+        Next
+    End If
+
+    
+
+End Sub
+
+
+
+
+
+
+''''''''''''''開發到Outlook自動發出email中.....
+Sub email_report()      '發出outlook email
+
+
+    On Error Resume Next
+    
+    
+    Dim title_range, para_range, source_range, target_rang, fix_range As Range
+    Dim i, j, k As Integer
+    Dim outlook_email, outlook_cc, outlook_subject, outlook_name, outlook_body, outlook_attachments As String
+    Dim outlook_body_rang As Range
+    Dim oOutlook, OutApp, OutMail As Object, signature As String
+    
+    
+
+
+    '取得參數
+    If WorksheetExists("報表參數", ThisWorkbook) Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "email_to" Then
+                outlook_email = para_range.Cells(i, 4).Value
+                Exit For
+            End If
+        Next
+        If outlook_email = "" Then GoTo exit_sub
+        
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "email_subject" Then
+                outlook_subject = para_range.Cells(i, 4).Value
+                Exit For
+            End If
+        Next
+        If outlook_subject = "" Then GoTo exit_sub
+        
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "email_body" Then
+                outlook_body = para_range.Cells(i, 4).Value
+                Exit For
+            End If
+        Next
+        
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "email_range" Then
+                Set outlook_body_rang = ThisWorkbook.Worksheets(para_range.Cells(i, 2).Value).Range(para_range.Cells(i, 4).Value).SpecialCells(xlCellTypeVisible)
+                Exit For
+            End If
+        Next
+
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "email_attachment" Then
+                outlook_attachments = para_range.Cells(i, 5).Value
+                Exit For
+            End If
+        Next
+        If FileFolderExists(outlook_attachments) Then
+
+        Else
+            outlook_attachments = ""
+        End If
+        
+    End If
+    
+    
+    
+    '開啟outlook
+    Set oOutlook = GetObject(, "Outlook.Application")
+    If oOutlook Is Nothing Then
+        Shell ("OUTLOOK")
+    Else
+        'already open
+    End If
+
+    Set OutApp = CreateObject("Outlook.Application")
+    Set OutMail = OutApp.CreateItem(0)
+    '建立email
+    With OutMail
+         .To = outlook_email
+         '.cc = outlook_cc
+         .subject = outlook_subject
+         .Display
+    End With
+    '取得簽名檔+執行tinytask
+    signature = OutMail.HTMLBody
+    'send email
+    With OutMail
+         '.body = outlook_body
+         If outlook_body_rang Is Nothing Then
+            .HTMLBody = "Hello " & outlook_name & " : " & "<br><br>" & _
+               outlook_body & "<br><br>" & _
+              "Best regards." & signature
+        Else
+            .HTMLBody = "Hello " & outlook_name & " : " & "<br><br>" & _
+               outlook_body & "<br><br>" & _
+               rangetoHTML(outlook_body_rang) & "<br><br>" & _
+              "Best regards." & signature
+        End If
+         '.Active
+         '.Focus
+         If outlook_attachments <> "" Then
+            .Attachments.Add outlook_attachments 'You can add files here
+         End If
+         '.Display
+         .send
+         Application.Wait (Now + TimeValue("00:00:10"))
+    End With
+
 exit_sub:
 
 
-End Function
+
+    Set oOutlook = GetObject(, "Outlook.Application")
+    oOutlook.Quit
+    Set OutMail = Nothing
+    Set OutApp = Nothing
+    
+    
+End Sub
 
 
-Function link_Web(ByVal link As String)
-    'ActiveWorkbook.FollowHyperlink Address:=Source_Path, NewWindow:=True
 
-   'Escape chars that cmd.exe uses
-    link = Replace(link, "^", "^^")
-    link = Replace(link, "|", "^|")
-    link = Replace(link, "&", "^&")
-    'Open default web browser
-    Shell "CMD.EXE /C START " & link, vbHide
+
+Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的表格
+    ' Changed by Ron de Bruin 28-Oct-2006
+    ' Working in Office 2000-2013
+    Dim fso As Object
+    Dim ts As Object
+    Dim tempFile As String
+    Dim TempWB As Workbook
+    
+    
+    tempFile = Environ$("temp") & "\" & Format(Now, "dd-mm-yy h-mm-ss") & ".htm"
+    'Copy the range and create a new workbook to past the data in
+    rng.Copy
+    Set TempWB = Workbooks.Add(1)
+    With TempWB.Sheets(1)
+    .Cells(1).PasteSpecial xlPasteFormats, , False, False
+        .Cells(1).PasteSpecial xlPasteValues, , False, False
+        .Cells(1).PasteSpecial xlPasteFormats, , False, False
+        .Cells(1).Select
+        Application.CutCopyMode = False
+        On Error Resume Next
+        .DrawingObjects.Visible = True
+        .DrawingObjects.Delete
+        On Error GoTo 0
+    End With
+    'Publish the sheet to a htm file
+    With TempWB.PublishObjects.Add( _
+        SourceType:=xlSourceRange, _
+        Filename:=tempFile, _
+        Sheet:=TempWB.Sheets(1).name, _
+        Source:=TempWB.Sheets(1).UsedRange.Address, _
+        HtmlType:=xlHtmlStatic)
+        .Publish (True)
+    End With
+    'Read all data from the htm file into RangetoHTML
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    Set ts = fso.GetFile(tempFile).OpenAsTextStream(1, -2)
+    rangetoHTML = ts.readall
+    ts.Close
+    rangetoHTML = Replace(rangetoHTML, "align=center x:publishsource=", _
+    "align=left x:publishsource=")
+    'Close TempWB
+    TempWB.Close SaveChanges:=False
+    'Delete the htm file we used in this function
+    Kill tempFile
+    Set ts = Nothing
+    Set fso = Nothing
+    Set TempWB = Nothing
 End Function
