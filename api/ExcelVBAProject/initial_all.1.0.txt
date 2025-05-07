@@ -1,6 +1,6 @@
 Option Explicit
 Public Const Mname As String = "MyPopUpMenu"
-Public Const AppVersion As String = "1.0"
+Public Const AppVersion As String = "0.9"
 
 
 '*****************************************************************************************
