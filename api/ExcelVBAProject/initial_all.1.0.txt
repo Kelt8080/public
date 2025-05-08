@@ -1,6 +1,6 @@
 Option Explicit
 Public Const Mname As String = "MyPopUpMenu"
-Public Const AppVersion As String = "0.9"
+Public Const AppVersion As String = "1.0"
 
 
 '*****************************************************************************************
@@ -365,16 +365,16 @@ Sub 管理用_menu_Create_PopUp管理用_menu_main()      '建置報表icon浮�
         
         
         '載入自訂選單
-        On Error Resume Next
-        Call 管理用_menu_Create_PopUp管理用_menu_main_report
-        On Error GoTo 0
+        'On Error Resume Next
+        'Call 管理用_menu_Create_PopUp管理用_menu_main_report
+        'On Error GoTo 0
 
         
         
         
         '單層
         With .Controls.Add(Type:=msoControlButton)
-            .Caption = "大視窗"
+            .Caption = "放大視窗"
             .FaceId = 444
             .OnAction = "report_menu_Fullscreen"
             .BeginGroup = True
@@ -383,7 +383,7 @@ Sub 管理用_menu_Create_PopUp管理用_menu_main()      '建置報表icon浮�
 
         '單層
         With .Controls.Add(Type:=msoControlButton)
-            .Caption = "小視窗"
+            .Caption = "縮小視窗"
             .FaceId = 445
             .OnAction = "report_menu_Deactivatescreen"
         End With
@@ -401,7 +401,7 @@ Sub 管理用_menu_Create_PopUp管理用_menu_main()      '建置報表icon浮�
 
         '單層
         With .Controls.Add(Type:=msoControlButton)
-            .Caption = "匯入資料模型"
+            .Caption = "更新資料"
             .FaceId = 1215
             .OnAction = "auto_open"
         End With
@@ -2477,5 +2477,7 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     Set fso = Nothing
     Set TempWB = Nothing
 End Function
+
+
 
 
