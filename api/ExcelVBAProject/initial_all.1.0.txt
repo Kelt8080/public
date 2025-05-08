@@ -133,13 +133,139 @@ End Sub
 
 
 
+'*****************************************************************************************
+'
+'02_報表參數
+'
+'*****************************************************************************************
+
+
+
+Sub dashboard_parameter() '開啟檔案時自動執行
+
+    Dim title_range, para_range, source_range, target_rang, fix_range As Range
+    Dim i, j, k As Integer
+    Dim sht As Worksheet
+    Dim vbProj As Object
+    Dim ws, ws2 As Worksheet
+    Dim GetPivotTables As PivotTable
+    Dim oChrtO As ChartObject
+    Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
+    
+    
+    On Error Resume Next
+    
+    
+    '初始化
+    '清除舊資料
+    Windows(ThisWorkbook.name).Activate
+    'Call del_unuse_row("data1")
+    
+        
+    
+    
+    '待更新內容
+    '報表api更新一般由後台的電子祕書進行，前台可由使用者手動更新
+    If Application.UserName = "WEA(廠務部共用帳號)" Then
+    
+    Else
+        Application.Run "frm_rec_log_googleforms"
+    End If
+    
+    '確認[報表參數]是否存在
+    Set sht = ThisWorkbook.Sheets("報表參數")
+    If Not sht Is Nothing Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        '更新VBA
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "自動更新VBA" Then
+                If para_range.Cells(i, 4).Value = "Y" Then
+                    '檢查[信任存取VBA專案物件模型]是否勾選
+                     Set vbProj = ThisWorkbook.VBProject
+                     If Err.Number = 0 Then
+                         '檢查本機VBA版本進行更新
+                         Call CheckForUpdate
+                     Else
+                         MsgBox "你有設定自動更新VBA，但是" & vbCrLf & _
+                                 "信任存取VBA專案物件模型未啟用" & vbCrLf & _
+                                 "請至 Excel 選項 -> 信任中心 -> 信任中心設定 -> 巨集設定 -> 勾選[信任存取VBA專案物件模型]", vbCritical
+                         Exit For
+                     End If
+                     Exit For
+                End If
+            End If
+        Next
+
+
+        '更新api
+        For i = 1 To 500
+            If para_range.Cells(i, 3).Value = "更新方式" Then
+                If para_range.Cells(i, 4).Value = "自動更新" Then
+                    '清除[刪除空白行列]舊資料
+                    Application.Run del_all_row("刪除空白行列")
+                    '更新api
+                    j = 1
+                    For Each ws In ActiveWorkbook.Worksheets
+                        If ws.name Like "*api_*" Or ws.name Like "*_api*" Then
+                            j = j + 1
+                            ws.Select
+                            Workbooks(ThisWorkbook.name).Sheets(ws.name).Range("A1").ListObject.QueryTable.Refresh BackgroundQuery:=False
+                        End If
+                    Next
+                    '更新樞紐分析表
+                    For k = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
+                        Set GetPivotTables = Workbooks(ThisWorkbook.name).Sheets(k).PivotTables(1)
+                        If Not GetPivotTables Is Nothing Then
+                            Workbooks(ThisWorkbook.name).Sheets(k).PivotTables(1).PivotCache.Refresh
+                            Exit For
+                        End If
+                    Next
+                    'Workbooks(ThisWorkbook.name).Sheets("廢水流向圖_設計用").PivotTables("對策db_0").PivotCache.Refresh
+                    Exit For
+                End If
+            End If
+        Next
+        
+
+
+        '樞紐分析表跳到前一天
+        For j = 1 To 500
+            If para_range.Cells(j, 3).Value = "跳到前一天" Then
+                para_range.Cells(j, 4).Value = "Y"
+                
+                last_row_1 = Sheets("ui_db").Cells(ActiveSheet.Rows.Count, 1).End(xlUp).Row
+                last_row_2 = "A" & last_row_1
+                
+                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_0").PivotFields("年度").ClearAllFilters
+                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_0").PivotFields("年度").CurrentPage = Format(Year(Workbooks(ThisWorkbook.name).Sheets("ui_db").Range(last_row_2).Value), "0000")
+                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_1").PivotFields("月份").ClearAllFilters
+                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_1").PivotFields("月份").CurrentPage = Format(Month(Workbooks(ThisWorkbook.name).Sheets("ui_db").Range(last_row_2).Value), "00")
+                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_2").PivotFields("日數").ClearAllFilters
+                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_2").PivotFields("日數").CurrentPage = Format(Day(Workbooks(ThisWorkbook.name).Sheets("ui_db").Range(last_row_2).Value), "00")
+                
+            End If
+        Next
+
+        
+    End If
+    
+ 
+    
+    On Error GoTo 0
+
+
+    
+End Sub
+
+
+
 
 
 
 
 '*****************************************************************************************
 '
-'02_報表程式
+'03_報表操作
 '
 '*****************************************************************************************
 
@@ -675,12 +801,12 @@ End Sub
 
 Sub 管理用_menu_update_message()            '更新進度說明
     Dim title_range, para_range, source_range, target_rang, fix_range As Range
-    Dim focus_sheet, Response As String
+    Dim focus_sheet, response As String
     Dim i, j, k As Integer
     
     If WorksheetExists("進度說明", ThisWorkbook) Then
-        Response = MsgBox("你要更新進度說明嗎?", vbYesNo)
-        If Response = vbYes Then    ' User chose Yes.
+        response = MsgBox("你要更新進度說明嗎?", vbYesNo)
+        If response = vbYes Then    ' User chose Yes.
             For j = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
                 If Workbooks(ThisWorkbook.name).Sheets(j).name Like "*參數*" Or Workbooks(ThisWorkbook.name).Sheets(j).name Like "*說明*" Then
                 
@@ -2305,9 +2431,6 @@ End Sub
 
 
 
-
-
-''''''''''''''開發到Outlook自動發出email中.....
 Sub email_report()      '發出outlook email
 
 
