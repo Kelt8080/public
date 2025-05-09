@@ -1898,6 +1898,45 @@ End Function
 
 
 
+Public Function IsUrlValid_check(url As String) As String     '檢測網址是否有效或錯誤
+    Dim httpRequest As Object
+    Dim result As String
+    
+    ' 創建 HTTP 請求物件
+    Set httpRequest = CreateObject("MSXML2.XMLHTTP")
+    
+    On Error GoTo ErrorHandler
+    
+    ' 發送 HEAD 請求（僅檢查標頭，減少資料傳輸）
+    With httpRequest
+        .Open "HEAD", url, False
+        .SetRequestHeader "User-Agent", "Mozilla/5.0" ' 避免某些伺服器拒絕請求
+        .Send
+        
+        ' 檢查 HTTP 狀態碼
+        Select Case .Status
+            Case 200
+                result = "Valid: URL is accessible"
+            Case 404
+                result = "Error: URL not found (404)"
+            Case 403
+                result = "Error: Access forbidden (403)"
+            Case 500
+                result = "Error: Server error (500)"
+            Case Else
+                result = "Error: HTTP Status " & .Status
+        End Select
+    End With
+    
+    Set httpRequest = Nothing
+    IsUrlValid_check = result
+    Exit Function
+
+ErrorHandler:
+    IsUrlValid_check = "Error: " & Err.Description & " (可能的原因：無效的網址格式、網路連線問題或伺服器未回應)"
+    Set httpRequest = Nothing
+End Function
+
 
 
 Function frm_search_log_googleforms(keyword, search_app As String)      '紀錄serch_keyword_googleforms
@@ -1940,10 +1979,10 @@ Function frm_search_log_googleforms(keyword, search_app As String)      '紀錄s
     myURL = link(1) & field(1) & field(2) & field(3) & field(4) & field(5)
     myURL = myURL & "&submit=Submit"
 
-    If Isurlvalid(link(2)) Then
+    If IsUrlValid(link(2)) Then
         myhttp.Open "GET", myURL, False
-        myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
-        myhttp.send
+        myhttp.SetRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
+        myhttp.Send
     End If
 
     
@@ -1997,16 +2036,16 @@ Sub frm_rec_log_googleforms()       '紀錄log_googleforms
     myURL = link(1) & field(1) & field(2) & field(3) & field(4) & field(5)
     myURL = myURL & "&submit=Submit"
 
-    If Isurlvalid(link(2)) Then
+    If IsUrlValid(link(2)) Then
         'myhttp.Open "POST", myURL, False
         myhttp.Open "GET", myURL, False
         'myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
         'myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=Big5"
-        myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
+        myhttp.SetRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
         'myhttp.setRequestHeader "Content-Type", "text/html; charset=Big5"
         'myhttp.setRequestHeader "Content-Type", "multipart/form-data; charset=UTF-8"
         'myhttp.setRequestHeader "enctype", "text/html; charset=UTF-8"
-        myhttp.send
+        myhttp.Send
     End If
 
     
@@ -2088,10 +2127,10 @@ Sub frm_email_googleforms()       'email_googleforms
     myURL = link(1) & field(1) & field(2) & field(3) & field(4) & field(5)
     myURL = myURL & "&submit=Submit"
 
-    If Isurlvalid(link(2)) Then
+    If IsUrlValid(link(2)) Then
         myhttp.Open "GET", myURL, False
-        myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
-        myhttp.send
+        myhttp.SetRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
+        myhttp.Send
     End If
     
 exit_sub:
@@ -2105,10 +2144,10 @@ End Sub
 
 
 
-Function Isurlvalid(ByVal url As String) As Boolean     '取得網頁api
+Function IsUrlValid(ByVal url As String) As Boolean     '取得網頁api
     Dim myreq As Object
 
-    Isurlvalid = False
+    IsUrlValid = False
     Set myreq = CreateObject("WinHttp.WinHttpRequest.5.1")
     
     If Not url Like "http*" Then
@@ -2119,8 +2158,8 @@ Function Isurlvalid(ByVal url As String) As Boolean     '取得網頁api
     
     With myreq
         .Open "GET", url, False
-        .send
-        If .Status = 200 Then Isurlvalid = True
+        .Send
+        If .Status = 200 Then IsUrlValid = True
         Exit Function
     End With
 Notvalid:
@@ -2382,7 +2421,7 @@ end_w:
 End Sub
 
 
-Sub upload_images()
+Sub upload_images()         '截圖
 
     Dim source_cel, target_cel, oRng As Range
     Dim para_range As Range
@@ -2533,7 +2572,7 @@ Sub email_report()      '發出outlook email
             .Attachments.Add outlook_attachments 'You can add files here
          End If
          '.Display
-         .send
+         .Send
          Application.Wait (Now + TimeValue("00:00:10"))
     End With
 
@@ -2600,6 +2639,8 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     Set fso = Nothing
     Set TempWB = Nothing
 End Function
+
+
 
 
 
