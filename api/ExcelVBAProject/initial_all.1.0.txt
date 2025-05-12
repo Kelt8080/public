@@ -366,14 +366,14 @@ Sub 管理用_menu_Create_PopUp管理用_menu_main()      '建置報表icon浮�
         With .Controls.Add(Type:=msoControlPopup)
             .Caption = "廠務部Dashboard"
             With .Controls.Add(Type:=msoControlButton)
-                .Caption = "光洋中央供應系統"
+                .Caption = "中央供應系統"
                 .FaceId = 17
-                .OnAction = "管理用_menu_光洋中央供應系統"
+                .OnAction = "管理用_menu_中央供應系統"
             End With
             With .Controls.Add(Type:=msoControlButton)
-                .Caption = "光洋中央供應系統_週報"
+                .Caption = "中央供應系統_週報"
                 .FaceId = 17
-                .OnAction = "管理用_menu_光洋中央供應系統_週報"
+                .OnAction = "管理用_menu_中央供應系統_週報"
             End With
             With .Controls.Add(Type:=msoControlButton)
                 .Caption = "廠務部月報(開發中)"
@@ -902,11 +902,11 @@ End Function
 Sub 管理用_menu_廠務部專案與工作()
     Call link_Web("https://tasks.office.com/solartech.com.tw/zh-TW/Home/Planner/#/plantaskboard?groupId=db7995ca-aa46-40c0-9a66-d266524f65a0&planId=Ba9uBBMK9EKj7rt_z0EHkskABclV")
 End Sub
-Sub 管理用_menu_光洋中央供應系統()
-    Call link_Folder_And_File("\\SolarDoc\總經理室\安環廠務處\廠務部\廠務部共用區\14.廠務管理系統\WEA\光洋中央供應系統.pptx")
+Sub 管理用_menu_中央供應系統()
+    Call link_Folder_And_File("\\SolarDoc\總經理室\安環廠務處\廠務部\廠務部共用區\14.廠務管理系統\WEA\中央供應系統.pptx")
 End Sub
-Sub 管理用_menu_光洋中央供應系統_週報()
-    Call link_Folder_And_File("\\SolarDoc\總經理室\安環廠務處\廠務部\廠務部共用區\14.廠務管理系統\WEA\光洋中央供應系統_週報.pptx")
+Sub 管理用_menu_中央供應系統_週報()
+    Call link_Folder_And_File("\\SolarDoc\總經理室\安環廠務處\廠務部\廠務部共用區\14.廠務管理系統\WEA\中央供應系統_週報.pptx")
 End Sub
 Sub 管理用_menu_環境部再利用檢核廠商清單()
         Call link_Web("https://rms.moenv.gov.tw/")
@@ -2639,6 +2639,8 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     Set fso = Nothing
     Set TempWB = Nothing
 End Function
+
+
 
 
 
