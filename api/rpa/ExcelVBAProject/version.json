@@ -1,6 +1,6 @@
 {
   "version": "1.0",
   "release_date": "2025-05-07",
-  "download_url": "https://kelt8080.github.io/public/api/ExcelVBAProject/initial_all.1.0.txt",
+  "download_url": "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/initial_all.1.0.txt",
   "note": "增加版本管控功能，各標準模組轉成獨立的api。"
 }
