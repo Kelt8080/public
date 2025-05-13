@@ -175,6 +175,40 @@ Sub dashboard_parameter() '開啟檔案時自動執行
     '確認[報表參數]是否存在
     Set sht = ThisWorkbook.Sheets("報表參數")
     If Not sht Is Nothing Then
+        '更新報表參數
+        Set fix_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("R1:S500")
+        With fix_range
+            .ClearContents
+        
+            .Cells(1, 1).Value = "程式寫入用"
+            .Cells(2, 1).Value = "自動更新VBA"
+            .Cells(3, 1).Value = "截圖"
+            .Cells(4, 1).Value = "跳到前一天"
+            .Cells(5, 1).Value = "更新方式"
+            .Cells(6, 1).Value = "gmail_to"
+            .Cells(7, 1).Value = "gmail_subject"
+            .Cells(8, 1).Value = "gmail_body"
+            .Cells(9, 1).Value = "email_to"
+            .Cells(10, 1).Value = "email_subject"
+            .Cells(11, 1).Value = "email_body"
+            .Cells(12, 1).Value = "email_range"
+            .Cells(13, 1).Value = "email_attachment"
+            
+            .Cells(1, 2).Value = "說明"
+            .Cells(2, 2).Value = "自動更新VBA程式碼"
+            .Cells(3, 2).Value = "自動上傳截圖"
+            .Cells(4, 2).Value = "檔案開啟時自動對到前一天的資料"
+            .Cells(5, 2).Value = "在[值與參數]填入【手動更新】或【自動更新】"
+            .Cells(6, 2).Value = "gmail給那些人，用','分隔"
+            .Cells(7, 2).Value = "gmail的名稱"
+            .Cells(8, 2).Value = "gmail的內容 , 必須用html語法"
+            .Cells(9, 2).Value = "outlook email給那些人，用';'分隔"
+            .Cells(10, 2).Value = "outlook email的名稱"
+            .Cells(11, 2).Value = "outlook email的內容, 必須用html語法"
+            .Cells(12, 2).Value = "outlook email的表格範圍"
+            .Cells(13, 2).Value = "outlook email附件"
+        End With
+        
         Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         '更新VBA
         For i = 1 To 500
@@ -2639,6 +2673,8 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     Set fso = Nothing
     Set TempWB = Nothing
 End Function
+
+
 
 
 
