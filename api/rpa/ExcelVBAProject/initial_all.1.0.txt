@@ -2,6 +2,7 @@ Option Explicit
 Public Const Mname As String = "MyPopUpMenu"
 Public Const AppVersion As String = "1.0"
 Public Const Version_url As String = "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/version.json"
+Public StartTime As Date
 
 '*****************************************************************************************
 '
@@ -10,7 +11,12 @@ Public Const Version_url As String = "https://kelt8080.github.io/public/api/rpa/
 '*****************************************************************************************
 
 
+Sub dfvkh()
 
+MsgBox StartTime
+Call frm_rec_log_googleforms
+
+End Sub
 
 
 
@@ -31,6 +37,19 @@ Sub auto_close()     '關閉檔案時自動執行
     Application.DisplayAlerts = False
     On Error Resume Next
 
+    'initialize
+    Windows(ThisWorkbook.name).Activate
+    NowSheet = ActiveSheet.name
+
+
+    '待更新內容
+    '報表api更新一般由後台的電子祕書進行，前台可由使用者手動更新
+    If Application.UserName = "WEA(廠務部共用帳號)" Then
+    
+    Else
+        Application.Run "frm_rec_log_googleforms"
+    End If
+
 
     '每周一10:30~14:30啟動備份
     'If Weekday(Date) = 2 Then
@@ -45,56 +64,11 @@ Sub auto_close()     '關閉檔案時自動執行
     'End If
     
     
+    
     '啟動檔案的獨立函數
     If WorksheetExists("報表參數", ThisWorkbook) Then
-        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = "auto_ui_initialization"
-        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1").Value = Now()
-        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = 1
-    End If
-    
-    
-
-
-    If Not ActiveWorkbook.ReadOnly Then
-        If WorksheetExists("報表參數", ThisWorkbook) Then
+        Application.Run "upload_images"
         Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
-            '更新api
-            For j = 1 To 500
-                If para_range.Cells(j, 3).Value = "更新方式" Then
-                    If para_range.Cells(j, 4).Value = "自動更新" Then
-                        NowSheet = ActiveSheet.name
-                        'Call del_unuse_row("db")
-                        
-                        '更新api
-                        For Each ws In ActiveWorkbook.Worksheets
-                            If ws.name Like "*api_*" Or ws.name Like "*_api*" Then
-                                ws.Select
-                                Workbooks(ThisWorkbook.name).Sheets(ws.name).Range("A1").ListObject.QueryTable.Refresh BackgroundQuery:=False
-                            End If
-                        Next
-                        
-                        '更新樞紐分析表
-                        For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
-                            Set GetPivotTables = Workbooks(ThisWorkbook.name).Sheets(i).PivotTables(1)
-                            If Not GetPivotTables Is Nothing Then
-                                Workbooks(ThisWorkbook.name).Sheets(i).PivotTables(1).PivotCache.Refresh
-                                GoTo exit_sub
-                            End If
-                        Next
-exit_sub:
-                        '刪除所有message
-                        'For i = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
-                        '    If Workbooks(ThisWorkbook.name).Sheets(i).name Like "*參數*" Or Workbooks(ThisWorkbook.name).Sheets(i).name Like "*說明*" Then
-                        '
-                        '    Else
-                        '        Workbooks(ThisWorkbook.name).Sheets(i).Cells.Validation.Delete
-                        '    End If
-                        'Next
-                        Exit For
-                    End If
-                End If
-            Next
-            
             '發出gmail
             For j = 1 To 500
                 If para_range.Cells(j, 3).Value = "gmail_to" Then
@@ -110,9 +84,14 @@ exit_sub:
                     Exit For
                 End If
             Next
+        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = "auto_ui_initialization"
+        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1").Value = Now()
+        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = 1
+    End If
+    
 
-        End If
-        
+
+    If Not ActiveWorkbook.ReadOnly Then
         Workbooks(ThisWorkbook.name).Activate
         Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
         ThisWorkbook.Close SaveChanges:=True
@@ -164,13 +143,7 @@ Sub dashboard_parameter() '開啟檔案時自動執行
         
     
     
-    '待更新內容
-    '報表api更新一般由後台的電子祕書進行，前台可由使用者手動更新
-    If Application.UserName = "WEA(廠務部共用帳號)" Then
-    
-    Else
-        Application.Run "frm_rec_log_googleforms"
-    End If
+
     
     '確認[報表參數]是否存在
     Set sht = ThisWorkbook.Sheets("報表參數")
@@ -2058,17 +2031,22 @@ Sub frm_rec_log_googleforms()       '紀錄log_googleforms
 
 
     '需要有2個link
-    link(1) = "https://docs.google.com/forms/d/e/1FAIpQLSeC9OyOC9Aqcxkgrwnr9d5ff9X_pEYZaAhG49QjJtPyZLCb6Q/formResponse?usp=pp_url&"
-    link(2) = "https://docs.google.com/forms/d/e/1FAIpQLSeC9OyOC9Aqcxkgrwnr9d5ff9X_pEYZaAhG49QjJtPyZLCb6Q/viewform"
+    link(1) = "https://docs.google.com/forms/d/1RdSVrhtYf59eGKB95gmyQhY0FwptkKejsRjPM1ku2Ok/formResponse?usp=pp_url&"
+    link(2) = "https://docs.google.com/forms/d/1RdSVrhtYf59eGKB95gmyQhY0FwptkKejsRjPM1ku2Ok/viewform"
     Set myhttp = CreateObject("MSXML2.ServerXMLHTTP")
     'Set myhttp = CreateObject("WinHttp.WinHttpRequest.5.1")
-    field(1) = "&entry.1286345521=" & Format(Now(), "yyyy/m/d h:mm;@")
-    field(2) = "&entry.1224084617=" & Date
-    field(3) = "&entry.807191636=" & URLEncode$(Application.UserName)
-    field(4) = "&entry.750613553=" & URLEncode$(ThisWorkbook.name)
-    field(5) = "&entry.1127642459=" & URLEncode$(ThisWorkbook.FullName)
-    myURL = link(1) & field(1) & field(2) & field(3) & field(4) & field(5)
+    field(1) = "&entry.1150985895=" & Format(StartTime, "yyyy/m/d h:mm;@")
+    field(2) = "&entry.1286345521=" & Format(Now(), "yyyy/m/d h:mm;@")
+    field(3) = "&entry.1537737830=" & Round((Now() - StartTime) * 1440, 2)
+    field(4) = "&entry.1224084617=" & Date
+    field(5) = "&entry.807191636=" & URLEncode$(Application.UserName)
+    field(6) = "&entry.750613553=" & URLEncode$(ThisWorkbook.name)
+    field(7) = "&entry.1127642459=" & URLEncode$(ThisWorkbook.FullName)
+    myURL = link(1) & field(1) & field(2) & field(3) & field(4) & field(5) & field(6) & field(7)
     myURL = myURL & "&submit=Submit"
+
+
+
 
     If IsUrlValid(link(2)) Then
         'myhttp.Open "POST", myURL, False
