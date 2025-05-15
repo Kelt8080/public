@@ -1,7 +1,7 @@
 Option Explicit
 Public Const Mname As String = "MyPopUpMenu"
 Public Const AppVersion As String = "1.0"
-
+Public Const Version_url As String = "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/version.json"
 
 '*****************************************************************************************
 '
@@ -2673,6 +2673,8 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     Set fso = Nothing
     Set TempWB = Nothing
 End Function
+
+
 
 
 
