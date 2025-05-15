@@ -1994,6 +1994,7 @@ Function frm_search_log_googleforms(keyword, search_app As String)      '紀錄s
 End Function
 
 
+
 Sub frm_rec_log_googleforms()       '紀錄log_googleforms
     Dim last_row_1, last_row_2 As String
     Dim s_path, t_path As String
@@ -2022,37 +2023,37 @@ Sub frm_rec_log_googleforms()       '紀錄log_googleforms
     CheckPath = Right(LocalPath, Len(LocalPath) - InStrRev(LocalPath, "\"))
     UpperPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1) & "\"
 
-
-    '需要有2個link
-    link(1) = "https://docs.google.com/forms/d/1RdSVrhtYf59eGKB95gmyQhY0FwptkKejsRjPM1ku2Ok/formResponse?usp=pp_url&"
-    link(2) = "https://docs.google.com/forms/d/1RdSVrhtYf59eGKB95gmyQhY0FwptkKejsRjPM1ku2Ok/viewform"
-    Set myhttp = CreateObject("MSXML2.ServerXMLHTTP")
-    'Set myhttp = CreateObject("WinHttp.WinHttpRequest.5.1")
-    field(1) = "&entry.1150985895=" & Format(StartTime, "yyyy/m/d h:mm;@")
-    field(2) = "&entry.1286345521=" & Format(Now(), "yyyy/m/d h:mm;@")
-    field(3) = "&entry.1537737830=" & Round((Now() - StartTime) * 1440, 2)
-    field(4) = "&entry.1224084617=" & Date
-    field(5) = "&entry.807191636=" & URLEncode$(Application.UserName)
-    field(6) = "&entry.750613553=" & URLEncode$(ThisWorkbook.name)
-    field(7) = "&entry.1127642459=" & URLEncode$(ThisWorkbook.FullName)
-    myURL = link(1) & field(1) & field(2) & field(3) & field(4) & field(5) & field(6) & field(7)
-    myURL = myURL & "&submit=Submit"
-
-
-
-
-    If IsUrlValid(link(2)) Then
-        'myhttp.Open "POST", myURL, False
-        myhttp.Open "GET", myURL, False
-        'myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
-        'myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=Big5"
-        myhttp.SetRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
-        'myhttp.setRequestHeader "Content-Type", "text/html; charset=Big5"
-        'myhttp.setRequestHeader "Content-Type", "multipart/form-data; charset=UTF-8"
-        'myhttp.setRequestHeader "enctype", "text/html; charset=UTF-8"
-        myhttp.Send
+    If StartTime > 0 Then
+        '需要有2個link
+        link(1) = "https://docs.google.com/forms/d/1RdSVrhtYf59eGKB95gmyQhY0FwptkKejsRjPM1ku2Ok/formResponse?usp=pp_url&"
+        link(2) = "https://docs.google.com/forms/d/1RdSVrhtYf59eGKB95gmyQhY0FwptkKejsRjPM1ku2Ok/viewform"
+        Set myhttp = CreateObject("MSXML2.ServerXMLHTTP")
+        'Set myhttp = CreateObject("WinHttp.WinHttpRequest.5.1")
+        field(1) = "&entry.1150985895=" & Format(StartTime, "yyyy/m/d h:mm;@")
+        field(2) = "&entry.1286345521=" & Format(Now(), "yyyy/m/d h:mm;@")
+        field(3) = "&entry.1537737830=" & Round((Now() - StartTime) * 1440, 2)
+        field(4) = "&entry.1224084617=" & Date
+        field(5) = "&entry.807191636=" & URLEncode$(Application.UserName)
+        field(6) = "&entry.750613553=" & URLEncode$(ThisWorkbook.name)
+        field(7) = "&entry.1127642459=" & URLEncode$(ThisWorkbook.FullName)
+        myURL = link(1) & field(1) & field(2) & field(3) & field(4) & field(5) & field(6) & field(7)
+        myURL = myURL & "&submit=Submit"
+    
+    
+    
+    
+        If IsUrlValid(link(2)) Then
+            'myhttp.Open "POST", myURL, False
+            myhttp.Open "GET", myURL, False
+            'myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
+            'myhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=Big5"
+            myhttp.SetRequestHeader "Content-Type", "application/x-www-form-urlencoded; charset=UTF-8"
+            'myhttp.setRequestHeader "Content-Type", "text/html; charset=Big5"
+            'myhttp.setRequestHeader "Content-Type", "multipart/form-data; charset=UTF-8"
+            'myhttp.setRequestHeader "enctype", "text/html; charset=UTF-8"
+            myhttp.Send
+        End If
     End If
-
     
     Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
     On Error GoTo 0
@@ -2644,6 +2645,10 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     Set fso = Nothing
     Set TempWB = Nothing
 End Function
+
+
+
+
 
 
 
