@@ -1,6 +1,6 @@
 Option Explicit
 Public Const Mname As String = "MyPopUpMenu"
-Public Const AppVersion As String = "1.0"
+Public Const AppVersion As String = "0.9"
 Public Const Version_url As String = "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/version.json"
 Public StartTime As Date
 
@@ -10,13 +10,6 @@ Public StartTime As Date
 '
 '*****************************************************************************************
 
-
-Sub dfvkh()
-
-MsgBox StartTime
-Call frm_rec_log_googleforms
-
-End Sub
 
 
 
