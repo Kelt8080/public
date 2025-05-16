@@ -1,8 +1,12 @@
 Option Explicit
 Public Const Mname As String = "MyPopUpMenu"
-Public Const AppVersion As String = "0.9"
+Public Const AppVersion As String = "1.0"
 Public Const Version_url As String = "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/version.json"
 Public StartTime As Date
+Public para_range_vba(3), para_range_screenshot(3), para_range_previous_day(3), para_range_refresh(3) As String
+Public para_range_gmail_to(3), para_range_gmail_subject(3), para_range_gmail_body(3)  As String
+Public para_range_email_to(3), para_range_email_subject(3), para_range_email_body(3), para_range_email_range(3), para_range_email_attachment(3)  As String
+Public para_range_e_assistant(3) As String
 
 '*****************************************************************************************
 '
@@ -56,33 +60,23 @@ Sub auto_close()     '關閉檔案時自動執行
     '    End If
     'End If
     
+    Call get_parameter
+    '上傳截圖
+    Application.Run "upload_images"
+    
+    '發出email
+    Call frm_email_googleforms
+    
+    '發出gmail
+    Call email_report
     
     
     '啟動檔案的獨立函數
     If WorksheetExists("報表參數", ThisWorkbook) Then
-        Application.Run "upload_images"
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
-            '發出gmail
-            For j = 1 To 500
-                If para_range.Cells(j, 2).Value = "gmail_to" Then
-                    Call frm_email_googleforms
-                    Exit For
-                End If
-            Next
-
-            '發出email
-            For j = 1 To 500
-                If para_range.Cells(j, 2).Value = "email_to" Then
-                    Call email_report
-                    Exit For
-                End If
-            Next
         Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = "auto_ui_initialization"
         Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1").Value = Now()
         Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = 1
     End If
-    
-
 
     If Not ActiveWorkbook.ReadOnly Then
         Workbooks(ThisWorkbook.name).Activate
@@ -124,22 +118,14 @@ Sub dashboard_parameter() '開啟檔案時自動執行
     Dim oChrtO As ChartObject
     Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
     
-    
-    On Error Resume Next
-    
-    
+
     '初始化
-    '清除舊資料
     Windows(ThisWorkbook.name).Activate
     'Call del_unuse_row("data1")
-    
-        
-    
-    
 
-    
-    '確認[報表參數]是否存在
+
     Set sht = ThisWorkbook.Sheets("報表參數")
+    '確認[報表參數]是否存在
     If Not sht Is Nothing Then
         '更新報表參數
         Set fix_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("R1:S500")
@@ -176,90 +162,142 @@ Sub dashboard_parameter() '開啟檔案時自動執行
             .Cells(13, 2).Value = "outlook email附件"
             .Cells(14, 2).Value = "電子祕書專用選項"
         End With
-        
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+
+        '取得報表參數值
+        Call get_parameter
+
+    
+    
         '更新VBA
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "自動更新VBA" Then
-                If para_range.Cells(i, 4).Value = "Y" Then
-                    '檢查[信任存取VBA專案物件模型]是否勾選
-                     Set vbProj = ThisWorkbook.VBProject
-                     If Err.Number = 0 Then
-                         '檢查本機VBA版本進行更新
-                         Call CheckForUpdate
-                     Else
-                         MsgBox "你有設定自動更新VBA，但是" & vbCrLf & _
-                                 "信任存取VBA專案物件模型未啟用" & vbCrLf & _
-                                 "請至 Excel 選項 -> 信任中心 -> 信任中心設定 -> 巨集設定 -> 勾選[信任存取VBA專案物件模型]", vbCritical
-                         Exit For
-                     End If
-                     Exit For
-                End If
-            End If
-        Next
+        If para_range_vba(2) = "Y" Then
+            '檢查[信任存VBA專案物件模型]是否勾選
+             Set vbProj = ThisWorkbook.VBProject
+             If Err.Number = 0 Then
+                 '檢查本機VBA版本進行更新
+                 Call CheckForUpdate
+             Else
+                 MsgBox "你有設定自動更新VBA，但是" & vbCrLf & _
+                         "信任存取VBA專案物件模型未啟用" & vbCrLf & _
+                         "請至 Excel 選項 -> 信任中心 -> 信任中心設定 -> 巨集設定 -> 勾選[信任存取VBA專案物件模型]", vbCritical
+             End If
+        End If
 
 
         '更新api
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "更新方式" Then
-                If para_range.Cells(i, 4).Value = "自動更新" Then
-                    '清除[刪除空白行列]舊資料
-                    Application.Run del_all_row("刪除空白行列")
-                    '更新api
-                    j = 1
-                    For Each ws In ActiveWorkbook.Worksheets
-                        If ws.name Like "*api_*" Or ws.name Like "*_api*" Then
-                            j = j + 1
-                            ws.Select
-                            Workbooks(ThisWorkbook.name).Sheets(ws.name).Range("A1").ListObject.QueryTable.Refresh BackgroundQuery:=False
-                        End If
-                    Next
-                    '更新樞紐分析表
-                    For k = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
-                        Set GetPivotTables = Workbooks(ThisWorkbook.name).Sheets(k).PivotTables(1)
-                        If Not GetPivotTables Is Nothing Then
-                            Workbooks(ThisWorkbook.name).Sheets(k).PivotTables(1).PivotCache.Refresh
-                            Exit For
-                        End If
-                    Next
-                    'Workbooks(ThisWorkbook.name).Sheets("廢水流向圖_設計用").PivotTables("對策db_0").PivotCache.Refresh
+        If para_range_refresh(2) = "自動更新" Then
+            '清除[刪除空白行列]舊資料
+            Application.Run del_all_row("刪除空白行列")
+            '更新api
+            j = 1
+            For Each ws In ActiveWorkbook.Worksheets
+                If ws.name Like "*api_*" Or ws.name Like "*_api*" Then
+                    j = j + 1
+                    ws.Select
+                    Workbooks(ThisWorkbook.name).Sheets(ws.name).Range("A1").ListObject.QueryTable.Refresh BackgroundQuery:=False
+                End If
+            Next
+            '更新樞紐分析表
+            For k = 1 To Workbooks(ThisWorkbook.name).Sheets.Count
+                Set GetPivotTables = Workbooks(ThisWorkbook.name).Sheets(k).PivotTables(1)
+                If Not GetPivotTables Is Nothing Then
+                    Workbooks(ThisWorkbook.name).Sheets(k).PivotTables(1).PivotCache.Refresh
                     Exit For
                 End If
-            End If
-        Next
+            Next
+        End If
         
 
 
         '樞紐分析表跳到前一天
-        For j = 1 To 500
-            If para_range.Cells(j, 2).Value = "跳到前一天" Then
-                para_range.Cells(j, 4).Value = "Y"
-                
-                last_row_1 = Sheets("ui_db").Cells(ActiveSheet.Rows.Count, 1).End(xlUp).Row
-                last_row_2 = "A" & last_row_1
-                
-                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_0").PivotFields("年度").ClearAllFilters
-                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_0").PivotFields("年度").CurrentPage = Format(Year(Workbooks(ThisWorkbook.name).Sheets("ui_db").Range(last_row_2).Value), "0000")
-                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_1").PivotFields("月份").ClearAllFilters
-                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_1").PivotFields("月份").CurrentPage = Format(Month(Workbooks(ThisWorkbook.name).Sheets("ui_db").Range(last_row_2).Value), "00")
-                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_2").PivotFields("日數").ClearAllFilters
-                Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_2").PivotFields("日數").CurrentPage = Format(Day(Workbooks(ThisWorkbook.name).Sheets("ui_db").Range(last_row_2).Value), "00")
-                
-            End If
-        Next
-
+         If para_range_previous_day(2) = "Y" Then
+            'last_row_1 = Sheets("ui_db").Cells(ActiveSheet.Rows.Count, 1).End(xlUp).Row
+            'last_row_2 = "A" & last_row_1
+            'Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_0").PivotFields("年度").ClearAllFilters
+            'Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_0").PivotFields("年度").CurrentPage = Format(Year(Workbooks(ThisWorkbook.name).Sheets("ui_db").Range(last_row_2).Value), "0000")
+            'Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_1").PivotFields("月份").ClearAllFilters
+            'Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_1").PivotFields("月份").CurrentPage = Format(Month(Workbooks(ThisWorkbook.name).Sheets("ui_db").Range(last_row_2).Value), "00")
+            'Workbooks(ThisWorkbook.name).Sheets("樞紐").PivotTables("樞紐_2").PivotFields("日數").ClearAllFilters
+         End If
         
     End If
-    
- 
-    
-    On Error GoTo 0
-
-
     
 End Sub
 
 
+
+
+Function get_parameter() '取得報表參數
+    Dim title_range, para_range, source_range, target_rang, fix_range As Range
+    Dim i, j, k As Integer
+    Dim sht As Worksheet
+
+    Set sht = ThisWorkbook.Sheets("報表參數")
+    '確認[報表參數]是否存在
+    If Not sht Is Nothing Then
+        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
+        '取得報表參數值
+        For i = 1 To 500
+            If para_range.Cells(i, 2).Value = "" Then Exit For
+            Select Case para_range.Cells(i, 2).Value
+                Case "自動更新VBA"
+                    For j = 1 To 3
+                        para_range_vba(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "截圖"
+                    For j = 1 To 3
+                        para_range_screenshot(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "跳到前一天"
+                    For j = 1 To 3
+                        para_range_previous_day(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "更新方式"
+                    For j = 1 To 3
+                        para_range_refresh(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "gmail_to"
+                    For j = 1 To 3
+                        para_range_gmail_to(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "gmail_subject"
+                    For j = 1 To 3
+                        para_range_gmail_subject(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "gmail_body"
+                    For j = 1 To 3
+                        para_range_gmail_body(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "email_to"
+                    For j = 1 To 3
+                        para_range_email_to(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "email_subject"
+                    For j = 1 To 3
+                        para_range_email_subject(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "email_body"
+                    For j = 1 To 3
+                        para_range_email_body(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "email_range"
+                    For j = 1 To 3
+                        para_range_email_range(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "email_attachment"
+                    For j = 1 To 3
+                        para_range_email_attachment(j) = para_range.Cells(i, j + 2).Value
+                    Next
+                Case "電子祕書"
+                    For j = 1 To 3
+                        para_range_e_assistant(j) = para_range.Cells(i, j + 2).Value
+                    Next
+
+                'Case Else
+            End Select
+        Next
+    End If
+    
+End Function
 
 
 
@@ -1409,46 +1447,6 @@ End Sub
 
 
 
-Function email_report_old(email, cc, subject, name, body, body_rang As String)      '發出email
-
-    Dim OutApp, OutMail As Object, signature As String
-    
-    
-    Set OutApp = CreateObject("Outlook.Application")
-    Set OutMail = OutApp.CreateItem(0)
-    '建立email
-    With OutMail
-         .To = email
-         .cc = cc
-         .subject = subject
-         .Display
-    End With
-    '取得簽名檔+執行tinytask
-    signature = OutMail.HTMLBody
-    'send email
-    With OutMail
-         '.body = body
-         .HTMLBody = "Hello " & name & " : " & "<br><br>" & _
-            body & "<br><br>" & _
-           "Thank you for your cooperation." & "<br><br>" & signature
-         .Active
-         .Focus
-         '.Attachments.Add ("") 'You can add files here
-         '.Display
-         '.Send
-    End With
-
-    Set OutMail = Nothing
-    Set OutApp = Nothing
-    
-    
-End Function
-
-
-
-
-
-
 
 Sub ini_message()       '將email內容整理成Outlook的表格
 
@@ -1560,10 +1558,6 @@ Function Offset_string(title_address, target_string As String) As String        
     Set target_rang = ActiveCell
     LocalPath = Left(target_rang.Address, InStrRev(target_rang.Address, "$") - 1) & source_range.Cells(1).Row
     source_string = Range(LocalPath).Value
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
-    End If
-    
     
     If target_rang.Row > source_range.Cells(1).Row Then
         '先取得現有欄位相對位置
@@ -1607,9 +1601,6 @@ Function Offset_string_auto(target_sheet, title_address, source_address, target_
     Set target_rang = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(source_address)
     LocalPath = Left(target_rang.Address, InStrRev(target_rang.Address, "$") - 1) & source_range.Cells(1).Row
     source_string = Workbooks(ThisWorkbook.name).Sheets(target_sheet).Range(LocalPath).Value
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:E500")
-    End If
 
 
     If target_rang.Row > source_range.Cells(1).Row Then
@@ -1981,19 +1972,6 @@ Function frm_search_log_googleforms(keyword, search_app As String)      '紀錄s
     
 
 
-    On Error Resume Next
-    Application.Calculation = xlManual  '關閉自動運算
-    
-
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    FilePath = ThisWorkbook.FullName
-    FileOnly = ThisWorkbook.name
-    PathOnly = Left(FilePath, Len(FilePath) - Len(FileOnly))
-    LocalPath = Left(PathOnly, InStrRev(PathOnly, "\") - 1)
-    CheckPath = Right(LocalPath, Len(LocalPath) - InStrRev(LocalPath, "\"))
-    UpperPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1) & "\"
-
-
     '需要有2個link
     link(1) = "https://docs.google.com/forms/d/e/1FAIpQLSdxPxdZ_Fi0JbB-ZrHw6cGQsJl4RNWisQGfAJ-gObdTdxNlZQ/formResponse?usp=pp_url&"
     link(2) = "https://docs.google.com/forms/d/e/1FAIpQLSdxPxdZ_Fi0JbB-ZrHw6cGQsJl4RNWisQGfAJ-gObdTdxNlZQ/viewform"
@@ -2014,9 +1992,6 @@ Function frm_search_log_googleforms(keyword, search_app As String)      '紀錄s
     End If
 
     
-    Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
-    On Error GoTo 0
-
 
 
 End Function
@@ -2035,21 +2010,6 @@ Sub frm_rec_log_googleforms()       '紀錄log_googleforms
     Dim link(100), field(100), myURL, txt, str As String
     Dim myhttp As Object
     
-
-    Application.EnableEvents = False
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
-    On Error Resume Next
-    Application.Calculation = xlManual  '關閉自動運算
-    
-
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    FilePath = ThisWorkbook.FullName
-    FileOnly = ThisWorkbook.name
-    PathOnly = Left(FilePath, Len(FilePath) - Len(FileOnly))
-    LocalPath = Left(PathOnly, InStrRev(PathOnly, "\") - 1)
-    CheckPath = Right(LocalPath, Len(LocalPath) - InStrRev(LocalPath, "\"))
-    UpperPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1) & "\"
 
     If StartTime > 0 Then
         '需要有2個link
@@ -2083,11 +2043,6 @@ Sub frm_rec_log_googleforms()       '紀錄log_googleforms
         End If
     End If
     
-    Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
-    On Error GoTo 0
-    Application.EnableEvents = True
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
 
 
 End Sub
@@ -2110,42 +2065,9 @@ Sub frm_email_googleforms()       'email_googleforms
     Dim i, j, k As Integer
 
 
-    On Error Resume Next
-    Application.Calculation = xlManual  '關閉自動運算
-    
-
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "gmail_to" Then
-                gmail_to_String = para_range.Cells(i, 4).Value
-                Exit For
-            End If
-        Next
-        If gmail_to_String = "" Then GoTo exit_sub
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "gmail_subject" Then
-                gmail_subject_String = para_range.Cells(i, 4).Value
-                Exit For
-            End If
-        Next
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "gmail_body" Then
-                gmail_body_String = para_range.Cells(i, 4).Value
-                Exit For
-            End If
-        Next
-        If gmail_body_String = "" Then GoTo exit_sub
-    End If
-    
-
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    FilePath = ThisWorkbook.FullName
-    FileOnly = ThisWorkbook.name
-    PathOnly = Left(FilePath, Len(FilePath) - Len(FileOnly))
-    LocalPath = Left(PathOnly, InStrRev(PathOnly, "\") - 1)
-    CheckPath = Right(LocalPath, Len(LocalPath) - InStrRev(LocalPath, "\"))
-    UpperPath = Left(LocalPath, InStrRev(LocalPath, "\") - 1) & "\"
+    gmail_to_String = para_range_gmail_to(2)
+    gmail_subject_String = para_range_gmail_subject(2)
+    gmail_body_String = para_range_gmail_body(2)
 
 
     '需要有2個link
@@ -2169,8 +2091,6 @@ Sub frm_email_googleforms()       'email_googleforms
     
 exit_sub:
     
-    Application.Calculation = xlSemiautomatic   '除運算列表外，自動運算
-    On Error GoTo 0
 
 
 End Sub
@@ -2463,43 +2383,33 @@ Sub upload_images()         '截圖
     Dim oChrtO As ChartObject
     Dim i, j, k, l As Integer
     Dim picture_type As String
-
-
+    
+    Call get_parameter
     '上傳最新截圖
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-    Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
-        For j = 1 To 500
-            'If para_range.Cells(j, 2).Value = "截圖" And para_range.Cells(j, 9).Value = "Y" Then
-            If para_range.Cells(j, 2).Value = "截圖" Then
-                If FileFolderExists(Left(para_range.Cells(j, 5).Value, InStrRev(para_range.Cells(j, 5).Value, "\") - 1)) Then
-                    If WorksheetExists(para_range.Cells(j, 3).Value, ThisWorkbook) Then
-                        Sheets(para_range.Cells(j, 3).Value).Select
-                        Set oRng = Range(para_range.Cells(j, 4).Value)
-                        oRng.CopyPicture xlScreen, xlPicture
-                        Set oChrtO = ActiveSheet.ChartObjects.Add(Left:=0, Top:=0, Width:=oRng.Width, Height:=oRng.Height)
-                        'Set oChrtO = ActiveSheet.ChartObjects.Add(Left:=0, Top:=0, Width:=1600, Height:=800)
-                         oChrtO.Activate
-                         oChrtO.ShapeRange.Fill.Visible = msoFalse
-                         oChrtO.ShapeRange.Line.Visible = msoFalse
-                    
-                         With oChrtO.Chart
-                          .Paste
-                          .Export Filename:=para_range.Cells(j, 5).Value, Filtername:=Right(para_range.Cells(j, 5).Value, 3)
-                         End With
-                         oChrtO.Delete
-                         '更新校對值
-                          para_range.Cells(j, 7).Value = para_range.Cells(j, 8).Value
-                    Else
-                        MsgBox "找不到 [" & para_range.Cells(j, 3).Value & "] 這一個活頁簿。"
-                    End If
-                End If
-            End If
-        Next
+    If FileFolderExists(Left(para_range_screenshot(3), InStrRev(para_range_screenshot(3), "\") - 1)) Then
+        If WorksheetExists(CStr(para_range_screenshot(1)), ThisWorkbook) Then
+            Sheets(para_range_screenshot(1)).Select
+            Set oRng = Range(para_range_screenshot(2))
+            oRng.CopyPicture xlScreen, xlPicture
+            Set oChrtO = ActiveSheet.ChartObjects.Add(Left:=0, Top:=0, Width:=oRng.Width, Height:=oRng.Height)
+            'Set oChrtO = ActiveSheet.ChartObjects.Add(Left:=0, Top:=0, Width:=1600, Height:=800)
+             oChrtO.Activate
+             oChrtO.ShapeRange.Fill.Visible = msoFalse
+             oChrtO.ShapeRange.Line.Visible = msoFalse
+        
+             With oChrtO.Chart
+              .Paste
+              .Export Filename:=para_range_screenshot(3), Filtername:=Right(para_range_screenshot(3), 3)
+             End With
+             oChrtO.Delete
+        Else
+            MsgBox "找不到 [" & para_range_screenshot(1) & "] 這一個活頁簿。"
+        End If
     End If
 
-    
 
 End Sub
+
 
 
 
@@ -2507,9 +2417,6 @@ End Sub
 Sub email_report()      '發出outlook email
 
 
-    On Error Resume Next
-    
-    
     Dim title_range, para_range, source_range, target_rang, fix_range As Range
     Dim i, j, k As Integer
     Dim outlook_email, outlook_cc, outlook_subject, outlook_name, outlook_body, outlook_attachments As String
@@ -2517,57 +2424,22 @@ Sub email_report()      '發出outlook email
     Dim oOutlook, OutApp, OutMail As Object, signature As String
     
     
-
+    On Error Resume Next
 
     '取得參數
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-        Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "email_to" Then
-                outlook_email = para_range.Cells(i, 4).Value
-                Exit For
-            End If
-        Next
-        If outlook_email = "" Then GoTo exit_sub
-        
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "email_subject" Then
-                outlook_subject = para_range.Cells(i, 4).Value
-                Exit For
-            End If
-        Next
-        If outlook_subject = "" Then GoTo exit_sub
-        
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "email_body" Then
-                outlook_body = para_range.Cells(i, 4).Value
-                Exit For
-            End If
-        Next
-        
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "email_range" Then
-                Set outlook_body_rang = ThisWorkbook.Worksheets(para_range.Cells(i, 3).Value).Range(para_range.Cells(i, 4).Value).SpecialCells(xlCellTypeVisible)
-                Exit For
-            End If
-        Next
+    Call get_parameter
+    outlook_email = para_range_email_to(2)
+    outlook_subject = para_range_email_subject(2)
+    outlook_body = para_range_email_body(2)
+    Set outlook_body_rang = ThisWorkbook.Worksheets(para_range_email_range(1)).Range(para_range_email_range(2)).SpecialCells(xlCellTypeVisible)
+    outlook_attachments = para_range_email_attachment(3)
+    If FileFolderExists(outlook_attachments) Then
 
-        For i = 1 To 500
-            If para_range.Cells(i, 2).Value = "email_attachment" Then
-                outlook_attachments = para_range.Cells(i, 5).Value
-                Exit For
-            End If
-        Next
-        If FileFolderExists(outlook_attachments) Then
-
-        Else
-            outlook_attachments = ""
-        End If
-        
+    Else
+        outlook_attachments = ""
     End If
-    
-    
-    
+  
+  
     '開啟outlook
     Set oOutlook = GetObject(, "Outlook.Application")
     If oOutlook Is Nothing Then
