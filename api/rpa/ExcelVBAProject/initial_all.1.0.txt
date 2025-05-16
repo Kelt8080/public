@@ -2068,8 +2068,12 @@ Sub frm_email_googleforms()       'email_googleforms
     gmail_to_String = para_range_gmail_to(2)
     gmail_subject_String = para_range_gmail_subject(2)
     gmail_body_String = para_range_gmail_body(2)
-
-
+    
+    '參數清洗
+    If gmail_to_Strin = "" Then GoTo exit_sub
+    If gmail_subject_String = "" Then GoTo exit_sub
+    
+    
     '需要有2個link
     link(1) = "https://docs.google.com/forms/d/e/1FAIpQLSerFesuFjfwBAMiCf_5Lpy3L2OlYqRllz_Q4zMC6sxC88LE2g/formResponse?usp=pp_url&"
     link(2) = "https://docs.google.com/forms/d/e/1FAIpQLSerFesuFjfwBAMiCf_5Lpy3L2OlYqRllz_Q4zMC6sxC88LE2g/viewform"
@@ -2433,6 +2437,10 @@ Sub email_report()      '發出outlook email
     outlook_body = para_range_email_body(2)
     Set outlook_body_rang = ThisWorkbook.Worksheets(para_range_email_range(1)).Range(para_range_email_range(2)).SpecialCells(xlCellTypeVisible)
     outlook_attachments = para_range_email_attachment(3)
+    
+    '參數清洗
+    If outlook_email = "" Then GoTo exit_sub
+    If outlook_subject = "" Then GoTo exit_sub
     If FileFolderExists(outlook_attachments) Then
 
     Else
