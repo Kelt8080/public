@@ -64,7 +64,7 @@ Sub auto_close()     '關閉檔案時自動執行
         Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
             '發出gmail
             For j = 1 To 500
-                If para_range.Cells(j, 3).Value = "gmail_to" Then
+                If para_range.Cells(j, 2).Value = "gmail_to" Then
                     Call frm_email_googleforms
                     Exit For
                 End If
@@ -72,7 +72,7 @@ Sub auto_close()     '關閉檔案時自動執行
 
             '發出email
             For j = 1 To 500
-                If para_range.Cells(j, 3).Value = "email_to" Then
+                If para_range.Cells(j, 2).Value = "email_to" Then
                     Call email_report
                     Exit For
                 End If
@@ -178,7 +178,7 @@ Sub dashboard_parameter() '開啟檔案時自動執行
         Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         '更新VBA
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "自動更新VBA" Then
+            If para_range.Cells(i, 2).Value = "自動更新VBA" Then
                 If para_range.Cells(i, 4).Value = "Y" Then
                     '檢查[信任存取VBA專案物件模型]是否勾選
                      Set vbProj = ThisWorkbook.VBProject
@@ -199,7 +199,7 @@ Sub dashboard_parameter() '開啟檔案時自動執行
 
         '更新api
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "更新方式" Then
+            If para_range.Cells(i, 2).Value = "更新方式" Then
                 If para_range.Cells(i, 4).Value = "自動更新" Then
                     '清除[刪除空白行列]舊資料
                     Application.Run del_all_row("刪除空白行列")
@@ -230,7 +230,7 @@ Sub dashboard_parameter() '開啟檔案時自動執行
 
         '樞紐分析表跳到前一天
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "跳到前一天" Then
+            If para_range.Cells(j, 2).Value = "跳到前一天" Then
                 para_range.Cells(j, 4).Value = "Y"
                 
                 last_row_1 = Sheets("ui_db").Cells(ActiveSheet.Rows.Count, 1).End(xlUp).Row
@@ -284,8 +284,8 @@ Function 管理用_menu_cell_search() As String    '取得active.cell在[報表�
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "欄位快搜" Then
-                If para_range.Cells(j, 2).Value = ActiveSheet.name Then
+            If para_range.Cells(j, 2).Value = "欄位快搜" Then
+                If para_range.Cells(j, 3).Value = ActiveSheet.name Then
                     If para_range.Cells(j, 4).Value = "" Then
                         管理用_menu_cell_search = "NA"
                     Else
@@ -576,8 +576,8 @@ Sub Create_PopUpMenu_search()        '建置欄位search專用的浮動選單
         For k = 1 To 100
             If search_app(k, 1) = "" Then GoTo end_k
             For j = 1 To 500
-                If para_range.Cells(j, 3).Value = "" Then Exit For
-                If para_range.Cells(j, 3).Value = search_app(k, 1) Then
+                If para_range.Cells(j, 2).Value = "" Then Exit For
+                If para_range.Cells(j, 2).Value = search_app(k, 1) Then
                     search_app(k, 2) = "True"
                     GoTo end_k
                 End If
@@ -939,9 +939,9 @@ Sub 管理用_menu_欄位search_everything()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_everything" Then
+            If para_range.Cells(j, 2).Value = "search_everything" Then
                 If FileFolderExists(para_range.Cells(j, 5).Value) Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value & " -search " & ActiveCell.Value
                     WshShell.Run exePath, 1, False  '1 = 正常視窗, False = 不等待完成
                 Else
@@ -977,9 +977,9 @@ Sub 管理用_menu_欄位search_anytxt()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_anytxt" Then
+            If para_range.Cells(j, 2).Value = "search_anytxt" Then
                 If FileFolderExists(para_range.Cells(j, 5).Value) Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = """" & para_range.Cells(j, 5).Value & """" & " /s " & """" & ActiveCell.Value & """"
                     WshShell.Run exePath, 1, False  '1 = 正常視窗, False = 不等待完成
                 Else
@@ -1016,8 +1016,8 @@ Sub 管理用_menu_欄位search_trello()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_trello" Then
-                Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_trello" Then
+                Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value & ActiveCell.Value
                     Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("J18") = exePath
                     Call link_Web(exePath)
@@ -1051,8 +1051,8 @@ Sub 管理用_menu_欄位search_google_keep()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_google_keep" Then
-                Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_google_keep" Then
+                Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                 exePath = para_range.Cells(j, 5).Value & ActiveCell.Value
                 Call link_Web(exePath)
                 Exit For
@@ -1085,8 +1085,8 @@ Sub 管理用_menu_欄位search_google_tasks()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_google_tasks" Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_google_tasks" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value
                     Call link_Web(exePath)
                     Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
@@ -1125,8 +1125,8 @@ Sub 管理用_menu_欄位search_chatgpt()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_chatgpt" Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_chatgpt" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value
                     Call link_Web(exePath)
                     Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
@@ -1163,8 +1163,8 @@ Sub 管理用_menu_欄位search_gemini()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_gemini" Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_gemini" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value
                     Call link_Web(exePath)
                     Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
@@ -1202,8 +1202,8 @@ Sub 管理用_menu_欄位search_copilot()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_copilot" Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_copilot" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value
                     Call link_Web(exePath)
                     Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
@@ -1239,8 +1239,8 @@ Sub 管理用_menu_欄位search_deepseek()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_deepseek" Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_deepseek" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value
                     Call link_Web(exePath)
                     Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
@@ -1276,8 +1276,8 @@ Sub 管理用_menu_欄位search_ithy()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_ithy" Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_ithy" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value
                     Call link_Web(exePath)
                     Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
@@ -1314,8 +1314,8 @@ Sub 管理用_menu_欄位search_perplexity()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_perplexity" Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_perplexity" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value
                     Call link_Web(exePath)
                     Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
@@ -1351,8 +1351,8 @@ Sub 管理用_menu_欄位search_felo()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_felo" Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_felo" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value
                     Call link_Web(exePath)
                     Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
@@ -1388,8 +1388,8 @@ Sub 管理用_menu_欄位search_claude()
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "search_claude" Then
-                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 3).Value)
+            If para_range.Cells(j, 2).Value = "search_claude" Then
+                    Call frm_search_log_googleforms(ActiveCell.Value, para_range.Cells(j, 2).Value)
                     exePath = para_range.Cells(j, 5).Value
                     Call link_Web(exePath)
                     Shell "cmd.exe /c echo " & ActiveCell.Value & " | clip", vbHide
@@ -1497,7 +1497,7 @@ Sub ini_message()       '將email內容整理成Outlook的表格
                                 For k = 1 To 500
                                     If para_range.Cells(k, 5).Value = "購案進度說明" Then
                                         If Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "請購單號") <> "" Then
-                                            para_range.Cells(k, 3).Value = Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "請購單號")
+                                            para_range.Cells(k, 2).Value = Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "請購單號")
                                             para_range.Cells(k, 4).Calculate
                                             With Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Validation
                                                 .Delete
@@ -1510,7 +1510,7 @@ Sub ini_message()       '將email內容整理成Outlook的表格
                                             Exit For
                                         End If
                                         If Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "採購單號") <> "" Then
-                                            para_range.Cells(k, 3).Value = Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "採購單號")
+                                            para_range.Cells(k, 2).Value = Offset_string_auto(Workbooks(ThisWorkbook.name).Sheets(i).name, title_range.Address, Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Address, "採購單號")
                                             para_range.Cells(k, 4).Calculate
                                             With Workbooks(ThisWorkbook.name).Sheets(i).Range("G" & j).Validation
                                                 .Delete
@@ -1741,7 +1741,7 @@ Sub toggle_comments()       '顯示/隱藏備註
     'Sheets("報表參數").Select
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            If para_range.Cells(j, 3).Value = "顯示隱藏備註" Then
+            If para_range.Cells(j, 2).Value = "顯示隱藏備註" Then
                 'Sheets("廢水流向圖").Select
                 Select Case para_range.Cells(j, 4).Value
                     Case "N"
@@ -2115,20 +2115,20 @@ Sub frm_email_googleforms()       'email_googleforms
     If WorksheetExists("報表參數", ThisWorkbook) Then
         Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "gmail_to" Then
+            If para_range.Cells(i, 2).Value = "gmail_to" Then
                 gmail_to_String = para_range.Cells(i, 4).Value
                 Exit For
             End If
         Next
         If gmail_to_String = "" Then GoTo exit_sub
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "gmail_subject" Then
+            If para_range.Cells(i, 2).Value = "gmail_subject" Then
                 gmail_subject_String = para_range.Cells(i, 4).Value
                 Exit For
             End If
         Next
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "gmail_body" Then
+            If para_range.Cells(i, 2).Value = "gmail_body" Then
                 gmail_body_String = para_range.Cells(i, 4).Value
                 Exit For
             End If
@@ -2467,11 +2467,11 @@ Sub upload_images()         '截圖
     If WorksheetExists("報表參數", ThisWorkbook) Then
     Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For j = 1 To 500
-            'If para_range.Cells(j, 3).Value = "截圖" And para_range.Cells(j, 9).Value = "Y" Then
-            If para_range.Cells(j, 3).Value = "截圖" Then
+            'If para_range.Cells(j, 2).Value = "截圖" And para_range.Cells(j, 9).Value = "Y" Then
+            If para_range.Cells(j, 2).Value = "截圖" Then
                 If FileFolderExists(Left(para_range.Cells(j, 5).Value, InStrRev(para_range.Cells(j, 5).Value, "\") - 1)) Then
-                    If WorksheetExists(para_range.Cells(j, 2).Value, ThisWorkbook) Then
-                        Sheets(para_range.Cells(j, 2).Value).Select
+                    If WorksheetExists(para_range.Cells(j, 3).Value, ThisWorkbook) Then
+                        Sheets(para_range.Cells(j, 3).Value).Select
                         Set oRng = Range(para_range.Cells(j, 4).Value)
                         oRng.CopyPicture xlScreen, xlPicture
                         Set oChrtO = ActiveSheet.ChartObjects.Add(Left:=0, Top:=0, Width:=oRng.Width, Height:=oRng.Height)
@@ -2488,7 +2488,7 @@ Sub upload_images()         '截圖
                          '更新校對值
                           para_range.Cells(j, 7).Value = para_range.Cells(j, 8).Value
                     Else
-                        MsgBox "找不到 [" & para_range.Cells(j, 2).Value & "] 這一個活頁簿。"
+                        MsgBox "找不到 [" & para_range.Cells(j, 3).Value & "] 這一個活頁簿。"
                     End If
                 End If
             End If
@@ -2521,7 +2521,7 @@ Sub email_report()      '發出outlook email
     If WorksheetExists("報表參數", ThisWorkbook) Then
         Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "email_to" Then
+            If para_range.Cells(i, 2).Value = "email_to" Then
                 outlook_email = para_range.Cells(i, 4).Value
                 Exit For
             End If
@@ -2529,7 +2529,7 @@ Sub email_report()      '發出outlook email
         If outlook_email = "" Then GoTo exit_sub
         
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "email_subject" Then
+            If para_range.Cells(i, 2).Value = "email_subject" Then
                 outlook_subject = para_range.Cells(i, 4).Value
                 Exit For
             End If
@@ -2537,21 +2537,21 @@ Sub email_report()      '發出outlook email
         If outlook_subject = "" Then GoTo exit_sub
         
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "email_body" Then
+            If para_range.Cells(i, 2).Value = "email_body" Then
                 outlook_body = para_range.Cells(i, 4).Value
                 Exit For
             End If
         Next
         
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "email_range" Then
-                Set outlook_body_rang = ThisWorkbook.Worksheets(para_range.Cells(i, 2).Value).Range(para_range.Cells(i, 4).Value).SpecialCells(xlCellTypeVisible)
+            If para_range.Cells(i, 2).Value = "email_range" Then
+                Set outlook_body_rang = ThisWorkbook.Worksheets(para_range.Cells(i, 3).Value).Range(para_range.Cells(i, 4).Value).SpecialCells(xlCellTypeVisible)
                 Exit For
             End If
         Next
 
         For i = 1 To 500
-            If para_range.Cells(i, 3).Value = "email_attachment" Then
+            If para_range.Cells(i, 2).Value = "email_attachment" Then
                 outlook_attachments = para_range.Cells(i, 5).Value
                 Exit For
             End If
@@ -2671,6 +2671,7 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     Set fso = Nothing
     Set TempWB = Nothing
 End Function
+
 
 
 
