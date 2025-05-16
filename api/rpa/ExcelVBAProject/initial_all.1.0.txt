@@ -2070,7 +2070,7 @@ Sub frm_email_googleforms()       'email_googleforms
     gmail_body_String = para_range_gmail_body(2)
     
     '參數清洗
-    If gmail_to_Strin = "" Then GoTo exit_sub
+    If gmail_to_String = "" Then GoTo exit_sub
     If gmail_subject_String = "" Then GoTo exit_sub
     
     
@@ -2553,6 +2553,8 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     Set fso = Nothing
     Set TempWB = Nothing
 End Function
+
+
 
 
 
