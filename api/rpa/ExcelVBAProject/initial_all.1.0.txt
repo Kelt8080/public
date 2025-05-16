@@ -159,9 +159,10 @@ Sub dashboard_parameter() '開啟檔案時自動執行
             .Cells(11, 1).Value = "email_body"
             .Cells(12, 1).Value = "email_range"
             .Cells(13, 1).Value = "email_attachment"
+            .Cells(14, 1).Value = "電子祕書"
             
             .Cells(1, 2).Value = "說明"
-            .Cells(2, 2).Value = "自動更新VBA程式碼"
+            .Cells(2, 2).Value = "是否自動更新VBA程式碼"
             .Cells(3, 2).Value = "自動上傳截圖"
             .Cells(4, 2).Value = "檔案開啟時自動對到前一天的資料"
             .Cells(5, 2).Value = "在[值與參數]填入【手動更新】或【自動更新】"
@@ -173,6 +174,7 @@ Sub dashboard_parameter() '開啟檔案時自動執行
             .Cells(11, 2).Value = "outlook email的內容, 必須用html語法"
             .Cells(12, 2).Value = "outlook email的表格範圍"
             .Cells(13, 2).Value = "outlook email附件"
+            .Cells(14, 2).Value = "電子祕書專用選項"
         End With
         
         Set para_range = Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1:I500")
