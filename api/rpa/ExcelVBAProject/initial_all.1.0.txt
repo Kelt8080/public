@@ -1660,68 +1660,30 @@ End Function
 
 
 Sub report_menu_Fullscreen()             '全螢幕視窗
-
-    Dim wsSheet As Worksheet
-    Dim NowSheet As String
-
-    NowSheet = ActiveSheet.name
-    
-    Application.ScreenUpdating = False
     Application.ExecuteExcel4Macro "SHOW.TOOLBAR(""Ribbon"",False)"
     Application.DisplayFormulaBar = False
-    Application.DisplayStatusBar = Not Application.DisplayStatusBar
-    ActiveWindow.DisplayWorkbookTabs = True
-    
-    
-    Application.ScreenUpdating = False
-    For Each wsSheet In ThisWorkbook.Worksheets
-        If Not wsSheet.name = "Blank" Then
-            wsSheet.Activate
-            With ActiveWindow
-                .DisplayHeadings = False
-                '.DisplayWorkbookTabs = True
-                '.DisplayHorizontalScrollBar = False
-            End With
-        End If
-    Next wsSheet
-
-    Workbooks(ThisWorkbook.name).Activate
-    Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
-    Application.ScreenUpdating = True
-
-
+    Application.DisplayStatusBar = False
+    With ActiveWindow
+        .DisplayGridlines = False
+        .DisplayHeadings = False
+        .DisplayWorkbookTabs = False
+        .DisplayHorizontalScrollBar = False
+        .DisplayVerticalScrollBar = False
+    End With
 End Sub
 
 
 Sub report_menu_Deactivatescreen()      '一般螢幕視窗
-
-    Dim wsSheet As Worksheet
-    Dim NowSheet As String
-
-    NowSheet = ActiveSheet.name
-
-    Application.ScreenUpdating = False
     Application.ExecuteExcel4Macro "SHOW.TOOLBAR(""Ribbon"",True)"
     Application.DisplayFormulaBar = True
     Application.DisplayStatusBar = True
-    ActiveWindow.DisplayWorkbookTabs = True
-    
-    Application.ScreenUpdating = False
-    For Each wsSheet In ThisWorkbook.Worksheets
-        If Not wsSheet.name = "Blank" Then
-            wsSheet.Activate
-            With ActiveWindow
-                .DisplayHeadings = True
-                '.DisplayWorkbookTabs = True
-                '.DisplayHorizontalScrollBar = True
-            End With
-        End If
-    Next wsSheet
-
-    Workbooks(ThisWorkbook.name).Activate
-    Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
-    Application.ScreenUpdating = True
-    
+    With ActiveWindow
+        .DisplayGridlines = True
+        .DisplayHeadings = True
+        .DisplayWorkbookTabs = True
+        .DisplayHorizontalScrollBar = True
+        .DisplayVerticalScrollBar = True
+    End With
 End Sub
 
 
@@ -1866,7 +1828,6 @@ Sub timer_reset()    '測試Code運行時間
 
          
 End Sub
-
 
 
 
@@ -2607,13 +2568,137 @@ Sub close_resident_program_normal()       '關閉常駐程式_子PStart專用
 End Sub
 
 
+Sub close_resident_program_main()       '關閉常駐程式_主PStart專用
+    Dim WshShell As Object
+    Dim shellApp As Object
+    Dim window As Object
+    Dim RetVal(100) As Variant
+    
+    
+    '初始化
+    Set WshShell = CreateObject("WScript.Shell")
+    Set shellApp = CreateObject("Shell.Application")
+    
+    '關閉程式
+    WshShell.Run "taskkill /IM line.exe ", 0, False
+    WshShell.Run "taskkill /IM MicrosoftEdgeCP.exe ", 0, False
+    WshShell.Run "taskkill /IM EXCEL.EXE /F", 2, False
+    WshShell.Run "taskkill /IM POWERPNT.exe ", 0, False
+    WshShell.Run "taskkill /IM WINWORD.EXE ", 0, False
+    WshShell.Run "taskkill /IM iexplore.exe ", 0, False
+    WshShell.Run "taskkill /IM AcroRd32.exe ", 0, False
+    WshShell.Run "taskkill /IM jp2launcher.exe ", 0, False
+    WshShell.Run "taskkill /IM outlook.exe ", 0, False
+    WshShell.Run "taskkill /IM olk.exe ", 0, False
+    WshShell.Run "taskkill /IM PBIDesktop.exe ", 0, False
+    WshShell.Run "taskkill /IM chrome.exe ", 0, False
+    WshShell.Run "taskkill /IM msedge.exe ", 0, False
+    WshShell.Run "taskkill /IM browser.exe ", 0, False
+    WshShell.Run "taskkill /IM firefox.exe ", 0, False
+    WshShell.Run "taskkill /IM Opera.exe ", 0, False
+    WshShell.Run "taskkill /IM FreeCommander.exe ", 0, False
+    WshShell.Run "taskkill /IM Q-Dir64.exe ", 0, False
+    WshShell.Run "taskkill /IM AutoSizer.exe ", 0, False
+    WshShell.Run "taskkill /IM sizer.exe ", 0, False
+    WshShell.Run "taskkill /IM ATGUI.exe ", 0, False
+    WshShell.Run "taskkill /IM javaw.exe ", 0, False
+    WshShell.Run "taskkill /IM chrome.exe ", 0, False
+    
+    
+    '關閉檔案總管
+    For Each window In shellApp.Windows
+        ' 檢查視窗是否由 explorer.exe 運行
+        If InStr(1, window.FullName, "explorer.exe", vbTextCompare) > 0 Then
+            window.Quit
+        End If
+    Next
+    
+
+    Set WshShell = Nothing
+    Set shellApp = Nothing
+    Set RetVal(100) = Nothing
+    
+
+End Sub
+
+
+Function CheckAndCloseOrQuit_main(k As Integer)     ' 檢查是否有其他工作簿的 VBA 存在
+    Dim xlApp As Application
+    Dim wb As Workbook
+    Dim isOtherVBARunning As Boolean
+    Dim i As Integer
+    
+    Set xlApp = Application
+    For i = 1 To k
+        isOtherVBARunning = False
+        For Each wb In xlApp.Workbooks
+            If Not wb Is ThisWorkbook Then ' 排除當前工作簿
+                On Error Resume Next
+                ' 檢查工作簿是否有 VBA 程式碼
+                If wb.VBProject.VBComponents.Count > 0 Then
+                    isOtherVBARunning = True
+                End If
+                On Error GoTo 0
+            End If
+        Next wb
+        
+        If Not isOtherVBARunning Then
+            ' 如果沒有其他 VBA 在執行，退出 Excel
+            ThisWorkbook.Save
+            Application.Quit
+            Exit Function
+        Else
+            Application.Wait Now + TimeValue("00:00:03")
+        End If
+    Next
+End Function
 
 
 
 
+Function SwitchLayout(TIMEOUT As Long,targets_file as String)      '更換Autosizer targets.dat
+    Dim WShell As Object
+    Dim FSO As Object
+    Dim appDataPath As String
+    Dim sourcePath As String
+    Dim targetPath As String
+    Dim dashboardPath As String
+    Const MB_SYSTEMMODAL As Long = &H1000 ' 系統模態
+    Const MB_OK As Long = &H0 ' 確認按鈕
 
-
-
+    
+    ' 初始化物件
+    Set WShell = CreateObject("WScript.Shell")
+    Set FSO = CreateObject("Scripting.FileSystemObject")
+    
+    ' 設定路徑
+    appDataPath = WShell.ExpandEnvironmentStrings("%APPDATA%")
+    ' VBA 檔案與 targets_acer14.dat 在同一目錄
+    sourcePath = ThisWorkbook.Path & "\" & targets_file
+    ' AutoSizer.exe 的相對路徑：從 Z:\PStart\lnk_private\standard\ 到 Z:\PStart\dashboard\AutoSizer\
+    dashboardPath = FSO.BuildPath(ThisWorkbook.Path, "..\..\dashboard\AutoSizer\")
+    targetPath = appDataPath & "\AutoSizer\targets.dat"
+    
+    ' Step 01: 中斷 AutoSizer
+    WShell.Run "taskkill /f /im AutoSizer.exe", 2, False
+    Application.Wait Now + TimeValue("00:00:01") ' 等待 1 秒
+    
+    ' Step 02: 覆寫 targets.dat
+    If FSO.FileExists(sourcePath) Then
+        FSO.CopyFile sourcePath, targetPath, True
+    Else
+        MsgBox "找不到來源檔案: " & sourcePath, vbCritical, "錯誤"
+        Exit Function
+    End If
+    
+    ' Step 03: 重新開啟 AutoSizer
+    WShell.Run dashboardPath & "AutoSizer.exe", 2, False
+    Application.Wait Now + TimeValue("00:00:01") ' 等待 1 秒
+    WShell.SendKeys "^%a"
+    
+    ' 顯示完成訊息
+    MessageBoxTimeout 0, StrPtr("UI已成功切換成" & targets_file & "的佈置"), StrPtr("完成"), MB_OK Or MB_SYSTEMMODAL, 0, TIMEOUT
+End Function
 
 
 
