@@ -4,9 +4,9 @@ Public Const AppVersion As String = "2.0"
 Public Const Version_url As String = "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/version.json"
 Public StartTime As Date
 Public close_saved As String
-Private Declare PtrSafe Function FindWindow Lib "user32" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As LongPtr
-Private Declare PtrSafe Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As LongPtr, ByVal wMsg As Long, ByVal wParam As LongPtr, ByVal lParam As LongPtr) As LongPtr
-Private Const WM_CLOSE As Long = &H10
+Public Declare PtrSafe Function FindWindow Lib "user32" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As LongPtr
+Public Declare PtrSafe Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As LongPtr, ByVal wMsg As Long, ByVal wParam As LongPtr, ByVal lParam As LongPtr) As LongPtr
+Public Const WM_CLOSE As Long = &H10
 Public para_range_vba(3), para_function(3), para_range_screenshot(3), para_range_previous_day(3), para_range_refresh(3) As String
 Public para_range_gmail_to(3), para_range_gmail_subject(3), para_range_gmail_body(3)  As String
 Public para_range_email_to(3), para_range_email_subject(3), para_range_email_body(3), para_range_email_range(3), para_range_email_attachment(3)  As String
@@ -15,7 +15,7 @@ Public para_range_e_assistant(3) As String
 ' 聲明 Windows API 的 MessageBoxTimeout 函數
 #If VBA7 Then
     Private Declare PtrSafe Function MessageBoxTimeout Lib "user32" Alias "MessageBoxTimeoutW" ( _
-        ByVal hWnd As LongPtr, _
+        ByVal hwnd As LongPtr, _
         ByVal lpText As LongPtr, _
         ByVal lpCaption As LongPtr, _
         ByVal uType As Long, _
