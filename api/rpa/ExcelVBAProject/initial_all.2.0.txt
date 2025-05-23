@@ -1523,7 +1523,7 @@ Sub ini_message()       '將email內容整理成Outlook的表格
     Dim LocalPath, FilePath, FileOnly, PathOnly, source_string As String
     Dim i, j, k As Integer
     Dim ws As Worksheet
-    Dim fm, fso, aFile As Object
+    Dim fm, FSO, aFile As Object
     Dim TestStr As String
     Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
     Dim email_email, email_cc, email_subject, email_name, email_body, email_body_rang As String
@@ -1742,7 +1742,7 @@ Sub toggle_comments()       '顯示/隱藏備註
     Dim row_s, row_e, row_range, target_sheet As String
     Dim i, j, k, l As Integer
     Dim ws As Worksheet
-    Dim fm, fso, aFile As Object
+    Dim fm, FSO, aFile As Object
     Dim TestStr As String
     Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
     Dim source_cel, target_cel As Range
@@ -2018,7 +2018,7 @@ Function frm_search_log_googleforms(keyword, search_app As String)      '紀錄s
     Dim s_path, t_path As String
     Dim last_range, input_range As Range
     Dim FilePath, FileOnly, PathOnly, LocalPath, frm_basPath, CheckPath, UpperPath As String
-    Dim fm, fso, aFile As Object
+    Dim fm, FSO, aFile As Object
     Dim TestStr As String
     Dim strFolderName As String
     Dim strFolderExists As String
@@ -2058,7 +2058,7 @@ Sub frm_rec_log_googleforms()       '紀錄log_googleforms
     Dim s_path, t_path As String
     Dim last_range, input_range As Range
     Dim FilePath, FileOnly, PathOnly, LocalPath, frm_basPath, CheckPath, UpperPath As String
-    Dim fm, fso, aFile As Object
+    Dim fm, FSO, aFile As Object
     Dim TestStr As String
     Dim strFolderName As String
     Dim strFolderExists As String
@@ -2109,7 +2109,7 @@ Sub frm_email_googleforms()       'email_googleforms
     Dim s_path, t_path As String
     Dim last_range, input_range As Range
     Dim FilePath, FileOnly, PathOnly, LocalPath, frm_basPath, CheckPath, UpperPath As String
-    Dim fm, fso, aFile As Object
+    Dim fm, FSO, aFile As Object
     Dim TestStr As String
     Dim strFolderName As String
     Dim strFolderExists As String
@@ -2567,7 +2567,7 @@ End Sub
 Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的表格
     ' Changed by Ron de Bruin 28-Oct-2006
     ' Working in Office 2000-2013
-    Dim fso As Object
+    Dim FSO As Object
     Dim ts As Object
     Dim tempFile As String
     Dim TempWB As Workbook
@@ -2598,8 +2598,8 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
         .Publish (True)
     End With
     'Read all data from the htm file into RangetoHTML
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    Set ts = fso.GetFile(tempFile).OpenAsTextStream(1, -2)
+    Set FSO = CreateObject("Scripting.FileSystemObject")
+    Set ts = FSO.GetFile(tempFile).OpenAsTextStream(1, -2)
     rangetoHTML = ts.readall
     ts.Close
     rangetoHTML = Replace(rangetoHTML, "align=center x:publishsource=", _
@@ -2609,7 +2609,7 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     'Delete the htm file we used in this function
     Kill tempFile
     Set ts = Nothing
-    Set fso = Nothing
+    Set FSO = Nothing
     Set TempWB = Nothing
 End Function
 
@@ -2656,7 +2656,7 @@ Sub close_resident_program_main()       '關閉常駐程式_主PStart專用
     '關閉程式
     WshShell.Run "taskkill /IM line.exe ", 0, False
     WshShell.Run "taskkill /IM MicrosoftEdgeCP.exe ", 0, False
-    WshShell.Run "taskkill /IM EXCEL.EXE /F", 2, False
+    'WshShell.Run "taskkill /IM EXCEL.EXE /F", 2, False
     WshShell.Run "taskkill /IM POWERPNT.exe ", 0, False
     WshShell.Run "taskkill /IM WINWORD.EXE ", 0, False
     WshShell.Run "taskkill /IM iexplore.exe ", 0, False
@@ -2732,7 +2732,7 @@ End Function
 
 Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosizer targets.dat
     Dim WShell As Object
-    Dim fso As Object
+    Dim FSO As Object
     Dim appDataPath As String
     Dim sourcePath As String
     Dim targetPath As String
@@ -2743,14 +2743,14 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     
     ' 初始化物件
     Set WShell = CreateObject("WScript.Shell")
-    Set fso = CreateObject("Scripting.FileSystemObject")
+    Set FSO = CreateObject("Scripting.FileSystemObject")
     
     ' 設定路徑
     appDataPath = WShell.ExpandEnvironmentStrings("%APPDATA%")
     ' VBA 檔案與 targets_acer14.dat 在同一目錄
     sourcePath = ThisWorkbook.Path & "\" & targets_file
     ' AutoSizer.exe 的相對路徑：從 Z:\PStart\lnk_private\standard\ 到 Z:\PStart\dashboard\AutoSizer\
-    dashboardPath = fso.BuildPath(ThisWorkbook.Path, "..\..\dashboard\AutoSizer\")
+    dashboardPath = FSO.BuildPath(ThisWorkbook.Path, "..\..\dashboard\AutoSizer\")
     targetPath = appDataPath & "\AutoSizer\targets.dat"
     
     ' Step 01: 中斷 AutoSizer
@@ -2758,8 +2758,8 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     Application.Wait Now + TimeValue("00:00:01") ' 等待 1 秒
     
     ' Step 02: 覆寫 targets.dat
-    If fso.FileExists(sourcePath) Then
-        fso.CopyFile sourcePath, targetPath, True
+    If FSO.FileExists(sourcePath) Then
+        FSO.CopyFile sourcePath, targetPath, True
     Else
         MsgBox "找不到來源檔案: " & sourcePath, vbCritical, "錯誤"
         Exit Function
