@@ -89,15 +89,9 @@ Sub auto_close()     '關閉檔案時自動執行
     'End If
     
     Call get_parameter
-    '上傳截圖
-    Application.Run "upload_images"
-    
-    '發出email
-    Call frm_email_googleforms
-    
-    '發出gmail
-    Call email_report
-    
+    If para_range_screenshot(2) <> "" Then Application.Run "upload_images"    '上傳截圖
+    If para_range_gmail_to(2) <> "" Then Call frm_email_googleforms   '發出gmail
+    If para_range_email_to(2) <> "" Then Call email_report    '發出email
     
     
     '啟動檔案的獨立函數
@@ -2779,6 +2773,8 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     ' 顯示完成訊息
     MessageBoxTimeout 0, StrPtr("UI已成功切換成" & targets_file & "的佈置"), StrPtr("完成"), MB_OK Or MB_SYSTEMMODAL, 0, TIMEOUT
 End Function
+
+
 
 
 
