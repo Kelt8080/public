@@ -65,7 +65,7 @@ Sub auto_close()     '關閉檔案時自動執行
     NowSheet = ActiveSheet.name
 
 
-    If para_function(1) = "pstart" Then GoTo exit_sub
+    If para_function(2) = "pstart" Then GoTo exit_sub
 
     '待更新內容
     '報表api更新一般由後台的電子祕書進行，前台可由使用者手動更新
