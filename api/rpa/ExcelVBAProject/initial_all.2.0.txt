@@ -276,7 +276,6 @@ Function get_parameter() '取得報表參數
                     For j = 1 To 3
                         para_range_vba(j) = para_range.Cells(i, j + 2).Value
                     Next
-                    para_function(3)
                 Case "截圖"
                     For j = 1 To 3
                         para_range_screenshot(j) = para_range.Cells(i, j + 2).Value
