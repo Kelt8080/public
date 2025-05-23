@@ -3,6 +3,7 @@ Public Const Mname As String = "MyPopUpMenu"
 Public Const AppVersion As String = "2.0"
 Public Const Version_url As String = "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/version.json"
 Public StartTime As Date
+Public close_saved As String
 Private Declare PtrSafe Function FindWindow Lib "user32" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As LongPtr
 Private Declare PtrSafe Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As LongPtr, ByVal wMsg As Long, ByVal wParam As LongPtr, ByVal lParam As LongPtr) As LongPtr
 Private Const WM_CLOSE As Long = &H10
@@ -64,6 +65,8 @@ Sub auto_close()     '關閉檔案時自動執行
     NowSheet = ActiveSheet.name
 
 
+    If para_function(1) = "pstart" Then GoTo exit_sub
+
     '待更新內容
     '報表api更新一般由後台的電子祕書進行，前台可由使用者手動更新
     If Application.UserName = "WEA(廠務部共用帳號)" Then
@@ -71,7 +74,7 @@ Sub auto_close()     '關閉檔案時自動執行
     Else
         Application.Run "frm_rec_log_googleforms"
     End If
-
+    
 
     '每周一10:30~14:30啟動備份
     'If Weekday(Date) = 2 Then
@@ -96,6 +99,7 @@ Sub auto_close()     '關閉檔案時自動執行
     Call email_report
     
     
+    
     '啟動檔案的獨立函數
     If WorksheetExists("報表參數", ThisWorkbook) Then
         Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = "auto_ui_initialization"
@@ -112,7 +116,7 @@ Sub auto_close()     '關閉檔案時自動執行
     End If
     
     
-    
+exit_sub:
     
     
     On Error GoTo 0
@@ -1525,7 +1529,7 @@ Sub ini_message()       '將email內容整理成Outlook的表格
     Dim LocalPath, FilePath, FileOnly, PathOnly, source_string As String
     Dim i, j, k As Integer
     Dim ws As Worksheet
-    Dim fm, FSO, aFile As Object
+    Dim fm, fso, aFile As Object
     Dim TestStr As String
     Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
     Dim email_email, email_cc, email_subject, email_name, email_body, email_body_rang As String
@@ -1744,7 +1748,7 @@ Sub toggle_comments()       '顯示/隱藏備註
     Dim row_s, row_e, row_range, target_sheet As String
     Dim i, j, k, l As Integer
     Dim ws As Worksheet
-    Dim fm, FSO, aFile As Object
+    Dim fm, fso, aFile As Object
     Dim TestStr As String
     Dim last_row_1 As String, last_column_1 As String, last_row_2 As String, last_column_2, last_row_3 As String, last_column_3 As String
     Dim source_cel, target_cel As Range
@@ -2020,7 +2024,7 @@ Function frm_search_log_googleforms(keyword, search_app As String)      '紀錄s
     Dim s_path, t_path As String
     Dim last_range, input_range As Range
     Dim FilePath, FileOnly, PathOnly, LocalPath, frm_basPath, CheckPath, UpperPath As String
-    Dim fm, FSO, aFile As Object
+    Dim fm, fso, aFile As Object
     Dim TestStr As String
     Dim strFolderName As String
     Dim strFolderExists As String
@@ -2060,7 +2064,7 @@ Sub frm_rec_log_googleforms()       '紀錄log_googleforms
     Dim s_path, t_path As String
     Dim last_range, input_range As Range
     Dim FilePath, FileOnly, PathOnly, LocalPath, frm_basPath, CheckPath, UpperPath As String
-    Dim fm, FSO, aFile As Object
+    Dim fm, fso, aFile As Object
     Dim TestStr As String
     Dim strFolderName As String
     Dim strFolderExists As String
@@ -2111,7 +2115,7 @@ Sub frm_email_googleforms()       'email_googleforms
     Dim s_path, t_path As String
     Dim last_range, input_range As Range
     Dim FilePath, FileOnly, PathOnly, LocalPath, frm_basPath, CheckPath, UpperPath As String
-    Dim fm, FSO, aFile As Object
+    Dim fm, fso, aFile As Object
     Dim TestStr As String
     Dim strFolderName As String
     Dim strFolderExists As String
@@ -2569,7 +2573,7 @@ End Sub
 Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的表格
     ' Changed by Ron de Bruin 28-Oct-2006
     ' Working in Office 2000-2013
-    Dim FSO As Object
+    Dim fso As Object
     Dim ts As Object
     Dim tempFile As String
     Dim TempWB As Workbook
@@ -2600,8 +2604,8 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
         .Publish (True)
     End With
     'Read all data from the htm file into RangetoHTML
-    Set FSO = CreateObject("Scripting.FileSystemObject")
-    Set ts = FSO.GetFile(tempFile).OpenAsTextStream(1, -2)
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    Set ts = fso.GetFile(tempFile).OpenAsTextStream(1, -2)
     rangetoHTML = ts.readall
     ts.Close
     rangetoHTML = Replace(rangetoHTML, "align=center x:publishsource=", _
@@ -2611,7 +2615,7 @@ Function rangetoHTML(rng As Range)      '將excel rang內容整理成Outlook的�
     'Delete the htm file we used in this function
     Kill tempFile
     Set ts = Nothing
-    Set FSO = Nothing
+    Set fso = Nothing
     Set TempWB = Nothing
 End Function
 
@@ -2734,7 +2738,7 @@ End Function
 
 Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosizer targets.dat
     Dim WShell As Object
-    Dim FSO As Object
+    Dim fso As Object
     Dim appDataPath As String
     Dim sourcePath As String
     Dim targetPath As String
@@ -2745,14 +2749,14 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     
     ' 初始化物件
     Set WShell = CreateObject("WScript.Shell")
-    Set FSO = CreateObject("Scripting.FileSystemObject")
+    Set fso = CreateObject("Scripting.FileSystemObject")
     
     ' 設定路徑
     appDataPath = WShell.ExpandEnvironmentStrings("%APPDATA%")
     ' VBA 檔案與 targets_acer14.dat 在同一目錄
     sourcePath = ThisWorkbook.Path & "\" & targets_file
     ' AutoSizer.exe 的相對路徑：從 Z:\PStart\lnk_private\standard\ 到 Z:\PStart\dashboard\AutoSizer\
-    dashboardPath = FSO.BuildPath(ThisWorkbook.Path, "..\..\dashboard\AutoSizer\")
+    dashboardPath = fso.BuildPath(ThisWorkbook.Path, "..\..\dashboard\AutoSizer\")
     targetPath = appDataPath & "\AutoSizer\targets.dat"
     
     ' Step 01: 中斷 AutoSizer
@@ -2760,8 +2764,8 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     Application.Wait Now + TimeValue("00:00:01") ' 等待 1 秒
     
     ' Step 02: 覆寫 targets.dat
-    If FSO.FileExists(sourcePath) Then
-        FSO.CopyFile sourcePath, targetPath, True
+    If fso.FileExists(sourcePath) Then
+        fso.CopyFile sourcePath, targetPath, True
     Else
         MsgBox "找不到來源檔案: " & sourcePath, vbCritical, "錯誤"
         Exit Function
