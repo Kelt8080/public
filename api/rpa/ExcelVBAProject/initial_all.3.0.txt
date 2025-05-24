@@ -32,99 +32,9 @@ Public para_range_e_assistant(3) As String
 #End If
 
 
-
 '*****************************************************************************************
 '
-'01_主程式
-'Sub auto_close()     '關閉檔案時自動執行
-'
-'*****************************************************************************************
-
-'對應報表參數的設定來執行auto_close()內容:report,pstart
-
-
-
-Sub auto_close()     '關閉檔案時自動執行
-
-    Dim BackupPath As String
-    Dim NowSheet As String
-    Dim GetPivotTables As PivotTable
-    Dim i, j, k As Integer
-    Dim title_range, para_range, source_range, target_rang, fix_range As Range
-    Dim focus_sheet As String
-    Dim ws, ws2 As Worksheet
-    
-    
-    'Application.EnableEvents = False
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
-    On Error Resume Next
-
-    'initialize
-    Windows(ThisWorkbook.name).Activate
-    NowSheet = ActiveSheet.name
-
-
-    If para_function(2) = "pstart" Then GoTo exit_sub
-
-    '待更新內容
-    '報表api更新一般由後台的電子祕書進行，前台可由使用者手動更新
-    If Application.UserName = "WEA(廠務部共用帳號)" Then
-    
-    Else
-        Application.Run "frm_rec_log_googleforms"
-    End If
-    
-
-    '每周一10:30~14:30啟動備份
-    'If Weekday(Date) = 2 Then
-    '   If TimeValue(Time) >= TimeValue("10:30:00") And TimeValue(Time) <= TimeValue("14:30:00") Then
-    '        '進行備份作業
-    '        BackupPath = "\\SolarDoc\總經理室\安環廠務處\廠務部\廠務部專用\14.廠務管理系統\WEA\廠務部報表_運算用\自動Backup\" & ThisWorkbook.name
-    '        If Dir(BackupPath) <> "" Then
-    '            Kill BackupPath
-    '        End If
-    '        Workbooks(ThisWorkbook.name).SaveCopyAs (BackupPath)
-    '    End If
-    'End If
-    
-    Call get_parameter
-    If para_range_screenshot(2) <> "" Then Application.Run "upload_images"    '上傳截圖
-    If para_range_gmail_to(2) <> "" Then Call frm_email_googleforms   '發出gmail
-    If para_range_email_to(2) <> "" Then Call email_report    '發出email
-    
-    
-    '啟動檔案的獨立函數
-    If WorksheetExists("報表參數", ThisWorkbook) Then
-        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = "auto_ui_initialization"
-        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A1").Value = Now()
-        Workbooks(ThisWorkbook.name).Sheets("報表參數").Range("A2").Value = 1
-    End If
-
-    If Not ActiveWorkbook.ReadOnly Then
-        Workbooks(ThisWorkbook.name).Activate
-        Workbooks(ThisWorkbook.name).Sheets(NowSheet).Select
-        ThisWorkbook.Close SaveChanges:=True
-    Else
-        ThisWorkbook.Close SaveChanges:=False
-    End If
-    
-    
-exit_sub:
-    
-    
-    On Error GoTo 0
-    'Application.EnableEvents = True
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-    
-End Sub
-
-
-
-'*****************************************************************************************
-'
-'02_報表參數
+'01_報表參數
 'Sub dashboard_parameter() '開啟檔案時自動執行
 'Function get_parameter() '取得報表參數
 '
@@ -336,7 +246,7 @@ End Function
 
 '*****************************************************************************************
 '
-'03_報表操作
+'02_報表操作
 'Function 管理用_menu_cell_search() As String    '取得active.cell在[報表參數]的快搜範圍，如果沒有設定，就傳回NA
 'Sub all_menu_Delete_PopUpMenu()      '如果浮動選單存在就刪除它
 'Sub 管理用_menu_Create_PopUp管理用_menu_main_report()      '建置報表icon專用的浮動選單
