@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "release_date": "2025-05-20",
-  "download_url": "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/initial_all.2.0.txt",
+  "version": "3.0",
+  "release_date": "2025-05-24",
+  "download_url": "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/initial_all.3.0.txt",
   "note": "增加10個通用功能。"
 }
