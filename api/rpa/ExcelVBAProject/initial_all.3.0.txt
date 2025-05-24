@@ -7,7 +7,7 @@ Public close_saved As String
 Public Declare PtrSafe Function FindWindow Lib "user32" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As LongPtr
 Public Declare PtrSafe Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As LongPtr, ByVal wMsg As Long, ByVal wParam As LongPtr, ByVal lParam As LongPtr) As LongPtr
 Public Const WM_CLOSE As Long = &H10
-Public para_range_vba(3), para_function(3), para_range_screenshot(3), para_range_previous_day(3), para_range_refresh(3) As String
+Public para_range_vba(3), para_range_screenshot(3), para_range_previous_day(3), para_range_refresh(3) As String
 Public para_range_gmail_to(3), para_range_gmail_subject(3), para_range_gmail_body(3)  As String
 Public para_range_email_to(3), para_range_email_subject(3), para_range_email_body(3), para_range_email_range(3), para_range_email_attachment(3)  As String
 Public para_range_e_assistant(3) As String
@@ -68,36 +68,34 @@ Sub dashboard_parameter() '開啟檔案時自動執行
             .ClearContents
         
             .Cells(1, 1).Value = "程式寫入用"
-            .Cells(2, 1).Value = "自動化類型"
-            .Cells(3, 1).Value = "自動更新VBA"
-            .Cells(4, 1).Value = "截圖"
-            .Cells(5, 1).Value = "跳到前一天"
-            .Cells(6, 1).Value = "更新方式"
-            .Cells(7, 1).Value = "gmail_to"
-            .Cells(8, 1).Value = "gmail_subject"
-            .Cells(9, 1).Value = "gmail_body"
-            .Cells(10, 1).Value = "email_to"
-            .Cells(11, 1).Value = "email_subject"
-            .Cells(12, 1).Value = "email_body"
-            .Cells(13, 1).Value = "email_range"
-            .Cells(14, 1).Value = "email_attachment"
-            .Cells(15, 1).Value = "電子祕書"
+            .Cells(2, 1).Value = "自動更新VBA"
+            .Cells(3, 1).Value = "截圖"
+            .Cells(4, 1).Value = "跳到前一天"
+            .Cells(5, 1).Value = "更新方式"
+            .Cells(6, 1).Value = "gmail_to"
+            .Cells(7, 1).Value = "gmail_subject"
+            .Cells(8, 1).Value = "gmail_body"
+            .Cells(9, 1).Value = "email_to"
+            .Cells(10, 1).Value = "email_subject"
+            .Cells(11, 1).Value = "email_body"
+            .Cells(12, 1).Value = "email_range"
+            .Cells(13, 1).Value = "email_attachment"
+            .Cells(14, 1).Value = "電子祕書"
             
             .Cells(1, 2).Value = "說明"
-            .Cells(2, 2).Value = "用以決定執行哪種自動化函式"
-            .Cells(3, 2).Value = "是否自動更新VBA程式碼"
-            .Cells(4, 2).Value = "自動上傳截圖"
-            .Cells(5, 2).Value = "檔案開啟時自動對到前一天的資料"
-            .Cells(6, 2).Value = "在[值與參數]填入【手動更新】或【自動更新】"
-            .Cells(7, 2).Value = "gmail給那些人，用','分隔"
-            .Cells(8, 2).Value = "gmail的名稱"
-            .Cells(9, 2).Value = "gmail的內容 , 必須用html語法"
-            .Cells(10, 2).Value = "outlook email給那些人，用';'分隔"
-            .Cells(11, 2).Value = "outlook email的名稱"
-            .Cells(12, 2).Value = "outlook email的內容, 必須用html語法"
-            .Cells(13, 2).Value = "outlook email的表格範圍"
-            .Cells(14, 2).Value = "outlook email附件"
-            .Cells(15, 2).Value = "電子祕書專用選項"
+            .Cells(2, 2).Value = "是否自動更新VBA程式碼"
+            .Cells(3, 2).Value = "自動上傳截圖"
+            .Cells(4, 2).Value = "檔案開啟時自動對到前一天的資料"
+            .Cells(5, 2).Value = "在[值與參數]填入【手動更新】或【自動更新】"
+            .Cells(6, 2).Value = "gmail給那些人，用','分隔"
+            .Cells(7, 2).Value = "gmail的名稱"
+            .Cells(8, 2).Value = "gmail的內容 , 必須用html語法"
+            .Cells(9, 2).Value = "outlook email給那些人，用';'分隔"
+            .Cells(10, 2).Value = "outlook email的名稱"
+            .Cells(11, 2).Value = "outlook email的內容, 必須用html語法"
+            .Cells(12, 2).Value = "outlook email的表格範圍"
+            .Cells(13, 2).Value = "outlook email附件"
+            .Cells(14, 2).Value = "電子祕書專用選項"
         End With
 
         '取得報表參數值
@@ -176,10 +174,6 @@ Function get_parameter() '取得報表參數
         For i = 1 To 500
             If para_range.Cells(i, 2).Value = "" Then Exit For
             Select Case para_range.Cells(i, 2).Value
-                Case "自動化類型"
-                    For j = 1 To 3
-                        para_function(j) = para_range.Cells(i, j + 2).Value
-                    Next
                 Case "自動更新VBA"
                     For j = 1 To 3
                         para_range_vba(j) = para_range.Cells(i, j + 2).Value
