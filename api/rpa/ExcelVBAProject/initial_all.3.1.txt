@@ -1925,8 +1925,8 @@ Function ProcessRunningCount(processName As String) As Integer
     ' Query all running processes
     Set processes = wmi.ExecQuery("SELECT * FROM Win32_Process WHERE Name = '" & processName & "'")
     
-    IsProcessRunning=processes.Count
-    
+    ProcessRunningCount=processes.Count
+
     ' Clean up objects
     Set processes = Nothing
     Set wmi = Nothing
