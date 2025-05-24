@@ -2638,7 +2638,8 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     Dim WShell As Object
     Dim FSO As Object
     Dim appDataPath As String
-    Dim sourcePath As String
+    Dim SourcePath As String
+    Dim SourceFileName As String
     Dim targetPath As String
     Dim dashboardPath As String
     Const MB_SYSTEMMODAL As Long = &H1000 ' 系統模態
@@ -2652,20 +2653,22 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     ' 設定路徑
     appDataPath = WShell.ExpandEnvironmentStrings("%APPDATA%")
     ' VBA 檔案與 targets_acer14.dat 在同一目錄
-    sourcePath = ThisWorkbook.Path & "\" & targets_file
+    SourcePath = targets_file
     ' AutoSizer.exe 的相對路徑：從 Z:\PStart\lnk_private\standard\ 到 Z:\PStart\dashboard\AutoSizer\
     dashboardPath = FSO.BuildPath(ThisWorkbook.Path, "..\..\dashboard\AutoSizer\")
     targetPath = appDataPath & "\AutoSizer\targets.dat"
+    ' 提取來源檔案名稱
+    SourceFileName = Mid(SourcePath, InStrRev(SourcePath, "\") + 1)
     
     ' Step 01: 中斷 AutoSizer
     WShell.Run "taskkill /f /im AutoSizer.exe", 2, False
     Application.Wait Now + TimeValue("00:00:01") ' 等待 1 秒
     
     ' Step 02: 覆寫 targets.dat
-    If FSO.FileExists(sourcePath) Then
-        FSO.CopyFile sourcePath, targetPath, True
+    If FSO.FileExists(SourcePath) Then
+        FSO.CopyFile SourcePath, targetPath, True
     Else
-        MsgBox "找不到來源檔案: " & sourcePath, vbCritical, "錯誤"
+        MsgBox "找不到來源檔案: " & SourcePath, vbCritical, "錯誤"
         Exit Function
     End If
     
@@ -2675,10 +2678,8 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     WShell.SendKeys "^%a"
     
     ' 顯示完成訊息
-    MessageBoxTimeout 0, StrPtr("UI已成功切換成" & targets_file & "的佈置"), StrPtr("完成"), MB_OK Or MB_SYSTEMMODAL, 0, TIMEOUT
+    MessageBoxTimeout 0, StrPtr("UI已成功切換成" & SourceFileName & "的佈置"), StrPtr("完成"), MB_OK Or MB_SYSTEMMODAL, 0, TIMEOUT
 End Function
-
-
 
 
 
