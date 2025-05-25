@@ -2693,7 +2693,7 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     End If
     
     ' Step 03: 重新開啟 AutoSizer
-    WShell.Run dashboardPath & "AutoSizer.exe", 0, True    '0 = 隱藏視窗, true = 等待完成
+    WShell.Run dashboardPath & "AutoSizer.exe", 0, False   '0 = 隱藏視窗, False = 不等待完成
     Application.Wait Now + TimeValue("00:00:01") ' 等待 1 秒
     WShell.SendKeys "^%a"
     
