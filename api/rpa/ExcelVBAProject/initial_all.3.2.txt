@@ -2594,8 +2594,8 @@ Sub close_resident_program_main()       '關閉常駐程式_主PStart專用
     WshShell.Run "taskkill /IM Opera.exe ", 0, False
     WshShell.Run "taskkill /IM FreeCommander.exe ", 0, False
     WshShell.Run "taskkill /IM Q-Dir64.exe ", 0, False
-    WshShell.Run "taskkill /IM AutoSizer.exe ", 0, False
-    WshShell.Run "taskkill /IM sizer.exe ", 0, False
+    WshShell.Run "taskkill /f /IM AutoSizer.exe ", 0, False
+    WshShell.Run "taskkill /f /IM sizer.exe ", 0, False
     WshShell.Run "taskkill /IM ATGUI.exe ", 0, False
     WshShell.Run "taskkill /IM javaw.exe ", 0, False
     WshShell.Run "taskkill /IM chrome.exe ", 0, False
@@ -2700,6 +2700,8 @@ Function SwitchLayout(TIMEOUT As Long, targets_file As String)     '更換Autosi
     ' 顯示完成訊息
     MessageBoxTimeout 0, StrPtr("UI已成功切換成" & SourceFileName & "的佈置"), StrPtr("完成"), MB_OK Or MB_SYSTEMMODAL, 0, TIMEOUT
 End Function
+
+
 
 
 
