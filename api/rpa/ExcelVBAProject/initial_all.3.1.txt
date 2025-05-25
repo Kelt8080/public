@@ -1,6 +1,6 @@
 Option Explicit
 Public Const Mname As String = "MyPopUpMenu"
-Public Const AppVersion As String = "3.0"
+Public Const AppVersion As String = "3.1"
 Public Const Version_url As String = "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/version.json"
 Public StartTime As Date
 Public close_saved As String
