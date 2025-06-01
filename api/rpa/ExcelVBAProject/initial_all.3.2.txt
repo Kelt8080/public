@@ -55,7 +55,7 @@ Sub dashboard_parameter() '開啟檔案時自動執行
     
 
     '初始化
-    Windows(ThisWorkbook.name).Activate
+    'Windows(ThisWorkbook.name).Activate
     'Call del_unuse_row("data1")
 
 
