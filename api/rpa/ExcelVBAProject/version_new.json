@@ -1,6 +1,6 @@
 [
   {
-    "version": "3.2",
+    "version": "3.3",
     "release_date": "2025-05-25",
     "download_url": "https://kelt8080.github.io/public/api/rpa/ExcelVBAProject/initial_all.3.2.txt",
     "note": "修改WShell.Run的執行順序，確保連續執行穩定度。"
